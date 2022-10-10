@@ -79,7 +79,7 @@ function ShowcaseItemInfo(item: ShowcaseItem) {
       {item.screenshots.length > 0 && <div className="row">
         {item.screenshots.map((url, idx) => (
           <div key={idx} className="col col--3">
-            <img className={styles.appScreenshot} src={url} alt={`${item.appName} screenshot ${idx + 1}`}/>
+            <img loading="lazy" className={styles.appScreenshot} src={url} alt={`${item.appName} screenshot ${idx + 1}`}/>
           </div>
         ))}
       </div>}

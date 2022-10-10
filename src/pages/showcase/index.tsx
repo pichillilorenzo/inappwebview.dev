@@ -100,7 +100,7 @@ function ShowcaseItemInfo(item: ShowcaseItem) {
             </div>
           </div>
           <div className="card__image">
-            <img
+            <img loading="lazy"
               src={item.screenshots[0]}
               alt={item.appName}
               title={item.appName}/>
