@@ -7,8 +7,7 @@ import styles from './index.module.css';
 import showcaseDataJSON from './showcase-data.json';
 
 const showcaseData = showcaseDataJSON.sort((a: ShowcaseItem, b: ShowcaseItem) => {
-  // @ts-ignore
-  return new Date(b.insertDate) - new Date(a.insertDate);
+  return Date.parse(b.insertDate) - Date.parse(a.insertDate);
 });
 
 interface SearchForm {
@@ -171,43 +170,49 @@ export default function ShowcasePage(): JSX.Element {
 }
 
 function searchFlutterApps(searchForm: SearchForm) {
+  let results = showcaseData;
+
   const text = searchForm.text.trim().toLowerCase();
-  const weightedTests = [
-    {
-      test: function (testElement: ShowcaseItem) {
-        const appName = testElement.appName.toLowerCase();
-        return (appName.indexOf(text) >= 0 ? 1 : 0) * appName.split(text).length;
-      }, weight: 5
-    },
-    {
-      test: function (testElement: ShowcaseItem) {
-        const longDescription = testElement.longDescription.toLowerCase();
-        return (longDescription.indexOf(text) >= 0 ? 1 : 0) * longDescription.split(text).length;
-      }, weight: 2
-    }
-  ];
-  const searchSlitted = text.split(' ');
-  if (searchSlitted.length > 1) {
-    for (const s of searchSlitted) {
-      if (s.length > 1) {
-        weightedTests.push({
-          test: function (testElement) {
-            return testElement.appName.toLowerCase().indexOf(s) >= 0 ? 1 : 0;
-          }, weight: 0.5
-        });
-        weightedTests.push({
-          test: function (testElement) {
-            return testElement.longDescription.toLowerCase().indexOf(s) >= 0 ? 1 : 0;
-          }, weight: 0.2
-        });
+  if (text !== '') {
+    const weightedTests = [
+      {
+        test: function (testElement: ShowcaseItem) {
+          const appName = testElement.appName.toLowerCase();
+          return (appName.indexOf(text) >= 0 ? 1 : 0) * appName.split(text).length;
+        }, weight: 5
+      },
+      {
+        test: function (testElement: ShowcaseItem) {
+          const longDescription = testElement.longDescription.toLowerCase();
+          return (longDescription.indexOf(text) >= 0 ? 1 : 0) * longDescription.split(text).length;
+        }, weight: 2
+      }
+    ];
+    const searchSlitted = text.split(' ');
+    if (searchSlitted.length > 1) {
+      for (const s of searchSlitted) {
+        if (s.length > 1) {
+          weightedTests.push({
+            test: function (testElement) {
+              return testElement.appName.toLowerCase().indexOf(s) >= 0 ? 1 : 0;
+            }, weight: 0.5
+          });
+          weightedTests.push({
+            test: function (testElement) {
+              return testElement.longDescription.toLowerCase().indexOf(s) >= 0 ? 1 : 0;
+            }, weight: 0.2
+          });
+        }
       }
     }
+
+    results = weightedSearch(showcaseData, weightedTests, "insertDate") as ShowcaseItem[];
   }
 
-  let results = weightedSearch(showcaseData, weightedTests, "insertDate") as ShowcaseItem[];
   if (searchForm.openSource) {
     results = results.filter(item => item.sourceCode != null && item.sourceCode !== '');
   }
+
   return results;
 }
 
@@ -233,9 +238,9 @@ function weightedSearch(array, weightedTests, sortProperty) {
 
     // Else by chosen property
     if (obj1.element[sortProperty] < obj2.element[sortProperty]) {
-      return -1;
-    } else if (obj1.element[sortProperty] > obj2.element[sortProperty]) {
       return 1;
+    } else if (obj1.element[sortProperty] > obj2.element[sortProperty]) {
+      return -1;
     } else {
       return 0;
     }
