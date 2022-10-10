@@ -1,0 +1,35 @@
+.showcaseItemContainer {
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.appHeader {
+  display: flex;
+  align-items: center;
+}
+
+.appIcon {
+  border-radius: 5px;
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+  max-width: 75px;
+  max-height: 75px;
+}
+
+.appName {
+  font-size: 2rem;
+  margin-bottom: 0;
+}
+
+.appStoreLink img {
+  max-width: 160px;
+}
+
+.appStoreLinkDisabled {
+  cursor: initial;
+  pointer-events: none;
+  opacity: .5;
+}
+
+.appScreenshot {
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+}

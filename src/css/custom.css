@@ -1,0 +1,60 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* fallback */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/fonts/material-icons.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+.material-icons.material-icons-vertical-align {
+  display: inline-flex;
+  vertical-align: top;
+}
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #02569b;
+  --ifm-color-primary-dark: #024d8b;
+  --ifm-color-primary-darker: #024984;
+  --ifm-color-primary-darkest: #013c6c;
+  --ifm-color-primary-light: #025fab;
+  --ifm-color-primary-lighter: #0263b2;
+  --ifm-color-primary-lightest: #0370ca;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #b3e5fc;
+  --ifm-color-primary-dark: #8ad7fa;
+  --ifm-color-primary-darker: #75d0fa;
+  --ifm-color-primary-darkest: #37baf7;
+  --ifm-color-primary-light: #dcf3fe;
+  --ifm-color-primary-lighter: #f1fafe;
+  --ifm-color-primary-lightest: #ffffff;
+}
+
+.width-100 {
+  width: 100%;
+}

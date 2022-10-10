@@ -1,0 +1,4 @@
+.submitAppForm input[type="text"], .submitAppForm input[type="url"], .submitAppForm textarea {
+  display: block;
+  width: 100%;
+}

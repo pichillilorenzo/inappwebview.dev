@@ -1,0 +1,18 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.featureImg {
+  max-height: 600px;
+}
+
+.badgeContainer a {
+  margin: 5px;
+}
+
+.badge {
+  max-width: 100%;
+}

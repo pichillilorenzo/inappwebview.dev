@@ -1,0 +1,68 @@
+[
+  {
+    "appName":"Flutter Browser",
+    "insertDate":"2020-08-06 20:00:00",
+    "icon":"https://user-images.githubusercontent.com/5956938/109398507-ab5e9300-793d-11eb-88a2-2bbde80eeaa6.png",
+    "platforms":[
+      "mobile"
+    ],
+    "shortDescription":"Full-Featured Mobile Browser App created using Flutter and flutter_inappwebview.",
+    "screenshots":[
+      "https://user-images.githubusercontent.com/5956938/89580253-56d6b780-d835-11ea-978d-a7ad41c389fa.png",
+      "https://user-images.githubusercontent.com/5956938/89580255-576f4e00-d835-11ea-9ec2-d5ebf3d44823.png",
+      "https://user-images.githubusercontent.com/5956938/89580256-5807e480-d835-11ea-9fd1-efd27bf2b665.png",
+      "https://user-images.githubusercontent.com/5956938/89580261-58a07b00-d835-11ea-92f4-94bd51651f22.png"
+    ],
+    "googlePlayStore":"https://play.google.com/store/apps/details?id=com.pichillilorenzo.flutter_browser",
+    "appleAppStore":"",
+    "sourceCode":"https://github.com/pichillilorenzo/flutter_browser_app",
+    "website":"https://github.com/pichillilorenzo/flutter_browser_app",
+    "longDescription":"A Full-Featured Mobile Browser App (such as the Google Chrome mobile browser) created using Flutter and the features offered by the flutter_inappwebview plugin.\n\nFeatures:\n- WebView Tab, with custom on long-press link/image preview, and how to move from one tab to another without losing the WebView state;\n- Browser App Bar with the current URL and all popup menu actions such as opening a new tab, a new incognito tab, saving the current URL to the favorite list, saving a page to offline usage, viewing the SSL Certificate used by the website, enable Desktop Mode, etc. (features similar to the Google Chrome App);\n- Developer console, where you can execute JavaScript code, see some network info, manage the browser storage such as cookies, window.localStorage , etc;\n- Settings page, where you can update the browser general settings and enable/disable all the features offered by the flutter_inappwebview for each WebView Tab, such as enabling/disabling JavaScript, caching, scrollbars, setting custom user-agent, etc., and all the Android and iOS-specific features;\n- Save and restore the current Browser state.\n\nFlutter plugin: https://github.com/pichillilorenzo/flutter_inappwebview\n\nFull Code Browser App: https://github.com/pichillilorenzo/flutter_browser_app",
+    "usedFor":"To make a Browser"
+  },
+  {
+    "appName":"Retro Browser: '90s nostalgic web browser",
+    "shortDescription":"'90s nostalgic web browser",
+    "longDescription":"Retro Browser is here! The best experience for navigating the World Wide Web is now available. Combining a '90s style browser inspired by the olds Netscape Navigator and Internet Explorer with the power of the modern web pages. Retro Browser includes beautiful designs and animations that will simulate an early internet experience which main purpose is to make you travel in time.",
+    "insertDate":"2021-03-22T16:38:26.785Z",
+    "icon":"https://user-images.githubusercontent.com/24376974/112024927-ab981b80-8b02-11eb-813a-5875fd6daff7.jpg",
+    "platforms":[
+      "mobile"
+    ],
+    "screenshots":[
+      "https://user-images.githubusercontent.com/24376974/112023913-ae464100-8b01-11eb-8fce-e8daeed45c9d.png",
+      "https://user-images.githubusercontent.com/24376974/112023919-aeded780-8b01-11eb-8651-76e10ee2271a.png",
+      "https://user-images.githubusercontent.com/24376974/112023921-af776e00-8b01-11eb-917b-f1e389f219fc.png",
+      "https://user-images.githubusercontent.com/24376974/112023925-b0100480-8b01-11eb-8509-f12b528c0f4b.png"
+    ],
+    "googlePlayStore":"https://play.google.com/store/apps/details?id=com.gabxap.retrobrowser",
+    "appleAppStore":"https://apps.apple.com/us/app/retro-browser/id1554974118",
+    "sourceCode":"",
+    "website":"https://daretrobrowser.web.app/",
+    "usedFor":"To create a Browser"
+  },
+  {
+    "appName":"Torn PDA",
+    "shortDescription":"Torn PDA has been developed as an assistant for players of Torn City (www.torn.com).",
+    "longDescription":"Torn PDA has been developed as an assistant for players of Torn City (www.torn.com).\n\nIt was conceived to enhance the experience of playing Torn from a mobile platform, and other already existing applications, such as YATA, have been a great influence.\n\n* Profile page with shortcuts to you preferred sections, access to basic status data, recent events, cooldowns and net-worth calculation. You can also manually activate notifications so that you don't waste any energy, nerve, or miss any cooldown expiry.\n\n* Check your travel status and configure notifications or alarms just before you arrive. No more forgetting and being mugged abroad. Also, configure the notification shown so that it is safe to use even at work or in other public environments.\n\n* Have a look at foreign stocks directly in the Travel section. Filter and sort items at your convenience, including profit based on item capacity. Also, by using the in-app browser, you are contributing by sending stock data automatically to the shared database!\n\n* YATA mobile interface: new sections (e.g. Awards) that constitute the first official YATA mobile interface. Data comes straight from your YATA account.\n\n* Ability to fill max items on arrival to destination, based on current capacity and money available. Then, use the quick home return button in the top bar to make your stay quicker and safer.\n\n* Quick crimes option when you visit the crimes section. Just set up your preferred crimes and they'll appear in the top bar.\n\n* Quick Items: browse to the items section in Torn with the full browser and add your prefer items for a quick access later on.\n\n* Trade calculator with total price calculation for cash, items and shares, plus the ability to copy total figures for a quick trading. If you are a professional trader, you can also synchronize with Torn Trader.\n\n* Automatic city items finder in the map.\n\n* Automatic alerts for travel, energy, nerve, hospitalization, drugs, racing, messages, events and trades.\n\n* Torn chat: options to highlight your name or hide the chat completely if you wish.\n\n* Follow your faction's chain live from the app, with instant energy updates. Use the chain watcher feature to avoid surprises.\n\n* Create your own target list, adding your own comments and many other details. Import and export your targets to/from YATA. While chaining, automatically skip targets that can't be attacked (hospitalised/jailed or in a different country). Get optimal targets directly from Torn Attack Central, included in the Chaining section. Chaining has never been easier.\n\n* Have a look at your last few attacks, with simple statistics so that you can decide when/who to add to your common chaining targets.\n\n* Export targets as a backup or share them with other players.\n\n* When in hospital, send Nuclear Central Hospital a revive request by clicking a button.\n\n* Create a friends list, with quick access to in-game messaging, trading and other important details. Also, add note to your friends' profiles. Backup functionality included.\n\n* Activate alerts for NPC loot.\n\n* Dark mode.",
+    "insertDate":"2021-03-24T17:49:47.830Z",
+    "icon":"https://user-images.githubusercontent.com/5956938/112359316-6fff7c00-8cd1-11eb-9409-379230741fcb.png",
+    "platforms":[
+      "mobile"
+    ],
+    "screenshots":[
+      "https://user-images.githubusercontent.com/5956938/112359338-755cc680-8cd1-11eb-9974-eaa0248bd047.png",
+      "https://user-images.githubusercontent.com/5956938/112359337-74c43000-8cd1-11eb-824e-ee46088770ab.png",
+      "https://user-images.githubusercontent.com/5956938/112359333-74c43000-8cd1-11eb-96ba-1dbd4bb47dac.png",
+      "https://user-images.githubusercontent.com/5956938/112359329-73930300-8cd1-11eb-8c64-d43fa5447286.png",
+      "https://user-images.githubusercontent.com/5956938/112359326-72fa6c80-8cd1-11eb-8693-6bc5b9917ca4.png",
+      "https://user-images.githubusercontent.com/5956938/112359323-71c93f80-8cd1-11eb-8c25-8c57ef2b7adb.png",
+      "https://user-images.githubusercontent.com/5956938/112359319-70981280-8cd1-11eb-8d23-e4575bc099bc.png"
+    ],
+    "googlePlayStore":"https://play.google.com/store/apps/details?id=com.manuito.tornpda",
+    "appleAppStore":"https://apps.apple.com/us/app/torn-pda/id1510138514",
+    "sourceCode":"https://github.com/Manuito83/torn-pda",
+    "website":"https://www.torn.com/",
+    "usedFor":"To display and assist players of Torn City (www.torn.com) website."
+  }
+]

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/hexo-theme-inside" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/hexo-theme-inside-ng" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/themes/hexo-theme-inside" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/themes/inside" vcs="Git" />
+  </component>
+</project>

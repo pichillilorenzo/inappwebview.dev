@@ -1,0 +1,256 @@
+---
+sidebar_position: 2
+date: 2021-03-08 10:48:00
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# ChromeSafariBrowser
+
+The `ChromeSafariBrowser` class represents [Chrome Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs/overview/) on Android and
+[SFSafariViewController](https://developer.apple.com/documentation/safariservices/sfsafariviewcontroller) on iOS.
+
+## Basic Usage
+
+:::caution Note for Android
+  If you want to use the `ChromeSafariBrowser` class on Android 11+, then you need to specify your app querying for `android.support.customtabs.action.CustomTabsService`
+in your `AndroidManifest.xml` (you can read more about it [here](https://developers.google.com/web/android/custom-tabs/best-practices#applications_targeting_android_11_api_level_30_or_above)).
+:::
+
+To be able to listen to the `ChromeSafariBrowser` events, you need to create a class that extends the `ChromeSafariBrowser` class in order to override the method callbacks.
+
+Example:
+```dart
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+class MyChromeSafariBrowser extends ChromeSafariBrowser {
+  @override
+  void onOpened() {
+    print("ChromeSafari browser opened");
+  }
+
+  @override
+  void onCompletedInitialLoad() {
+    print("ChromeSafari browser initial load completed");
+  }
+
+  @override
+  void onClosed() {
+    print("ChromeSafari browser closed");
+  }
+}
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isAndroid) {
+    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
+
+  runApp(MaterialApp(home: MyApp()));
+}
+
+class MyApp extends StatefulWidget {
+  final ChromeSafariBrowser browser = new MyChromeSafariBrowser();
+
+  @override
+  _MyAppState createState() => new _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    widget.browser.addMenuItem(new ChromeSafariBrowserMenuItem(
+        id: 1,
+        label: 'Custom item menu 1',
+        action: (url, title) {
+          print('Custom item menu 1 clicked!');
+        }));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('ChromeSafariBrowser Example'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+            onPressed: () async {
+              await widget.browser.open(
+                  url: Uri.parse("https://flutter.dev/"),
+                  options: ChromeSafariBrowserClassOptions(
+                      android: AndroidChromeCustomTabsOptions(
+                          shareState: CustomTabsShareState.SHARE_STATE_OFF),
+                      ios: IOSSafariOptions(barCollapsingEnabled: true)));
+            },
+            child: Text("Open Chrome Safari Browser")),
+      ),
+    );
+  }
+}
+```
+
+This is the result:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="android" label="Android" default>
+```
+![ChromeSafariBrowser android basic usage](./chrome-safari-browser/android-chrome-safari-browser-basic-usage.gif "ChromeSafariBrowser android basic usage.")
+```mdx-code-block
+  </TabItem>
+  <TabItem value="ios" label="iOS">
+```
+![ChromeSafariBrowser iOS basic usage](./chrome-safari-browser/ios-chrome-safari-browser-basic-usage.gif "ChromeSafariBrowser iOS basic usage.")
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
+
+## Android TWA
+
+To create an App for Android that supports TWA (Trusted Web Activity), you can use the `ChromeSafariBrowser` class with the Android-specific option `isTrustedWebActivity: true`.
+
+### Remove the URL bar
+
+Trusted Web Activities require an association between the Android application and the website to be established to remove the URL bar.
+
+This association is created via [Digital Asset Links](https://developers.google.com/digital-asset-links/v1/getting-started) and the association must be established in both ways, linking [from the app to the website](https://developers.google.com/digital-asset-links/v1/create-statement) and [from the website to the app](https://developer.android.com/training/app-links/verify-site-associations#web-assoc).
+
+It is possible to setup the app to website validation and setup Chrome to skip the website to app validation, for debugging purposes.
+
+Check the official [Android Integration Guide](https://developer.chrome.com/docs/android/trusted-web-activity/integration-guide/#remove-url-bar) for more details.
+
+### TWA Example
+
+```dart
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+class AndroidTWABrowser extends ChromeSafariBrowser {
+  @override
+  void onOpened() {
+    print("Android TWA browser opened");
+  }
+
+  @override
+  void onCompletedInitialLoad() {
+    print("Android TWA browser initial load completed");
+  }
+
+  @override
+  void onClosed() {
+    print("Android TWA browser closed");
+  }
+}
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isAndroid) {
+    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
+
+  runApp(MaterialApp(home: MyApp()));
+}
+
+class MyApp extends StatefulWidget {
+  final ChromeSafariBrowser browser = new AndroidTWABrowser();
+
+  @override
+  _MyAppState createState() => new _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Android TWA Example'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+            onPressed: () async {
+              await widget.browser.open(
+                  url: Uri.parse("https://flutter.dev/"),
+                  options: ChromeSafariBrowserClassOptions(
+                    android: AndroidChromeCustomTabsOptions(
+                        isTrustedWebActivity: true),
+                  ));
+            },
+            child: Text("Open Android TWA Browser")),
+      ),
+    );
+  }
+}
+```
+
+Create the Android string resource file `android/app/src/main/res/values/strings.xml` and add the Digital AssetLinks statement below for the https://flutter.dev/ website:
+
+```xml
+<resources>
+    <string name="app_name">Flutter Trusted Web Activity</string>
+    <string name="asset_statements">
+        [{
+            \"relation\": [\"delegate_permission/common.handle_all_urls\"],
+            \"target\": {
+                \"namespace\": \"web\",
+                \"site\": \"https://flutter.dev\"}
+        }]
+    </string>
+</resources>
+```
+
+In the Android App Manifest file `android/app/src/main/AndroidManifest.xml`, link to the statement by adding a new `meta-data` tag as a child of the `application` tag:
+
+```xml
+<application
+    android:label="flutter_inappwebview_example"
+    android:icon="@mipmap/ic_launcher">
+    <!-- ... -->
+    <meta-data
+        android:name="asset_statements"
+        android:resource="@string/asset_statements" />
+    <!-- ... -->
+    <activity>
+        <!-- ... -->
+    </activity>
+</application>
+```
+
+To enable debug mode:
+
+- Open Chrome on the development device, navigate to `chrome://flags`, search for an item called _Enable command line on non-rooted devices_ and change it to `ENABLED` and then restart the browser.
+- Next, on the Terminal application of your operating system, use the [Android Debug Bridge](https://developer.android.com/studio/command-line/adb) (installed with Android Studio), and run the following command:
+```shell
+adb shell "echo '_ --disable-digital-asset-link-verification-for-url=\"https://flutter.dev\"' > /data/local/tmp/chrome-command-line"
+```
+
+Close Chrome and re-launch your application from Android Studio. The application should now be shown in full-screen.
+
+Note: It may needed to force close Chrome so it restarts with the correct command line. Go to _Android Settings > Apps & notifications > Chrome_, and click on _Force stop_.
+
+This is the result:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="android" label="Android" default>
+```
+![Android TWA example](./chrome-safari-browser/android-twa.gif "Android TWA example.")
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
