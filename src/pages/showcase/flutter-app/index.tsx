@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
+import useIsBrowser from '@docusaurus/useIsBrowser';
 import clsx from 'clsx';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import styles from './index.module.css';
@@ -48,26 +50,29 @@ function ShowcaseItemInfo(item: ShowcaseItem) {
           <strong>For what the InAppWebView plugin is used</strong>?<br/>
           {item.usedFor}
         </p>
-        <div>
-          <strong>Share on</strong>:
-          <a className="button button--link" style={{color: "#3b5998"}}
-             role="button"
-             href={`https://facebook.com/sharer/sharer.php?u=${window.location.href}`}
-             target="_blank" rel="noopener">Facebook</a><a style={{color: "#55acee"}} role="button"
-                                                           className="button button--link"
-                                                           href={`https://twitter.com/intent/tweet/?text=${item.appName} is using Flutter InAppWebView&amp;url=${window.location.href}`}
-                                                           target="_blank" rel="noopener">Twitter</a><a
-          style={{color: "#dd4b39"}} role="button"
-          className="button button--link"
-          href={`mailto:?subject=${item.appName} is using Flutter InAppWebView&amp;body=${window.location.href}`}
-          target="_self" rel="noopener">Mail</a><a style={{color: "#25d366"}} role="button"
-                                                   className="button button--link"
-                                                   href={`whatsapp://send?text=${item.appName} is using Flutter InAppWebView%20${window.location.href}`}
-                                                   target="_blank" rel="noopener">Whatsapp</a><a
-          style={{color: "#54a9eb"}} role="button"
-          className="button button--link"
-          href={`https://telegram.me/share/url?text=${item.appName} is using Flutter InAppWebView&amp;url=${window.location.href}`}
-          target="_blank" rel="noopener">Telegram</a></div>
+        <BrowserOnly>
+          {() => <div>
+            <strong>Share on</strong>:
+            <a className="button button--link" style={{color: "#3b5998"}}
+               role="button"
+               href={`https://facebook.com/sharer/sharer.php?u=${window.location.href}`}
+               target="_blank" rel="noopener">Facebook</a><a style={{color: "#55acee"}} role="button"
+                                                             className="button button--link"
+                                                             href={`https://twitter.com/intent/tweet/?text=${item.appName} is using Flutter InAppWebView&amp;url=${window.location.href}`}
+                                                             target="_blank" rel="noopener">Twitter</a><a
+            style={{color: "#dd4b39"}} role="button"
+            className="button button--link"
+            href={`mailto:?subject=${item.appName} is using Flutter InAppWebView&amp;body=${window.location.href}`}
+            target="_self" rel="noopener">Mail</a><a style={{color: "#25d366"}} role="button"
+                                                     className="button button--link"
+                                                     href={`whatsapp://send?text=${item.appName} is using Flutter InAppWebView%20${window.location.href}`}
+                                                     target="_blank" rel="noopener">Whatsapp</a><a
+            style={{color: "#54a9eb"}} role="button"
+            className="button button--link"
+            href={`https://telegram.me/share/url?text=${item.appName} is using Flutter InAppWebView&amp;url=${window.location.href}`}
+            target="_blank" rel="noopener">Telegram</a>
+          </div>}
+        </BrowserOnly>
       </div>
       <h3 className="margin-top--md">App Description</h3>
       <p dangerouslySetInnerHTML={{__html: item.longDescription.replace(/\n/g, "<br />")}}/>
@@ -82,21 +87,30 @@ function ShowcaseItemInfo(item: ShowcaseItem) {
   );
 }
 
-const appName = new URLSearchParams(window.location.search).get('appName')?.trim();
-if (appName == null) {
-  window.history.back();
-}
-const flutterApp: ShowcaseItem | null = (showcaseDataJSON as ShowcaseItem[]).find(item => item.appName === appName);
-if (flutterApp == null) {
-  window.history.back();
-}
-
 export default function FlutterAppPage(): JSX.Element {
-  if (!flutterApp) {
+  const [flutterApp, setFlutterApp] = useState(null as ShowcaseItem | null);
+  const isBrowser = useIsBrowser();
+
+  useEffect(() => {
+    if (isBrowser) {
+      const appName = new URLSearchParams(window.location.search).get('appName')?.trim();
+      if (appName == null) {
+        window.history.back();
+        return null;
+      }
+      const app = (showcaseDataJSON as ShowcaseItem[]).find(item => item.appName === appName);
+      if (app == null) {
+        window.history.back();
+        return null;
+      }
+      setFlutterApp({...app});
+    }
+  }, [isBrowser]);
+
+  if (flutterApp == null) {
     return null;
   }
 
-  const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
       title={`${flutterApp.appName} - Showcase`}

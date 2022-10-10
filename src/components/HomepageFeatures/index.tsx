@@ -13,22 +13,22 @@ const FeatureList: FeatureItem[] = [
     title: 'WebView integrated into the widget tree',
     img: '/img/webview_integrated.png',
     description: (
-      <>
+      <div>
         <p>Adding the <code>InAppWebView</code> widget into your app is very simple.
           It’s just a widget like any other Flutter widget:
-          <pre><code>InAppWebView(initialUrlRequest: <br/>&nbsp;&nbsp;URLRequest(url: Uri.parse(<span
-            style={{color: 'rgb(215, 58, 73)'}}>"https://flutter.dev"</span>))<br/>)</code></pre>
         </p>
+        <pre><code>InAppWebView(initialUrlRequest: <br/>&nbsp;&nbsp;URLRequest(url: Uri.parse(<span
+          style={{color: 'rgb(215, 58, 73)'}}>"https://flutter.dev"</span>))<br/>)</code></pre>
         <p>You can listen to a lot of events and use the <code>InAppWebViewController</code> to control
           your <code>InAppWebView</code> instances!</p>
-      </>
+      </div>
     ),
   },
   {
     title: 'Open An In-App Browser',
     img: '/img/in_app_browser.png',
     description: (
-      <>
+      <div>
         <p>Use <code>InAppBrowser</code> or <code>ChromeSafariBrowser</code> to open an in-app
           browser! <code>ChromeSafariBrowser</code> is based on <a target="_blank" rel="noopener"
                                                                    href="https://developer.android.com/reference/android/support/customtabs/package-summary">Chrome
@@ -37,19 +37,19 @@ const FeatureList: FeatureItem[] = [
           iOS.</p>
         <p>Create a Class that extends the <code>InAppBrowser</code>/<code>ChromeSafariBrowser</code> Class in order to
           override the callbacks to manage the browser events.</p>
-      </>
+      </div>
     ),
   },
   {
     title: 'Use Headless WebViews',
     img: '/img/headless_webview.png',
     description: (
-      <>
+      <div>
         <p>It can be used to run a WebView in background without attaching an <code>InAppWebView</code> to the widget
           tree.</p>
         <p>As <code>InAppWebView</code>, it has the same options and events. Use <code>InAppWebViewController</code> to
           control the <strong>headless WebView</strong> instance.</p>
-      </>
+      </div>
     ),
   }
 ];
@@ -62,7 +62,7 @@ function Feature({title, img, description}: FeatureItem) {
       </div>
       <div className="padding-horiz--md">
         <h3>{title}</h3>
-        <p>{description}</p>
+        <div>{description}</div>
       </div>
     </div>
   );

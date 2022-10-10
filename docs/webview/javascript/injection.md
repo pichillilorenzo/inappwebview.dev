@@ -18,7 +18,7 @@ You can inject JavaScript code in different ways:
 
 ## Using the evaluateJavascript method
 
-To evaluate JavaScript code, you can use the `InAppWebViewController.evaluateJavascript` method. It accepts a String as source code to be evaluated by the WebView and an optional [Content World](/docs/javascript/content-worlds/) and returns the result of the evaluation as a `dynamic`type.
+To evaluate JavaScript code, you can use the `InAppWebViewController.evaluateJavascript` method. It accepts a String as source code to be evaluated by the WebView and an optional [Content World](/docs/webview/javascript/content-worlds) and returns the result of the evaluation as a `dynamic`type.
 The return type depends on the type you returned from the JavaScript side.
 
 For example, using this code:
@@ -51,7 +51,7 @@ The `functionBody` parameter is the JavaScript source code string to use as the 
 
 The `arguments` parameter is a `Map` of the arguments to pass to the function call. Each key in the `Map` corresponds to the name of an argument in the `functionBody` string, and the value of that key is the value to use during the evaluation of the code.
 
-Also, you can set an optional [Content World](/docs/javascript/content-worlds/).
+Also, you can set an optional [Content World](/docs/webview/javascript/content-worlds).
 
 Supported value types can be found in the official Flutter docs: [Platform channel data types support and codecs](https://flutter.dev/docs/development/platform-integration/platform-channels#codec), except for `Uint8List`, `Int32List`, `Int64List`, and `Float64List` that should be converted into a `List`. All items in a `List` or in a `Map` must also be one of the supported types.
 
