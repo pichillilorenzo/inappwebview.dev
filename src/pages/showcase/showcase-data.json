@@ -64,5 +64,30 @@
     "sourceCode":"https://github.com/Manuito83/torn-pda",
     "website":"https://www.torn.com/",
     "usedFor":"To display and assist players of Torn City (www.torn.com) website."
+  },
+  {
+    "appName": "KryptoGO Wallet",
+    "shortDescription": "KryptoGO - Cryptocurrency Wallet for Bitcoin and NFTs",
+    "longDescription": "KryptoGO - Cryptocurrency Wallet for Bitcoin and NFTs\n\nEasily and safely manage crypto, ETH, and BTC.\n\n- The most beginner-friendly crypto wallet. Registration requires only your phone number and is lightning fast.\n- Knowing your seed phrase is optional. Even without knowing your seed phrase, KryptoGO guarantees security and privacy.\n- Passed the ISO 27701 and 27001 (information security and data privacy) certifications.\n- Identity verification. Trade with phone contacts, or set up peer-to-peer (P2P) exchanges.\n- Manage your assets from multiple chains. Your portfolio consolidates cryptocurrency tokens, NFTs, DeFi positions, and GameFi assets.\n- Receive NFT airdrops straight to your wallet associated with your phone. Your KryptoGO identity serves as your Web3 passport\n- Built-in DApp browser. Hand selected Defi investments tailored to you. Invest with a single click, and keep track of your return of investment.\n- Scan QR codes and receive NFTs. See NFT price graphs and trends.\n- List on OpenSea with a single click.\n\nKryptoGO helps you explore the wonderful world of crypto, and is the most secure and beginner-friendly wallet for NFTs, Bitcoin, and Ethereum.\n\nKryptoGO Wallet combines functionality of multiple services and wallets and simplifies procedure, making it super easy to perform a multitude of tasks.\n\nWith KryptoGO, start your journey into the metaverse.\n\nKryptoGO Wallet is a decentralized, non-custodial wallet. That means users have 100% full control over their assets. KryptoGO or any other third party are unable to access user assets,.\n\nKryptoGO started out in the field of regulatory finance, providing due-diligence (KYC) services and solutions to financial institutions worldwide. Now, we are working on establishing safe financial spaces in Web 3, starting with our secure, transparent, and decentralised asset management systems.\n\n- The first blockchain company in Taiwan to pass ISO 27001 / 27701 information security and data privacy certifications.\n- Multi-chain wallet. We support Bitcoin, Ethereum, Solana, Polygon, BNB Chian, Arbitrum, KCC, Tron",
+    "insertDate": "2022-10-09T17:42:46.031Z",
+    "icon": "https://user-images.githubusercontent.com/12824216/194771313-e1e3c013-699d-4958-a981-606f1fdb285b.png",
+    "platforms": [
+      "mobile"
+    ],
+    "screenshots": [
+      "https://user-images.githubusercontent.com/12824216/194771339-7205440a-00ab-4135-abf2-f3ee5a1a8b3b.png",
+      "https://user-images.githubusercontent.com/12824216/194771343-829d284c-838a-4c80-9af6-a26430848a28.png",
+      "https://user-images.githubusercontent.com/12824216/194771346-47f581ef-255f-43b5-b165-7c8ce2faf0f8.png",
+      "https://user-images.githubusercontent.com/12824216/194771349-57065626-aef7-494b-9b3a-790a21c628d8.png",
+      "https://user-images.githubusercontent.com/12824216/194771351-37205d81-dc2a-463a-8f6c-329b3e02658b.png",
+      "https://user-images.githubusercontent.com/12824216/194771355-44b37da9-615f-4d13-a221-89f3ebb49c32.png",
+      "https://user-images.githubusercontent.com/12824216/194771356-8da71b9e-dc99-439e-a75b-394856888226.png",
+      "https://user-images.githubusercontent.com/12824216/194771358-763148b7-e2d1-4dab-86c5-23a1582bac2d.png"
+    ],
+    "googlePlayStore": "https://play.google.com/store/apps/details?id=com.kryptogo.walletapp",
+    "appleAppStore": "https://apps.apple.com/app/kryptogo/id1593830910",
+    "sourceCode": "",
+    "website": "https://kryptogo.com/wallet",
+    "usedFor": "Create a in-app DApp browser to interact to blockchain"
   }
 ]
