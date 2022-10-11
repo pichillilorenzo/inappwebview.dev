@@ -26,12 +26,14 @@ To test WebRTC, you can try to visit the [PubNub WebRTC Demo](https://www.pubnub
 
 ## WebRTC on Android
 
-On Android, you need to implement the `androidOnPermissionRequest` event, that is an event fired when the WebView is requesting permission to access a specific resource.
+On Android, you need to implement the `onPermissionRequest` event, that is an event fired when the WebView is requesting permission to access a specific resource.
 This event is used to grant permissions for the WebRTC API, for example:
 ```dart
-androidOnPermissionRequest: (controller, origin, resources) async {
-  return PermissionRequestResponse(resources: resources, action: PermissionRequestResponseAction.GRANT);
-}
+onPermissionRequest: (controller, request) async {
+  return PermissionResponse(
+      resources: request.resources,
+      action: PermissionResponseAction.GRANT);
+},
 ```
 
 Also, you need to add these permissions in your `AndroidManifest.xml` file:
@@ -50,20 +52,23 @@ Also, you need to add these permissions in your `AndroidManifest.xml` file:
 WebRTC is available starting from iOS 14.3+.
 :::
 
+On iOS, you can also implement the `onPermissionRequest` event to grant permissions for the WebRTC API, for example:
+```dart
+onPermissionRequest: (controller, request) async {
+  return PermissionResponse(
+      resources: request.resources,
+      action: PermissionResponseAction.GRANT);
+},
+```
+
 You need to set the iOS-specific option `allowsInlineMediaPlayback` to `true`, for example:
 ```dart
-initialOptions: InAppWebViewGroupOptions(
-  crossPlatform: InAppWebViewOptions(
-    mediaPlaybackRequiresUserGesture: false,
-  ),
-  android: AndroidInAppWebViewOptions(
-    useHybridComposition: true
-  ),
-  ios: IOSInAppWebViewOptions(
-    allowsInlineMediaPlayback: true,
-  )
+initialSettings: InAppWebViewSettings(
+  mediaPlaybackRequiresUserGesture: false,
+  allowsInlineMediaPlayback: true,
 ),
 ```
+
 Note that on iOS, to be able to play video inline, the `video` HTML element must have the `playsinline` attribute, for example:
 ```html
 <video autoplay playsinline src="..."></video>
@@ -78,3 +83,13 @@ In your `Info.plist` file, you need to add also the following properties:
 ```
 If you open this file In Xcode, the `NSMicrophoneUsageDescription` property is represented by `Privacy - Microphone Usage Description` and
 `NSCameraUsageDescription` is represented by `Privacy - Camera Usage Description`.
+
+## WebRTC on Web platform
+
+You need to set the Web-specific option `iframeAllow` to `camera; microphone`, for example:
+```dart
+initialSettings: InAppWebViewSettings(
+  iframeAllow: "camera; microphone", // for camera and microphone permissions
+  iframeAllowFullscreen: true, // if you need fullscreen support
+),
+```

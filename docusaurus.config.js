@@ -35,7 +35,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/pichillilorenzo/inappwebview.dev/tree/main/',
+            'https://github.com/pichillilorenzo/inappwebview.dev/tree/main/'
         },
         blog: {
           showReadingTime: true,
@@ -69,14 +69,9 @@ const config = {
           src: 'img/logo.svg',
         },
         items: [
-          // {
-          //   type: 'docsVersionDropdown',
-          // },
           {
-            type: 'doc',
-            docId: 'intro',
+            type: 'docsVersionDropdown',
             position: 'left',
-            label: 'Docs',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {to: 'https://pub.dartlang.org/packages/flutter_inappwebview', label: 'Pub.dev', position: 'left'},

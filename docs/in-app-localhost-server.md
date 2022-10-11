@@ -13,8 +13,7 @@ To start and stop the server, you can use the `InAppLocalhostServer.start` and `
 
 Example:
 ```dart
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -26,8 +25,8 @@ Future main() async {
   // start the localhost server
   await localhostServer.start();
 
-  if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
   runApp(MaterialApp(home: MyApp()));
@@ -39,7 +38,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,15 +49,13 @@ class _MyAppState extends State<MyApp> {
             Expanded(
               child: InAppWebView(
                 initialUrlRequest: URLRequest(
-                    url: Uri.parse("http://localhost:8080/assets/index.html")
-                ),
+                    url: Uri.parse("http://localhost:8080/assets/index.html")),
                 onWebViewCreated: (controller) {},
                 onLoadStart: (controller, url) {},
                 onLoadStop: (controller, url) {},
               ),
-            )]
-          )
-      ),
+            )
+          ])),
     );
   }
 }

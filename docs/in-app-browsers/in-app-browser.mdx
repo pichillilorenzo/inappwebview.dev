@@ -18,8 +18,7 @@ To be able to listen to the `WebView` events, you need to create a class that ex
 
 Example:
 ```dart
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -40,8 +39,8 @@ class MyInAppBrowser extends InAppBrowser {
   }
 
   @override
-  void onLoadError(url, code, message) {
-    print("Can't load $url.. Error: $message");
+  void onReceivedError(WebResourceRequest request, WebResourceError error) {
+    print("Can't load ${request.url}.. Error: ${error.description}");
   }
 
   @override
@@ -58,8 +57,8 @@ class MyInAppBrowser extends InAppBrowser {
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
   runApp(
@@ -77,10 +76,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var options = InAppBrowserClassOptions(
-      crossPlatform: InAppBrowserOptions(hideUrlBar: false),
-      inAppWebViewGroupOptions: InAppWebViewGroupOptions(
-          crossPlatform: InAppWebViewOptions(javaScriptEnabled: true)));
+  var settings = InAppBrowserClassSettings(
+      browserSettings: InAppBrowserSettings(hideUrlBar: false),
+      webViewSettings: InAppWebViewSettings(javaScriptEnabled: true));
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +91,7 @@ class _MyAppState extends State<MyApp> {
             onPressed: () {
               widget.browser.openUrlRequest(
                   urlRequest: URLRequest(url: Uri.parse("https://flutter.dev")),
-                  options: options);
+                  settings: settings);
             },
             child: Text("Open InAppBrowser")),
       ),

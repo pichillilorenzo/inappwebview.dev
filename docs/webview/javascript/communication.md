@@ -78,17 +78,17 @@ In this case, simply return data that you want to send and it will be automatica
 Here is an example of communication:
 ```dart
 import 'dart:async';
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
-  
+
   runApp(new MyApp());
 }
 
@@ -98,11 +98,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
-      android: AndroidInAppWebViewOptions(
-        useHybridComposition: true,
-      ),);
+  InAppWebViewSettings settings = InAppWebViewSettings();
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +109,7 @@ class _MyAppState extends State<MyApp> {
               child: Column(children: <Widget>[
                 Expanded(
                   child: InAppWebView(
-                    initialData: InAppWebViewInitialData(
-                        data: """
+                    initialData: InAppWebViewInitialData(data: """
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -138,21 +133,22 @@ class _MyAppState extends State<MyApp> {
         </script>
     </body>
 </html>
-                      """
-                    ),
-                    initialOptions: options,
+                      """),
+                    initialSettings: settings,
                     onWebViewCreated: (controller) {
-                      controller.addJavaScriptHandler(handlerName: 'handlerFoo', callback: (args) {
-                        // return data to the JavaScript side!
-                        return {
-                          'bar': 'bar_value', 'baz': 'baz_value'
-                        };
-                      });
+                      controller.addJavaScriptHandler(
+                          handlerName: 'handlerFoo',
+                          callback: (args) {
+                            // return data to the JavaScript side!
+                            return {'bar': 'bar_value', 'baz': 'baz_value'};
+                          });
 
-                      controller.addJavaScriptHandler(handlerName: 'handlerFooWithArgs', callback: (args) {
-                        print(args);
-                        // it will print: [1, true, [bar, 5], {foo: baz}, {bar: bar_value, baz: baz_value}]
-                      });
+                      controller.addJavaScriptHandler(
+                          handlerName: 'handlerFooWithArgs',
+                          callback: (args) {
+                            print(args);
+                            // it will print: [1, true, [bar, 5], {foo: baz}, {bar: bar_value, baz: baz_value}]
+                          });
                     },
                     onConsoleMessage: (controller, consoleMessage) {
                       print(consoleMessage);
@@ -227,7 +223,7 @@ To create a Web Message Channel, you need to use the `InAppWebViewController.cre
 This method should be called when the page is loaded, for example, when the `WebView.onLoadStop` event is fired, otherwise, the `WebMessageChannel` won't work.
 
 ```dart
-if (!Platform.isAndroid || await AndroidWebViewFeature.isFeatureSupported(AndroidWebViewFeature.CREATE_WEB_MESSAGE_CHANNEL)) {
+if (defaultTargetPlatform != TargetPlatform.android || await WebViewFeature.isFeatureSupported(WebViewFeature.CREATE_WEB_MESSAGE_CHANNEL)) {
   var webMessageChannel = await controller.createWebMessageChannel();
   var port1 = webMessageChannel!.port1;
   var port2 = webMessageChannel.port2;
@@ -235,7 +231,7 @@ if (!Platform.isAndroid || await AndroidWebViewFeature.isFeatureSupported(Androi
 ```
 
 :::caution Note for Android
-  This method should only be called if `AndroidWebViewFeature.isFeatureSupported` returns `true` for `AndroidWebViewFeature.CREATE_WEB_MESSAGE_CHANNEL`.
+  This method should only be called if `WebViewFeature.isFeatureSupported` returns `true` for `WebViewFeature.CREATE_WEB_MESSAGE_CHANNEL`.
 :::
 
 The Dart side that created the channel uses `port1`, and the JavaScript side at the other end of the port uses `port2`. You send a message to `port2`, and transfer the port over to the other browsing context using `InAppWebViewController.postWebMessage` method along with the message to send, and the object to transfer ownership of, in this case, the port itself.
@@ -255,15 +251,15 @@ To be able to listen to messages from the JavaScript side, you need to first "ca
 Here is an example of communication:
 ```dart
 import 'dart:async';
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
   runApp(new MyApp());
@@ -275,11 +271,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
-    android: AndroidInAppWebViewOptions(
-      useHybridComposition: true,
-    ),);
+  InAppWebViewSettings settings = InAppWebViewSettings();
 
   @override
   Widget build(BuildContext context) {
@@ -290,8 +282,7 @@ class _MyAppState extends State<MyApp> {
               child: Column(children: <Widget>[
                 Expanded(
                   child: InAppWebView(
-                    initialData: InAppWebViewInitialData(
-                        data: """
+                    initialData: InAppWebViewInitialData(data: """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -327,33 +318,40 @@ class _MyAppState extends State<MyApp> {
 </body>
 </html>
 """),
-                    initialOptions: options,
+                    initialSettings: settings,
                     onConsoleMessage: (controller, consoleMessage) {
-                      print("Message coming from the Dart side: ${consoleMessage.message}");
+                      print(
+                          "Message coming from the Dart side: ${consoleMessage.message}");
                     },
                     onLoadStop: (controller, url) async {
-                      if (!Platform.isAndroid || await AndroidWebViewFeature.isFeatureSupported(AndroidWebViewFeature.CREATE_WEB_MESSAGE_CHANNEL)) {
+                      if (defaultTargetPlatform != TargetPlatform.android ||
+                          await WebViewFeature.isFeatureSupported(
+                              WebViewFeature.CREATE_WEB_MESSAGE_CHANNEL)) {
                         // wait until the page is loaded, and then create the Web Message Channel
-                        var webMessageChannel = await controller.createWebMessageChannel();
+                        var webMessageChannel =
+                        await controller.createWebMessageChannel();
                         var port1 = webMessageChannel!.port1;
                         var port2 = webMessageChannel.port2;
-  
+
                         // set the web message callback for the port1
                         await port1.setWebMessageCallback((message) async {
-                          print("Message coming from the JavaScript side: $message");
+                          print(
+                              "Message coming from the JavaScript side: $message");
                           // when it receives a message from the JavaScript side, respond back with another message.
-                          await port1.postMessage(WebMessage(data: message! + " and back"));
+                          await port1.postMessage(
+                              WebMessage(data: message! + " and back"));
                         });
-  
+
                         // transfer port2 to the webpage to initialize the communication
-                        await controller.postWebMessage(message: WebMessage(data: "capturePort", ports: [port2]), targetOrigin: Uri.parse("*"));
+                        await controller.postWebMessage(
+                            message:
+                            WebMessage(data: "capturePort", ports: [port2]),
+                            targetOrigin: Uri.parse("*"));
                       }
                     },
                   ),
                 ),
-              ])
-          )
-      ),
+              ]))),
     );
   }
 }
@@ -368,7 +366,7 @@ To add a Web Message Listener, you need to use the `InAppWebViewController.addWe
 child: InAppWebView(
   onWebViewCreated: (controller) async {
    // add first all of your web message listeners
-   if (!Platform.isAndroid || await AndroidWebViewFeature.isFeatureSupported(AndroidWebViewFeature.WEB_MESSAGE_LISTENER)) {
+   if (defaultTargetPlatform != TargetPlatform.android || await WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
      await controller.addWebMessageListener(WebMessageListener(
        jsObjectName: "myObject",
        allowedOriginRules: Set.from(["https://*.example.com"]),
@@ -385,7 +383,7 @@ child: InAppWebView(
 ``` 
 
 :::caution Note for Android
-  This method should only be called if `AndroidWebViewFeature.isFeatureSupported` returns `true` for `AndroidWebViewFeature.WEB_MESSAGE_LISTENER`.
+  This method should only be called if `WebViewFeature.isFeatureSupported` returns `true` for `WebViewFeature.WEB_MESSAGE_LISTENER`.
 :::
 
 The injected JavaScript object will be named `WebMessageListener.jsObjectName` in the global scope. This will inject the JavaScript object in any frame whose origin matches `WebMessageListener.allowedOriginRules` for every navigation after this call, and the JavaScript object will be available immediately when the page begins to load.
@@ -518,7 +516,7 @@ myObject.postMessage("I'm ready!");
 // Flutter App
 child: InAppWebView(
   onWebViewCreated: (controller) async {
-   if (!Platform.isAndroid || await AndroidWebViewFeature.isFeatureSupported(AndroidWebViewFeature.WEB_MESSAGE_LISTENER)) {
+   if (defaultTargetPlatform != TargetPlatform.android || await WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
      await controller.addWebMessageListener(WebMessageListener(
        jsObjectName: "myObject",
        onPostMessage: (message, sourceOrigin, isMainFrame, replyProxy) {

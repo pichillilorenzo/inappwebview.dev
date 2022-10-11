@@ -22,8 +22,7 @@ To be able to listen to the `ChromeSafariBrowser` events, you need to create a c
 
 Example:
 ```dart
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -47,8 +46,8 @@ class MyChromeSafariBrowser extends ChromeSafariBrowser {
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
   runApp(MaterialApp(home: MyApp()));
@@ -84,10 +83,9 @@ class _MyAppState extends State<MyApp> {
             onPressed: () async {
               await widget.browser.open(
                   url: Uri.parse("https://flutter.dev/"),
-                  options: ChromeSafariBrowserClassOptions(
-                      android: AndroidChromeCustomTabsOptions(
-                          shareState: CustomTabsShareState.SHARE_STATE_OFF),
-                      ios: IOSSafariOptions(barCollapsingEnabled: true)));
+                  settings: ChromeSafariBrowserSettings(
+                      shareState: CustomTabsShareState.SHARE_STATE_OFF,
+                      barCollapsingEnabled: true));
             },
             child: Text("Open Chrome Safari Browser")),
       ),
@@ -130,8 +128,7 @@ Check the official [Android Integration Guide](https://developer.chrome.com/docs
 ### TWA Example
 
 ```dart
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -155,8 +152,8 @@ class AndroidTWABrowser extends ChromeSafariBrowser {
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
   runApp(MaterialApp(home: MyApp()));
@@ -185,11 +182,10 @@ class _MyAppState extends State<MyApp> {
         child: ElevatedButton(
             onPressed: () async {
               await widget.browser.open(
-                  url: Uri.parse("https://flutter.dev/"),
-                  options: ChromeSafariBrowserClassOptions(
-                    android: AndroidChromeCustomTabsOptions(
-                        isTrustedWebActivity: true),
-                  ));
+                url: Uri.parse("https://flutter.dev/"),
+                settings:
+                    ChromeSafariBrowserSettings(isTrustedWebActivity: true),
+              );
             },
             child: Text("Open Android TWA Browser")),
       ),
