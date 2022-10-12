@@ -15,6 +15,8 @@ In this case by default the system-wide Android network proxy settings are used 
 In the rare case that it is necessary for an application to explicitly specify its proxy configuration,
 this API may be used to explicitly specify the proxy rules that govern WebView initiated network requests.
 
+Before using it, check if `WebViewFeature.isFeatureSupported` returns `true` for `WebViewFeature.PROXY_OVERRIDE`.
+
 Example:
 ```dart
 import 'dart:async';
