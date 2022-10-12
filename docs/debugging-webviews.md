@@ -10,7 +10,7 @@ date: 2022-12-10 12:00:00
 WebViews and some controllers have debugging info enabled by default when your flutter app is running in debug mode (based on the `kDebugMode` flutter constant value).
 
 You can change the `DebugLoggingSettings` properties of the following static properties:
-- `InAppWebView` and `HeadlessInAppWebView` thought `WebView.debugLoggingSettings`;
+- `InAppWebView` and `HeadlessInAppWebView` through `WebView.debugLoggingSettings`;
 - `ChromeSafariBrowser.debugLoggingSettings`;
 - `InAppBrowser.debugLoggingSettings` for InAppBrowser specific events, otherwise `WebView.debugLoggingSettings`;
 - `FindInteractionController.debugLoggingSettings`;
