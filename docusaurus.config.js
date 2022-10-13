@@ -35,7 +35,16 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/pichillilorenzo/inappwebview.dev/tree/main/'
+            'https://github.com/pichillilorenzo/inappwebview.dev/tree/main/',
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: '6.x.x',
+            },
+            '5.x.x': {
+              banner: 'none'
+            }
+          },
         },
         blog: {
           showReadingTime: true,

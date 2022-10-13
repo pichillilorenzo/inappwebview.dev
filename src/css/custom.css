@@ -58,3 +58,15 @@
 .width-100 {
   width: 100%;
 }
+
+.navbar-sidebar .navbar__logo img {
+  max-width: 150px;
+}
+
+.navbar-sidebar .navbar__brand {
+  margin-right: auto;
+}
+
+.navbar-sidebar__close {
+  margin-left: 1rem;
+}
