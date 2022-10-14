@@ -15,7 +15,7 @@ Before using these classes or their methods, you should check if the service wor
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (defaultTargetPlatform == TargetPlatform.android) {
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(true);
 
     var swAvailable = await WebViewFeature.isFeatureSupported(

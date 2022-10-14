@@ -22,10 +22,12 @@ final InAppLocalhostServer localhostServer = new InAppLocalhostServer();
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // start the localhost server
-  await localhostServer.start();
+  if (!kIsWeb) {
+    // start the localhost server
+    await localhostServer.start();
+  }
 
-  if (defaultTargetPlatform == TargetPlatform.android) {
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 

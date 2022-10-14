@@ -27,21 +27,23 @@ Example:
 // get the WebStorageManager instance
 WebStorageManager webStorageManager = WebStorageManager.instance();
 
-if (defaultTargetPlatform == TargetPlatform.android) {
-  // if current platform is Android, delete all data. 
-  await webStorageManager.deleteAllData();
-} else if (defaultTargetPlatform == TargetPlatform.iOS) {
-  // if current platform is iOS, delete all data for "flutter.dev".
-  var records = await webStorageManager.fetchDataRecords(dataTypes: WebsiteDataType.values);
-  var recordsToDelete = <WebsiteDataRecord>[];
-  for (var record in records) {
-    if (record.displayName == 'flutter.dev') {
-      recordsToDelete.add(record);
+if (!kIsWeb) {
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    // if current platform is Android, delete all data. 
+    await webStorageManager.deleteAllData();
+  } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+    // if current platform is iOS, delete all data for "flutter.dev".
+    var records = await webStorageManager.fetchDataRecords(dataTypes: WebsiteDataType.values);
+    var recordsToDelete = <WebsiteDataRecord>[];
+    for (var record in records) {
+      if (record.displayName == 'flutter.dev') {
+        recordsToDelete.add(record);
+      }
     }
+    await webStorageManager.removeDataFor(
+        dataTypes: WebsiteDataType.values,
+        dataRecords: recordsToDelete
+    );
   }
-  await webStorageManager.removeDataFor(
-      dataTypes: WebsiteDataType.values,
-      dataRecords: recordsToDelete
-  );
 }
 ```
