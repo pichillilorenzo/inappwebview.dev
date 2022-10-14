@@ -29,9 +29,11 @@ WebView.debugLoggingSettings.excludeFilter.add(
 );
 ```
 
-`WebView.debugLoggingSettings` comes with a default list of excluded events, that are:
+`WebView.debugLoggingSettings` comes with a default list of excluded events
+and `maxLogMessageLength` value:
 ```dart
 DebugLoggingSettings(
+  maxLogMessageLength: 1000,
   excludeFilter: [
     RegExp(r"onScrollChanged"),
     RegExp(r"onOverScrolled"),

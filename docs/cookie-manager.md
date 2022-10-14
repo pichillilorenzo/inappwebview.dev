@@ -31,7 +31,6 @@ await cookieManager.setCookie(
   url: url,
   name: "myCookie",
   value: "myValue",
-  domain: ".flutter.dev",
   expiresDate: expiresDate,
   isSecure: true,
 );
@@ -46,5 +45,5 @@ Cookie? cookie = await cookieManager.getCookie(url: url, name: "myCookie");
 await cookieManager.deleteCookie(url: url, name: "myCookie");
 
 // delete cookies
-await cookieManager.deleteCookies(url: url);
+await cookieManager.deleteCookies(url: url, domain: ".flutter.dev");
 ```
