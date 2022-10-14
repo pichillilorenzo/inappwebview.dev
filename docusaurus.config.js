@@ -108,6 +108,10 @@ const config = {
                 label: 'Getting Started',
                 to: '/docs/intro',
               },
+              {
+                label: 'Migration Guide from 5.x.x',
+                to: '/docs/migration-guide',
+              },
             ],
           },
           {
