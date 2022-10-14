@@ -105,22 +105,22 @@ A simple example:
 ```dart
 child: InAppWebView(  
   initialUrlRequest: URLRequest(  
-    url: Uri._parse_("https://flutter.dev"),  
+    url: Uri.parse("https://flutter.dev"),  
   ),  
   onLoadStop: (controller, url) async {  
     await controller.evaluateJavascript(source: "var foo = 49;");  
     await controller.evaluateJavascript(source: "var bar = 19;",  
-        contentWorld: ContentWorld._PAGE_);  
+        contentWorld: ContentWorld.PAGE);  
     print(await controller.evaluateJavascript(source: "foo + bar;"));  
 
     print(await controller.evaluateJavascript(source: "bar;",  
-        contentWorld: ContentWorld._DEFAULT_CLIENT_));  
+        contentWorld: ContentWorld.DEFAULT_CLIENT));  
     await controller.evaluateJavascript(source: "var bar = 2;",  
-        contentWorld: ContentWorld._DEFAULT_CLIENT_);  
+        contentWorld: ContentWorld.DEFAULT_CLIENT);  
     print(await controller.evaluateJavascript(source: "bar;",  
-        contentWorld: ContentWorld._DEFAULT_CLIENT_));  
+        contentWorld: ContentWorld.DEFAULT_CLIENT));  
 
-    if (Platform._isIOS_) {  
+    if (Platform.isIOS) {  
       await controller.evaluateJavascript(  
           source: "document.body.innerHTML = 'LOL';",  
           contentWorld: ContentWorld.world(name: "MyWorld"));  
@@ -157,7 +157,7 @@ Here is an example:
 ```dart
 child: InAppWebView(  
   initialUrlRequest: URLRequest(  
-    url: Uri._parse_("https://flutter.dev"),  
+    url: Uri.parse("https://flutter.dev"),  
   ),  
   onLoadStop: (controller, url) async {  
     final String functionBody = """  

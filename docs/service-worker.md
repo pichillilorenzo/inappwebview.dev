@@ -1,6 +1,6 @@
 ---
 sidebar_position: 10
-date: 2021-03-08 10:48:00
+date: 2022-12-10 12:00:00
 ---
 
 # Service Worker
@@ -15,21 +15,23 @@ Before using these classes or their methods, you should check if the service wor
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
 
-    var swAvailable = await AndroidWebViewFeature.isFeatureSupported(AndroidWebViewFeature.SERVICE_WORKER_BASIC_USAGE);
-    var swInterceptAvailable = await AndroidWebViewFeature.isFeatureSupported(AndroidWebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST);
+    var swAvailable = await WebViewFeature.isFeatureSupported(
+        WebViewFeature.SERVICE_WORKER_BASIC_USAGE);
+    var swInterceptAvailable = await WebViewFeature.isFeatureSupported(
+        WebViewFeature.SERVICE_WORKER_SHOULD_INTERCEPT_REQUEST);
 
     if (swAvailable && swInterceptAvailable) {
-      AndroidServiceWorkerController serviceWorkerController = AndroidServiceWorkerController.instance();
+      ServiceWorkerController serviceWorkerController = ServiceWorkerController.instance();
 
-      serviceWorkerController.serviceWorkerClient = AndroidServiceWorkerClient(
+      await serviceWorkerController.setServiceWorkerClient(ServiceWorkerClient(
         shouldInterceptRequest: (request) async {
           print(request);
           return null;
         },
-      );
+      ));
     }
   }
 
@@ -64,10 +66,8 @@ You can specify up to 10 "app-bound" domains using the new Info.plist key `WKApp
 
 After that, you need to set to `true` the `limitsNavigationsToAppBoundDomains` iOS-specific WebView option, for example:
 ```dart
-InAppWebViewGroupOptions(
-  ios: IOSInAppWebViewOptions(
-    limitsNavigationsToAppBoundDomains: true // adds Service Worker API on iOS 14.0+
-  )
+InAppWebViewSettings(
+  limitsNavigationsToAppBoundDomains: true // adds Service Worker API on iOS 14.0+
 )
 ```
 

@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-date: 2021-03-08 10:48:00
+date: 2022-12-10 12:00:00
 ---
 
 # Getting Started
@@ -26,14 +26,14 @@ void main() {
 
 - Dart sdk: ">=2.14.0 <3.0.0"
 - Flutter: ">=2.5.0"
-- Android: `minSdkVersion 17` and add support for `androidx` (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app)
-- iOS: `--ios-language swift`, Xcode version `>= 12`
+- Android: `minSdkVersion 19` and add support for `androidx` (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app)
+- iOS 9.0+: `--ios-language swift`, Xcode version `>= 12`
 
 ## Setup Android
 
 If you are starting a new fresh app, you need to create the Flutter App with `flutter create --androidx -i swift` to add support for `androidx`, otherwise it won't work (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app).
 
-During the build, if Android fails with `Error: uses-sdk:minSdkVersion 16 cannot be smaller than version 17 declared in library`, it means that you need to update the `minSdkVersion` of your `android/app/build.gradle` file to at least `17`.
+During the build, if Android fails with `Error: uses-sdk:minSdkVersion 16 cannot be smaller than version 19 declared in library`, it means that you need to update the `minSdkVersion` of your `android/app/build.gradle` file to at least `19`.
 
 Also, you need to add `<uses-permission android:name="android.permission.INTERNET"/>` in the `android/app/src/main/AndroidManifest.xml` file in order to give minimum permission to perform network operations in your application.
 
@@ -65,7 +65,7 @@ To use Material Components when the user interacts with input elements in the We
 If you are starting a new fresh app, you need to create the Flutter App with `flutter create --androidx -i swift` (see [flutter/flutter#13422 (comment)](https://github.com/flutter/flutter/issues/13422#issuecomment-392133780)), otherwise, you will get this message:
 ```
 === BUILD TARGET flutter_inappwebview OF PROJECT Pods WITH CONFIGURATION Debug ===
-The â€œSwift Language Versionâ€ (SWIFT_VERSION) build setting must be set to a supported value for targets which use Swift. Supported values are: 3.0, 4.0, 4.2, 5.0. This setting can be set in the build settings editor.
+The "Swift Language Version" (SWIFT_VERSION) build setting must be set to a supported value for targets which use Swift. Supported values are: 3.0, 4.0, 4.2, 5.0. This setting can be set in the build settings editor.
 ```
 
 If you still have this problem, try to edit iOS `Podfile` like this (see [#15](https://github.com/pichillilorenzo/flutter_inappwebview/issues/15)):
@@ -114,13 +114,35 @@ You need to disable Apple Transport Security (ATS) feature. There're two options
 ```xml
 <key>NSAppTransportSecurity</key>
 <dict>
-    <key>NSAllowsArbitraryLoads</key><true/>
+  <key>NSAllowsArbitraryLoads</key><true/>
 </dict>
 ```
 
 Other useful `Info.plist` properties are:
 * `NSAllowsLocalNetworking`: A Boolean value indicating whether to allow loading of local resources ([Official wiki](https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/nsallowslocalnetworking));
 * `NSAllowsArbitraryLoadsInWebContent`: A Boolean value indicating whether all App Transport Security restrictions are disabled for requests made from web views ([Official wiki](https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/nsallowsarbitraryloadsinwebcontent)).
+
+## Setup Web
+
+To make it work properly on the Web platform, you need to add the `web_support.js` file inside the `<head>` of your `web/index.html` file:
+
+```html
+<head>
+  <!-- ... -->
+  <script src="/packages/flutter_inappwebview/assets/web/web_support.js" defer></script>
+  <!-- ... -->
+</head>
+```
+
+:::info Flutter widgets over iframe are not working!
+When overlaying Flutter widgets on top of `HtmlElementView` widgets that respond to mouse gestures (handle clicks, for example), the clicks will be consumed by the `HtmlElementView`, and not relayed to Flutter.
+
+The result is that Flutter widget's `onTap` (and other) handlers won't fire as expected, but they'll affect the underlying webview.
+
+This is an issue of Flutter itself and not of this plugin.
+
+To overcome this problem, you should use the official [pointer_interceptor](https://pub.dev/packages/pointer_interceptor) Flutter plugin. Check the `pointer_interceptor` plugin docs to understand how to use it.
+:::
 
 ## Load files inside the assets folder
 

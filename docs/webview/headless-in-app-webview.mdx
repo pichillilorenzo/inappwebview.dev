@@ -1,6 +1,6 @@
 ---
-sidebar_position: 4
-date: 2021-03-08 10:48:00
+sidebar_position: 2
+date: 2022-12-10 12:00:00
 ---
 
 import Tabs from '@theme/Tabs';
@@ -31,15 +31,15 @@ Note that if the `HeadlessInAppWebView` is not running, the `getSize` method wil
 Example:
 ```dart
 import 'dart:async';
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
   runApp(MaterialApp(home: new MyApp()));

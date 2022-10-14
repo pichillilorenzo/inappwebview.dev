@@ -1,13 +1,17 @@
 ---
-title: "WebView Context Menu"
-sidebar_position: 3
-date: 2021-03-08 10:48:00
+title: "Context Menu"
+sidebar_position: 4
+date: 2022-12-10 12:00:00
+description: ContextMenu represents the WebView's context menu.
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import config from '../../docusaurus.config';
 
-# Context Menu
+<head>
+  <title>WebView Context Menu | {config.title}</title>
+</head>
 
 `ContextMenu` represents the `WebView`'s context menu.
 
@@ -31,15 +35,15 @@ So, the `ContextMenu` class represents the WebView context menu. It used by `Web
 Example:
 ```dart
 import 'dart:async';
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isAndroid) {
-    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
   runApp(MaterialApp(home: new MyApp()));
@@ -54,11 +58,7 @@ class _MyAppState extends State<MyApp> {
   final GlobalKey webViewKey = GlobalKey();
 
   InAppWebViewController? webViewController;
-  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
-    android: AndroidInAppWebViewOptions(
-      useHybridComposition: true,
-    ),
-  );
+  InAppWebViewSettings settings = InAppWebViewSettings();
   late ContextMenu contextMenu;
 
   @override
@@ -68,8 +68,7 @@ class _MyAppState extends State<MyApp> {
     contextMenu = ContextMenu(
         menuItems: [
           ContextMenuItem(
-              androidId: 1,
-              iosId: "1",
+              id: 1,
               title: "Special",
               action: () async {
                 final snackBar = SnackBar(
@@ -90,11 +89,9 @@ class _MyAppState extends State<MyApp> {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },
         onContextMenuActionItemClicked: (menuItem) {
-          var id = (Platform.isAndroid) ? menuItem.androidId : menuItem.iosId;
-
           final snackBar = SnackBar(
             content: Text(
-                "Menu item with ID $id and title '${menuItem.title}' clicked!"),
+                "Menu item with ID ${menuItem.id} and title '${menuItem.title}' clicked!"),
             duration: Duration(seconds: 1),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -114,7 +111,7 @@ class _MyAppState extends State<MyApp> {
             initialUrlRequest:
                 URLRequest(url: Uri.parse("https://flutter.dev/")),
             contextMenu: contextMenu,
-            initialOptions: options,
+            initialSettings: settings,
             onWebViewCreated: (InAppWebViewController controller) {
               webViewController = controller;
             },

@@ -36,6 +36,15 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
             'https://github.com/pichillilorenzo/inappwebview.dev/tree/main/',
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: '6.x.x',
+            },
+            '5.x.x': {
+              banner: 'none'
+            }
+          },
         },
         blog: {
           showReadingTime: true,
@@ -69,14 +78,9 @@ const config = {
           src: 'img/logo.svg',
         },
         items: [
-          // {
-          //   type: 'docsVersionDropdown',
-          // },
           {
-            type: 'doc',
-            docId: 'intro',
+            type: 'docsVersionDropdown',
             position: 'left',
-            label: 'Docs',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {to: 'https://pub.dartlang.org/packages/flutter_inappwebview', label: 'Pub.dev', position: 'left'},
@@ -103,6 +107,10 @@ const config = {
               {
                 label: 'Getting Started',
                 to: '/docs/intro',
+              },
+              {
+                label: 'Migration Guide from 5.x.x',
+                to: '/docs/migration-guide',
               },
             ],
           },

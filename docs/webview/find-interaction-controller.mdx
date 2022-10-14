@@ -1,0 +1,221 @@
+---
+title: "Find Interaction Controller"
+sidebar_position: 5
+date: 2022-12-10 12:00:00
+description: FindInteractionController represents the controller used by the WebView to add text-finding capabilities, such as the "Find on page" feature.
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import config from '../../docusaurus.config';
+
+<head>
+  <title>WebView Find Interaction Controller | {config.title}</title>
+</head>
+
+`FindInteractionController` represents the controller used by the `WebView` to add text-finding capabilities, such as the "Find on page" feature.
+
+## Basic Usage
+
+Set the `findInteractionController` of the `WebView` to control the text-finding feature.
+To start search text, use `findInteractionController.findAll(string find)` and then use `findInteractionController.findNext(bool forward)` to move forward (`true`) or backward (`false` ).
+
+You can access the active find session with `findInteractionController.getActiveFindSession()` with info about the search after completion.
+
+:::info Note for Android
+The `findAll` method will not wait for the completion of the search.
+
+In this case, you can wait for a little time, for example `await Future.delayed(Duration(seconds: 1)))`, before accessing the active `FindSession`.
+:::
+
+Also, you can listen for the `FindInteractionController.onFindResultReceived` event that is an event fired as find-on-page operations progress.
+
+:::caution Note for iOS
+This event will not be called if `InAppWebViewSettings.isFindInteractionEnabled` is `true`.
+:::
+
+Only on iOS, setting `InAppWebViewSettings.isFindInteractionEnabled` to `true`, enables the web view's built-in find interaction native UI.
+With this option enabled, you can use the other `FindInteractionController` methods to control the iOS native UI.
+
+Example:
+```dart
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
+
+  runApp(MaterialApp(home: new MyApp()));
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => new _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey webViewKey = GlobalKey();
+
+  InAppWebViewController? webViewController;
+  InAppWebViewSettings settings = InAppWebViewSettings();
+  late FindInteractionController findInteractionController;
+  final searchController = TextEditingController();
+  var textFound = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    findInteractionController = FindInteractionController(
+      onFindResultReceived: (controller, activeMatchOrdinal, numberOfMatches,
+          isDoneCounting) async {
+        if (isDoneCounting) {
+          setState(() {
+            textFound = numberOfMatches > 0
+                ? '${activeMatchOrdinal + 1} of $numberOfMatches'
+                : '';
+          });
+          if (numberOfMatches == 0) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  'No matches found for "${await findInteractionController.getSearchText()}"'),
+            ));
+          }
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+            title: const Text('Find Interaction Controller'),
+            actions: defaultTargetPlatform != TargetPlatform.iOS
+                ? []
+                : [
+                    (settings.isFindInteractionEnabled)
+                        ? IconButton(
+                            icon: Icon(Icons.search),
+                            onPressed: () async {
+                              if (await findInteractionController
+                                      .isFindNavigatorVisible() ??
+                                  false) {
+                                await findInteractionController
+                                    .dismissFindNavigator();
+                              } else {
+                                await findInteractionController
+                                    .presentFindNavigator();
+                              }
+                            },
+                          )
+                        : Container(),
+                    TextButton(
+                      child: Text(!settings.isFindInteractionEnabled
+                          ? 'Native UI'
+                          : 'Custom UI'),
+                      style:
+                          TextButton.styleFrom(foregroundColor: Colors.white),
+                      onPressed: () async {
+                        if (settings.isFindInteractionEnabled) {
+                          searchController.text =
+                              await findInteractionController.getSearchText() ??
+                                  '';
+                        }
+                        await findInteractionController.clearMatches();
+                        settings.isFindInteractionEnabled =
+                            !settings.isFindInteractionEnabled;
+                        await webViewController?.setSettings(
+                            settings: settings);
+                        setState(() {
+                          textFound = '';
+                        });
+                        await findInteractionController
+                            .setSearchText(searchController.text);
+                        if (settings.isFindInteractionEnabled) {
+                          await findInteractionController
+                              .presentFindNavigator();
+                        }
+                      },
+                    )
+                  ]),
+        body: Column(children: <Widget>[
+          settings.isFindInteractionEnabled
+              ? Container()
+              : TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.search),
+                    suffixText: textFound,
+                    suffixIcon: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 10,
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.arrow_upward),
+                          onPressed: () {
+                            findInteractionController.findNext(forward: false);
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.arrow_downward),
+                          onPressed: () {
+                            findInteractionController.findNext();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  controller: searchController,
+                  keyboardType: TextInputType.text,
+                  onSubmitted: (value) {
+                    if (value == '') {
+                      findInteractionController.clearMatches();
+                      setState(() {
+                        textFound = '';
+                      });
+                    } else {
+                      findInteractionController.findAll(find: value);
+                    }
+                  },
+                ),
+          Expanded(
+              child: InAppWebView(
+            key: webViewKey,
+            initialUrlRequest:
+                URLRequest(url: Uri.parse("https://flutter.dev/")),
+            findInteractionController: findInteractionController,
+            initialSettings: settings,
+            onWebViewCreated: (InAppWebViewController controller) {
+              webViewController = controller;
+            },
+          )),
+        ]));
+  }
+}
+```
+
+This is the result:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="android" label="Android" default>
+```
+![Android find interaction controller basic usage](./find-interaction-controller/android-find-interaction-controller-basic-usage.gif "Android find interaction controller basic usage.")
+```mdx-code-block
+  </TabItem>
+  <TabItem value="ios" label="iOS">
+```
+![iOS find interaction controller basic usage](./find-interaction-controller/ios-find-interaction-controller-basic-usage.gif "iOS find interaction controller basic usage.")
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```

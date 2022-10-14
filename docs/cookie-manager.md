@@ -1,6 +1,6 @@
 ---
 sidebar_position: 6
-date: 2021-03-08 10:48:00
+date: 2022-12-10 12:00:00
 ---
 
 # Cookie Manager
@@ -9,11 +9,12 @@ To manage `WebView` cookies, you can use the `CookieManager` class, which implem
 
 On Android, it is implemented using the [CookieManager](https://developer.android.com/reference/android/webkit/CookieManager) class.
 On iOS, it is implemented using the [WKHTTPCookieStore](https://developer.apple.com/documentation/webkit/wkhttpcookiestore) class.
+On Web platform, it is implemented using Javascript.
 
 ## Basic Usage
 
-:::caution Note for iOS below 11.0 (LIMITED SUPPORT!)
-  In this case, almost all of the methods (`CookieManager.deleteAllCookies` and `IOSCookieManager.getAllCookies` are not supported!) has been implemented using JavaScript because there is no other way to work with them on iOS below 11.0. Check [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies) for JavaScript restrictions.
+:::caution Note for iOS below 11.0 and Web platform (LIMITED SUPPORT!)
+  In this case, almost all of the methods (`CookieManager.deleteAllCookies` and `CookieManager.getAllCookies` are not supported!) has been implemented using JavaScript because there is no other way to work with them on iOS below 11.0. Check [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies) for JavaScript restrictions.
 :::
 
 Example:
@@ -30,7 +31,6 @@ await cookieManager.setCookie(
   url: url,
   name: "myCookie",
   value: "myValue",
-  domain: ".flutter.dev",
   expiresDate: expiresDate,
   isSecure: true,
 );
@@ -45,5 +45,5 @@ Cookie? cookie = await cookieManager.getCookie(url: url, name: "myCookie");
 await cookieManager.deleteCookie(url: url, name: "myCookie");
 
 // delete cookies
-await cookieManager.deleteCookies(url: url);
+await cookieManager.deleteCookies(url: url, domain: ".flutter.dev");
 ```

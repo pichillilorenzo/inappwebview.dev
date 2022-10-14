@@ -1,0 +1,142 @@
+---
+title: "WebView Context Menu"
+sidebar_position: 3
+date: 2021-03-08 10:48:00
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Context Menu
+
+`ContextMenu` represents the `WebView`'s context menu.
+
+## Basic Usage
+
+You can customize `WebView`'s context menu adding custom menu items, and/or hiding the default system menu items.
+For each custom menu item, you can declare a callback `action` to be invoked when the user clicks on it.
+
+So, the `ContextMenu` class represents the WebView context menu. It used by `WebView.contextMenu` or by `InAppBrowser.contextMenu`.
+
+`ContextMenu.menuItems` contains the list of the custom `ContextMenuItem`.
+
+:::caution Note for Android
+  To make it work properly, JavaScript must be enabled.
+:::
+
+:::info Note for iOS
+  To make it work with links, you need to set the `allowsLinkPreview` iOS-specific WebView option to `false`.
+:::
+
+Example:
+```dart
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isAndroid) {
+    await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
+
+  runApp(MaterialApp(home: new MyApp()));
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => new _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey webViewKey = GlobalKey();
+
+  InAppWebViewController? webViewController;
+  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
+    android: AndroidInAppWebViewOptions(
+      useHybridComposition: true,
+    ),
+  );
+  late ContextMenu contextMenu;
+
+  @override
+  void initState() {
+    super.initState();
+
+    contextMenu = ContextMenu(
+        menuItems: [
+          ContextMenuItem(
+              androidId: 1,
+              iosId: "1",
+              title: "Special",
+              action: () async {
+                final snackBar = SnackBar(
+                  content: Text("Special clicked!"),
+                  duration: Duration(seconds: 1),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              })
+        ],
+        onCreateContextMenu: (hitTestResult) async {
+          String selectedText =
+              await webViewController?.getSelectedText() ?? "";
+          final snackBar = SnackBar(
+            content: Text(
+                "Selected text: '$selectedText', of type: ${hitTestResult.type.toString()}"),
+            duration: Duration(seconds: 1),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        },
+        onContextMenuActionItemClicked: (menuItem) {
+          var id = (Platform.isAndroid) ? menuItem.androidId : menuItem.iosId;
+
+          final snackBar = SnackBar(
+            content: Text(
+                "Menu item with ID $id and title '${menuItem.title}' clicked!"),
+            duration: Duration(seconds: 1),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('ContextMenu Example'),
+        ),
+        body: Column(children: <Widget>[
+          Expanded(
+              child: InAppWebView(
+            key: webViewKey,
+            initialUrlRequest:
+                URLRequest(url: Uri.parse("https://flutter.dev/")),
+            contextMenu: contextMenu,
+            initialOptions: options,
+            onWebViewCreated: (InAppWebViewController controller) {
+              webViewController = controller;
+            },
+          )),
+        ]));
+  }
+}
+```
+
+This is the result:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="android" label="Android" default>
+```
+![Android context menu basic usage](./context-menu/android-context-menu-basic-usage.gif "Android context menu basic usage.")
+```mdx-code-block
+  </TabItem>
+  <TabItem value="ios" label="iOS">
+```
+![iOS context menu basic usage](./context-menu/ios-context-menu-basic-usage.gif "iOS context menu basic usage.")
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
