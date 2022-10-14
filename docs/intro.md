@@ -27,7 +27,7 @@ void main() {
 - Dart sdk: ">=2.14.0 <3.0.0"
 - Flutter: ">=2.5.0"
 - Android: `minSdkVersion 19` and add support for `androidx` (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app)
-- iOS 9.0+: `--ios-language swift`, Xcode version `>= 12`
+- iOS 9.0+: `--ios-language swift`, Xcode version `>= 14`
 
 ## Setup Android
 
