@@ -5,8 +5,8 @@ date: 2022-12-10 12:00:00
 ---
 
 `WebAuthenticationSession` represents a session that an app uses to authenticate a user through a web service.
-It's available only on iOS 11.0+ and it is implemented using
-[ASWebAuthenticationSession](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession) on iOS 12.0+
+It's available only on iOS 11.0+ and MacOS 10.15+ and it is implemented using
+[ASWebAuthenticationSession](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession) on iOS 12.0+ and MacOS 10.15+
 and [SFAuthenticationSession](https://developer.apple.com/documentation/safariservices/sfauthenticationsession) on iOS 11.0.
 
 ## Basic Usage

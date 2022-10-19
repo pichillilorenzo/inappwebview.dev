@@ -8,13 +8,13 @@ date: 2022-12-10 12:00:00
 To manage `WebView` cookies, you can use the `CookieManager` class, which implements a singleton object (shared instance).
 
 On Android, it is implemented using the [CookieManager](https://developer.android.com/reference/android/webkit/CookieManager) class.
-On iOS, it is implemented using the [WKHTTPCookieStore](https://developer.apple.com/documentation/webkit/wkhttpcookiestore) class.
+On iOS and MacOS, it is implemented using the [WKHTTPCookieStore](https://developer.apple.com/documentation/webkit/wkhttpcookiestore) class.
 On Web platform, it is implemented using Javascript.
 
 ## Basic Usage
 
-:::caution Note for iOS below 11.0 and Web platform (LIMITED SUPPORT!)
-  In this case, almost all of the methods (`CookieManager.deleteAllCookies` and `CookieManager.getAllCookies` are not supported!) has been implemented using JavaScript because there is no other way to work with them on iOS below 11.0. Check [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies) for JavaScript restrictions.
+:::caution Note for iOS below 11.0, MacOS 10.13 and Web platform (LIMITED SUPPORT!)
+  In this case, almost all of the methods (`CookieManager.deleteAllCookies` and `CookieManager.getAllCookies` are not supported!) has been implemented using JavaScript because there is no other way to work with them on iOS below 11.0 and MacOS 10.13. Check [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies#restrict_access_to_cookies) for JavaScript restrictions.
 :::
 
 Example:

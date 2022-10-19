@@ -84,6 +84,23 @@ In your `Info.plist` file, you need to add also the following properties:
 If you open this file In Xcode, the `NSMicrophoneUsageDescription` property is represented by `Privacy - Microphone Usage Description` and
 `NSCameraUsageDescription` is represented by `Privacy - Camera Usage Description`.
 
+## WebRTC on MacOS
+
+On MacOS, you need to implement the `onPermissionRequest` event to grant permissions for the WebRTC API, for example:
+```dart
+onPermissionRequest: (controller, request) async {
+  return PermissionResponse(
+      resources: request.resources,
+      action: PermissionResponseAction.GRANT);
+},
+```
+
+Also, you need to configure the macOS App Sandbox by enabling the `Camera` and `Audio Input` options in your MacOS XCode Project, under `Runner > Signing & Capabilities`.
+
+Here is an example of configuration:
+
+![MacOS WebRTC App Sandbox example](./web-rtc/macos_app_sandbox_example.png "MacOS WebRTC App Sandbox example.")
+
 ## WebRTC on Web platform
 
 You need to set the Web-specific option `iframeAllow` to `camera; microphone`, for example:

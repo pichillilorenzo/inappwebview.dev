@@ -28,6 +28,7 @@ void main() {
 - Flutter: ">=2.5.0"
 - Android: `minSdkVersion 19` and add support for `androidx` (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app)
 - iOS 9.0+: `--ios-language swift`, Xcode version `>= 14`
+- MacOS 10.11+: Xcode version `>= 14`
 
 ## Setup Android
 
@@ -121,6 +122,16 @@ You need to disable Apple Transport Security (ATS) feature. There're two options
 Other useful `Info.plist` properties are:
 * `NSAllowsLocalNetworking`: A Boolean value indicating whether to allow loading of local resources ([Official wiki](https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/nsallowslocalnetworking));
 * `NSAllowsArbitraryLoadsInWebContent`: A Boolean value indicating whether all App Transport Security restrictions are disabled for requests made from web views ([Official wiki](https://developer.apple.com/documentation/bundleresources/information_property_list/nsapptransportsecurity/nsallowsarbitraryloadsinwebcontent)).
+
+## Setup MacOS
+
+To be able to make HTTP requests, you need to configure the macOS App Sandbox by enabling the `Outgoing Connections (Client)` option in your MacOS XCode Project, under `Runner > Signing & Capabilities`.
+
+Here is an example of configuration:
+
+![MacOS App Sandbox example](./intro/macos_app_sandbox_example.png "MacOS App Sandbox example.")
+
+For more details, check the [Apple Official Guide](https://developer.apple.com/documentation/xcode/configuring-the-macos-app-sandbox/).
 
 ## Setup Web
 

@@ -7,7 +7,7 @@ date: 2022-12-10 12:00:00
 
 To manage HTTP auth credentials, you can use the `HttpAuthCredentialDatabase` class, which implements a singleton object (shared instance).
 
-On iOS, this class uses the [URLCredentialStorage](https://developer.apple.com/documentation/foundation/urlcredentialstorage) class. On Android, this class has a custom implementation using `android.database.sqlite.SQLiteDatabase` because the [WebViewDatabase](https://developer.android.com/reference/android/webkit/WebViewDatabase) class doesn't offer the same functionalities as iOS `URLCredentialStorage`.
+On iOS and MacOS, this class uses the [URLCredentialStorage](https://developer.apple.com/documentation/foundation/urlcredentialstorage) class. On Android, this class has a custom implementation using `android.database.sqlite.SQLiteDatabase` because the [WebViewDatabase](https://developer.android.com/reference/android/webkit/WebViewDatabase) class doesn't offer the same functionalities as iOS `URLCredentialStorage`.
 
 ## Basic Usage
 

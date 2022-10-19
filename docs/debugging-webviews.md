@@ -57,5 +57,5 @@ Future main() async {
 }
 ```
 
-## Inspect iOS WebViews
-On iOS, debugging WebViews on Safari through developer tools is always enabled. There isn't a way to enable or disable it.
+## Inspect iOS and MacOS WebViews
+On iOS and MacOS, debugging WebViews on Safari through developer tools is always enabled. There isn't a way to enable or disable it.
