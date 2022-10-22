@@ -42,7 +42,7 @@ Native path handlers:
 - `ResourcesPathHandler`: handler class to open a file from resources directory in the application APK;
 - `InternalStoragePathHandler`: handler class to open files from application internal storage.
 
-Your flutter asset files can be found under the folder `/assest/flutter_assets` of the application APK.
+Your flutter asset files can be found under the folder `/assets/flutter_assets` of the application APK.
 
 Extend the `PathHandler` abstract class to handle other use-cases according to your app's needs.
 For example:
