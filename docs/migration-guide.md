@@ -5,10 +5,11 @@ date: 2022-12-10 12:00:00
 
 # Migration Guide from 5.x.x
 
-## Minimum Platform Version
+## Requirements
 
-Version `6.x.x` now requires Android `minSdkVersion` to be `19` (`android/app/build.gradle`)
-and the minimum iOS version to be `9.0` (`ios/Podfile`).
+Version `6.x.x` now requires minimum Flutter version to be `3.0.0`,
+Android `minSdkVersion` to be `19` (`android/app/build.gradle`),
+and the minimum iOS version to be `9.0` (`ios/Podfile`) with XCode version `>= 14`.
 
 ## Deprecated Option classes
 
