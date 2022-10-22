@@ -63,7 +63,7 @@ const config = {
   ],
 
   themeConfig:
-    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+  /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       metadata: [{name: 'keywords', content: 'webview, inappwebview, inappbrowser, flutter, chrome, safari, browser'}],
       // algolia: {
@@ -158,6 +158,20 @@ const config = {
         additionalLanguages: ['dart']
       },
     }),
+  themes: [
+    [
+      // @ts-ignore
+      "@easyops-cn/docusaurus-search-local",
+      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+      // @ts-ignore
+      ({
+        hashed: true,
+        language: ["en"],
+        highlightSearchTermsOnTargetPage: true,
+        explicitSearchResultPath: true,
+      }),
+    ],
+  ],
 };
 
 module.exports = config;

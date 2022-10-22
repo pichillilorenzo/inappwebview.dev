@@ -70,3 +70,15 @@
 .navbar-sidebar__close {
   margin-left: 1rem;
 }
+
+@media screen and (max-width: 1250px) {
+  .navbar__inner .navbar__brand .navbar__logo img {
+    max-width: 150px;
+  }
+}
+
+@media screen and (max-width: 996px) {
+  .navbar__inner .navbar__brand .navbar__logo img {
+    max-width: initial;
+  }
+}
