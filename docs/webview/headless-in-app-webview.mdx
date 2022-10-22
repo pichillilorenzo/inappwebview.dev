@@ -176,3 +176,209 @@ This is the result:
   </TabItem>
 </Tabs>
 ```
+
+## Convert to an InAppWebView widget
+
+It's possible to convert a `HeadlessInAppWebView` to an `InAppWebView` widget using the `InAppWebView.headlessWebView` property.
+
+When you create an `InAppWebView` widget this way, the `HeadlessInAppWebView` instance
+will be automatically disposed when the `InAppWebView.onWebViewCreated` event is fired.
+
+When the `InAppWebView` widget is created, it won't use any of the initial properties (such as `initialSettings`, `initialUrlRequest`, etc...),
+context menu and controllers (`PullToRefreshController` and `FindInteractionController`).
+All of these properties are inherited from the `HeadlessInAppWebView`.
+
+So, if you need to enable specific settings, use the pull-to-refresh feature, etc..., you need to declare them when you create
+the `HeadlessInAppWebView` instance, before passing it to the `InAppWebView.headlessWebView` property.
+
+Example:
+```dart
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
+
+  runApp(MaterialApp(home: new MyApp()));
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => new _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  HeadlessInAppWebView? headlessWebView;
+  PullToRefreshController? pullToRefreshController;
+  InAppWebViewController? webViewController;
+
+  String url = "";
+  int progress = 0;
+  bool convertFlag = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    pullToRefreshController = kIsWeb ||
+            ![TargetPlatform.iOS, TargetPlatform.android]
+                .contains(defaultTargetPlatform)
+        ? null
+        : PullToRefreshController(
+            settings: PullToRefreshSettings(
+              color: Colors.blue,
+            ),
+            onRefresh: () async {
+              if (defaultTargetPlatform == TargetPlatform.android) {
+                webViewController?.reload();
+              } else if (defaultTargetPlatform == TargetPlatform.iOS ||
+                  defaultTargetPlatform == TargetPlatform.macOS) {
+                webViewController?.loadUrl(
+                    urlRequest:
+                        URLRequest(url: await webViewController?.getUrl()));
+              }
+            },
+          );
+
+    headlessWebView = new HeadlessInAppWebView(
+      initialUrlRequest: URLRequest(url: Uri.parse("https://flutter.dev")),
+      pullToRefreshController: pullToRefreshController,
+      onWebViewCreated: (controller) {
+        webViewController = controller;
+
+        final snackBar = SnackBar(
+          content: Text('HeadlessInAppWebView created!'),
+          duration: Duration(seconds: 1),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      },
+      onLoadStart: (controller, url) async {
+        setState(() {
+          this.url = url?.toString() ?? '';
+        });
+      },
+      onProgressChanged: (controller, progress) {
+        setState(() {
+          this.progress = progress;
+        });
+      },
+      onLoadStop: (controller, url) async {
+        setState(() {
+          this.url = url?.toString() ?? '';
+        });
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    headlessWebView?.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+            title: Text(
+          "HeadlessInAppWebView to InAppWebView",
+          textScaleFactor: .8,
+        )),
+        body: Column(children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+                "URL: ${(url.length > 40) ? url.substring(0, 40) + "..." : url} - $progress%"),
+          ),
+          !convertFlag
+              ? Center(
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        var headlessWebView = this.headlessWebView;
+                        if (headlessWebView != null &&
+                            !headlessWebView.isRunning()) {
+                          await headlessWebView.run();
+                        }
+                      },
+                      child: Text("Run HeadlessInAppWebView")),
+                )
+              : Container(),
+          !convertFlag
+              ? Center(
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (!convertFlag) {
+                          setState(() {
+                            convertFlag = true;
+                          });
+                        }
+                      },
+                      child: Text("Convert to InAppWebView")),
+                )
+              : Container(),
+          convertFlag
+              ? Expanded(
+                  child: InAppWebView(
+                  headlessWebView: headlessWebView,
+                  onWebViewCreated: (controller) {
+                    headlessWebView = null;
+                    webViewController = controller;
+
+                    final snackBar = SnackBar(
+                      content: Text(
+                          'HeadlessInAppWebView converted to InAppWebView!'),
+                      duration: Duration(seconds: 1),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  },
+                  onLoadStart: (controller, url) {
+                    setState(() {
+                      this.url = url?.toString() ?? "";
+                    });
+                  },
+                  onProgressChanged: (controller, progress) {
+                    if (progress == 100) {
+                      pullToRefreshController?.endRefreshing();
+                    }
+                    setState(() {
+                      this.progress = progress;
+                    });
+                  },
+                  onLoadStop: (controller, url) {
+                    pullToRefreshController?.endRefreshing();
+                    setState(() {
+                      this.url = url?.toString() ?? "";
+                    });
+                  },
+                  onReceivedError: (controller, request, error) {
+                    pullToRefreshController?.endRefreshing();
+                  },
+                ))
+              : Container()
+        ]));
+  }
+}
+```
+
+This is the result:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="android" label="Android" default>
+```
+![Android headless to inappwebview example](./headless-in-app-webview/android-headless-to-inappwebview-example.gif "Android headless to inappwebview example.")
+```mdx-code-block
+  </TabItem>
+  <TabItem value="ios" label="iOS">
+```
+![iOS headless to inappwebview example](./headless-in-app-webview/ios-headless-to-inappwebview-example.gif "iOS headless to inappwebview example.")
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
