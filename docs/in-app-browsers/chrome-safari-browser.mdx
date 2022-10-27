@@ -15,7 +15,7 @@ The `ChromeSafariBrowser` class represents [Chrome Custom Tabs](https://develope
 
 :::caution Note for Android
   If you want to use the `ChromeSafariBrowser` class on Android 11+, then you need to specify your app querying for `android.support.customtabs.action.CustomTabsService`
-in your `AndroidManifest.xml` (you can read more about it [here](https://developers.google.com/web/android/custom-tabs/best-practices#applications_targeting_android_11_api_level_30_or_above)).
+in your `AndroidManifest.xml` (you can read more about it [here](https://developer.chrome.com/docs/android/custom-tabs/best-practices/#applications-targeting-android-11-api-level-30-or-above)).
 :::
 
 To be able to listen to the `ChromeSafariBrowser` events, you need to create a class that extends the `ChromeSafariBrowser` class in order to override the method callbacks.
@@ -109,6 +109,239 @@ This is the result:
 ```mdx-code-block
   </TabItem>
 </Tabs>
+```
+
+## Style and Animations
+
+Android and iOS behaves differently regarding browser style and entrance and exit animations.
+
+#### Android
+
+Use the "color" related `ChromeSafariBrowserSettings` properties to change the color of the specific portion of the browser.
+
+You can change the Custom Tabs entrance and exit (when the user presses Back) animations
+using `ChromeSafariBrowserSettings.startAnimations` and `ChromeSafariBrowserSettings.exitAnimations`.
+Both of these properties accept a list of 2 `AndroidResource` instances that represent the "enter" and "exit" animation
+for the browser and the application.
+
+`AndroidResource` is a class that represents an Android resource file.
+
+A list of available `android.R.anim` can be found
+[here](https://developer.android.com/reference/android/R.anim).
+A list of available `androidx.appcompat.R.anim` can be found
+[here](https://android.googlesource.com/platform/frameworks/support/+/HEAD/appcompat/appcompat/src/main/res/anim/)
+(abc_*.xml files).
+
+To define your custom Android resource animation, check the [Official Android Animation Docs](https://developer.android.com/guide/topics/resources/animation-resource#View).
+
+#### iOS
+
+Use `ChromeSafariBrowserSettings.presentationStyle` to set the custom modal presentation style when presenting the WebView.
+
+If you need to change the transition style when presenting the Browser, use `ChromeSafariBrowserSettings.transitionStyle`
+
+Example:
+```dart
+ChromeSafariBrowserSettings(
+  // Android
+  startAnimations: [
+    AndroidResource.anim(
+        name: "slide_in_left", defPackage: "android"), // android.R.anim.slide_in_left
+    AndroidResource.anim(
+        name: "slide_out_right", defPackage: "android") // android.R.anim.slide_out_right
+  ],
+  exitAnimations: [
+    AndroidResource.anim(
+        name: "abc_slide_in_top", // androidx.appcompat.R.anim.abc_slide_in_top
+        defPackage:
+            "com.your_android.application_id"),
+    AndroidResource.anim(
+        name: "abc_slide_out_top", // androidx.appcompat.R.anim.abc_slide_out_top
+        defPackage: "com.your_android.application_id")
+  ],
+
+  // iOS
+  presentationStyle: ModalPresentationStyle.OVER_FULL_SCREEN,
+  transitionStyle: ModalTransitionStyle.PARTIAL_CURL
+)
+```
+
+## Action and Activity button
+
+#### Android
+
+On Android, you can add a custom Action button to be displayed on the top toolbar and listen to the click event
+using the `ChromeSafariBrowser.setActionButton` method.
+
+Example:
+```dart
+var actionButtonIcon = await rootBundle.load('assets/images/action-button.png');
+chromeSafariBrowser.setActionButton(ChromeSafariBrowserActionButton(
+  id: 1,
+  description: 'Action Button description',
+  icon: actionButtonIcon.buffer.asUint8List(),
+  onClick: (url, title) {})
+);
+```
+
+To update the icon and description of it at runtime, use the `ChromeSafariBrowser.updateActionButton` method.
+
+#### iOS
+
+On iOS, you can add an Activity button to be displayed on the bottom toolbar using the `ChromeSafariBrowserSettings.activityButton` property.
+
+When tapped, it will invoke a Share or Action Extension bundled with your app.
+
+Check [Official Apple App Extensions](https://developer.apple.com/app-extensions/) for more details.
+
+Example:
+```dart
+ChromeSafariBrowserSettings(
+  activityButton: ActivityButton(
+    templateImage: UIImage(systemName: "sun.max"),
+    extensionIdentifier: "com.your.ios_bundle_identifier.extension_identifier"
+  )
+)
+```
+
+`UIImage` is a class that represents an object that manages iOS image data in your app.
+
+Check [UIKit.UIImage](https://developer.apple.com/documentation/uikit/uiimage) for more details.
+
+## Android Secondary Toolbar
+
+On Android, you can also add a custom secondary toolbar at the bottom using an Android layout resource file and
+listen for click events on specific view elements using Android IDs.
+
+Create your custom Android layout resource and define the clickable IDs,
+for example add a file in `android/app/src/main/res/layout/remote_view.xml` with this code:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button 1" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Button 2" />
+
+</LinearLayout>
+```
+
+where the clickable IDs are `button1` for the first button and `button2` for the second button.
+
+Then, add the secondary toolbar using the `ChromeSafariBrowser.setSecondaryToolbar` method, for example:
+```dart
+chromeSafariBrowser.setSecondaryToolbar(
+  ChromeSafariBrowserSecondaryToolbar(
+    layout: AndroidResource.layout( // matches the "android/app/src/main/res/layout/remote_view.xml" file
+        name: "remote_view",
+        defPackage:
+            "com.your_android.application_id"),
+    clickableIDs: [
+      ChromeSafariBrowserSecondaryToolbarClickableID(
+          id: AndroidResource.id(
+              name: "button1", // ID of the first button
+              defPackage:
+                  "com.your_android.application_id"),
+          onClick: (WebUri? url) {
+            print("Button 1 with $url");
+          }),
+      ChromeSafariBrowserSecondaryToolbarClickableID(
+          id: AndroidResource.id(
+              name: "button2", // ID of the second button
+              defPackage:
+                  "com.your_android.application_id"),
+          onClick: (WebUri? url) {
+            print("Button 2 with $url");
+          }),
+    ]
+  )
+);
+```
+
+To update it, you can use the `ChromeSafariBrowser.updateSecondaryToolbar` method.
+
+## Android Extra Headers and Referrer
+
+On Android, you can add extra headers and a referrer header when launching your Custom Tab.
+
+To add a referrer, use the `referrer` argument of the `ChromeSafariBrowser.open` and `ChromeSafariBrowser.launchUrl` methods.
+
+Instead, use the `headers` argument to add extra headers with the request.
+
+### Extra Headers
+
+HTTP requests contain headers such as User-Agent or Content-Type.
+Apart from headers attached by browsers, Android apps may add extra headers, like Cookie or Referrer through the `headers` argument.
+For security reasons, Chrome filters some of the extra headers depending on how and where an intent is launched.
+
+Until Chrome 83, developers could add any headers when launching a Custom Tab.
+From version 83 onward, Chrome started filtering all except [approvelisted](https://fetch.spec.whatwg.org/#cors-safelisted-request-header)
+cross-origin headers, since non-approvelisted headers posed a security risk.
+Starting with Chrome 86, it is possible to attach non-approvelisted headers to cross-origin requests,
+when the server and client are related using a [digital asset link](https://developers.google.com/digital-asset-links/v1/getting-started).
+
+Example of approvelisted headers are: `accept-language`, `content-language`, `content-type`.
+
+Examples of non-approvelisted headers are: `bearer-token`, `origin`, `cookie`.
+
+We can always attach approvelisted headers to Custom Tabs CORS requests.
+However, Chrome filters non-approvelisted headers by default.
+Although other browsers may have different behaviour, developers should expect non-approvelisted headers to be blocked in general.
+
+The supported way of including non-approvelisted headers in custom tabs is to first verify the cross-origin connection using a digital access link.
+
+### Adding non-approvelisted Extra Headers
+
+#### Set up digital asset links
+
+To allow non-approvelisted headers to be passed through custom tab intents,
+it is necessary to set up a digital asset link between the android and web application that verifies that the author owns both applications.
+
+Follow the official guide to set up a digital asset link. For the link relation use `"delegate_permission/common.use_as_origin"`
+which indicates that both apps belong to the same origin once the link is verified.
+
+#### Set up a Custom Tabs Connection to Validate the Asset Link and launch the intent
+
+A Custom Tabs connection is used for setting up a Custom Tabs session between the app and the Chrome tab.
+We need the session to verify that the app and web app belong to the same origin.
+The verification only passes if the digital asset links were set up correctly.
+
+```dart
+class MyChromeSafariBrowser extends ChromeSafariBrowser {
+  @override
+  void onServiceConnected() async {
+    // Validate the session as the same origin to allow cross origin headers.
+    await validateRelationship(relation: CustomTabsRelationType.USE_AS_ORIGIN,
+                               origin: WebUri("https://flutter.dev"));
+  }
+
+  @override
+  void onRelationshipValidationResult(
+      CustomTabsRelationType? relation, Uri? requestedOrigin, bool result) async {
+    // Launch Custom Tabs with non-approvelisted Extra Headers
+    // after session was validated as the same origin.
+    await launchUrl(url: WebUri("https://flutter.dev"), headers: {
+      'bearer-token': 'Some token',
+      'redirect-url': 'Some redirect url'
+    });
+  }
+}
+// ...
+final chromeSafariBrowser = MyChromeSafariBrowser();
+chromeSafariBrowser.open();
 ```
 
 ## Android TWA
