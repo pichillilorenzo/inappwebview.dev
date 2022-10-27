@@ -130,7 +130,7 @@ class _MyAppState extends State<MyApp> {
               child: InAppWebView(
                 key: webViewKey,
                 initialUrlRequest:
-                URLRequest(url: Uri.parse("https://my.custom.domain.com/assets/flutter_assets/assets/website/index.html")),
+                URLRequest(url: WebUri("https://my.custom.domain.com/assets/flutter_assets/assets/website/index.html")),
                 initialSettings: settings,
               )),
         ]));

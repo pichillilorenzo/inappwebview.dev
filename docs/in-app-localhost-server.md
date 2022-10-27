@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
             Expanded(
               child: InAppWebView(
                 initialUrlRequest: URLRequest(
-                    url: Uri.parse("http://localhost:8080/assets/index.html")),
+                    url: WebUri("http://localhost:8080/assets/index.html")),
                 onWebViewCreated: (controller) {},
                 onLoadStart: (controller, url) {},
                 onLoadStop: (controller, url) {},

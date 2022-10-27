@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
 
     headlessWebView = new HeadlessInAppWebView(
       initialUrlRequest:
-          URLRequest(url: Uri.parse("https://github.com/flutter")),
+          URLRequest(url: WebUri("https://github.com/flutter")),
       onWebViewCreated: (controller) {
         final snackBar = SnackBar(
           content: Text('HeadlessInAppWebView created!'),
@@ -247,7 +247,7 @@ class _MyAppState extends State<MyApp> {
           );
 
     headlessWebView = new HeadlessInAppWebView(
-      initialUrlRequest: URLRequest(url: Uri.parse("https://flutter.dev")),
+      initialUrlRequest: URLRequest(url: WebUri("https://flutter.dev")),
       pullToRefreshController: pullToRefreshController,
       onWebViewCreated: (controller) {
         webViewController = controller;

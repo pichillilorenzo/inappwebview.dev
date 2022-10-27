@@ -24,7 +24,7 @@ CookieManager cookieManager = CookieManager.instance();
 
 // set the expiration date for the cookie in milliseconds
 final expiresDate = DateTime.now().add(Duration(days: 3)).millisecondsSinceEpoch;
-final url = Uri.parse("https://flutter.dev/");
+final url = WebUri("https://flutter.dev/");
 
 // set the cookie
 await cookieManager.setCookie(

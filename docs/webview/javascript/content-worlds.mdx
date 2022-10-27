@@ -49,7 +49,7 @@ Here is a simple usage example:
 ```dart
 InAppWebView(
   initialUrlRequest: URLRequest(
-    url: Uri.parse("https://flutter.dev"),
+    url: WebUri("https://flutter.dev"),
   ),
   onLoadStop: (controller, url) async {
     await controller.evaluateJavascript(source: "var foo = 49;");
@@ -68,7 +68,9 @@ InAppWebView(
         contentWorld: ContentWorld.DEFAULT_CLIENT)); // 2
 
     // Change the HTML content of the current web page from a custom Content World
-    var source = "${(Platform.isAndroid) ? "window.top.document.body.innerHTML" : "document.body.innerHTML"} = 'Modifying the body HTML content from another Content World';";
+    var source = "${(!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
+        ? "window.top.document.body.innerHTML"
+        : "document.body.innerHTML"} = 'Modifying the body HTML content from another Content World';";
     await controller.evaluateJavascript(
         source: source,
         contentWorld: ContentWorld.world(name: "myCustomWorld"));

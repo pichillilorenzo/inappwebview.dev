@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
               child: InAppWebView(
             key: webViewKey,
             initialUrlRequest:
-                URLRequest(url: Uri.parse("https://github.com/flutter/")),
+                URLRequest(url: WebUri("https://github.com/flutter/")),
             initialSettings: settings,
             pullToRefreshController: pullToRefreshController,
             onWebViewCreated: (InAppWebViewController controller) {

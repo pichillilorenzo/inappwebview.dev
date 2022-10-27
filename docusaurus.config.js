@@ -66,11 +66,16 @@ const config = {
   /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       metadata: [{name: 'keywords', content: 'webview, inappwebview, inappbrowser, flutter, chrome, safari, browser'}],
-      // algolia: {
-      //   searchPagePath: true,
-      //   appId: '',
-      //   apiKey: ''
-      // },
+      algolia: {
+        // The application ID provided by Algolia
+        appId: 'MJATJYT1MX',
+        // Public API key: it is safe to commit it
+        apiKey: '1b4f2aea5c887ceeda4ed9fe83c426b1',
+        indexName: 'inappwebview',
+        contextualSearch: true,
+        searchPagePath: 'search',
+        debug: false
+      },
       navbar: {
         title: '',
         logo: {
@@ -158,20 +163,20 @@ const config = {
         additionalLanguages: ['dart']
       },
     }),
-  themes: [
-    [
-      // @ts-ignore
-      "@easyops-cn/docusaurus-search-local",
-      /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
-      // @ts-ignore
-      ({
-        hashed: true,
-        language: ["en"],
-        highlightSearchTermsOnTargetPage: true,
-        explicitSearchResultPath: true,
-      }),
-    ],
-  ],
+  // themes: [
+  //   [
+  //     // @ts-ignore
+  //     "@easyops-cn/docusaurus-search-local",
+  //     /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+  //     // @ts-ignore
+  //     ({
+  //       hashed: true,
+  //       language: ["en"],
+  //       highlightSearchTermsOnTargetPage: true,
+  //       explicitSearchResultPath: true,
+  //     }),
+  //   ],
+  // ],
 };
 
 module.exports = config;

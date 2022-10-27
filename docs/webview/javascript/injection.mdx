@@ -111,7 +111,7 @@ Here is a simple example that injects the `jQuery` JavaScript library to the cur
 ```dart
 onLoadStop: (controller, url) async {
   await controller.injectJavascriptFileFromUrl(
-      urlFile: Uri.parse('https://code.jquery.com/jquery-3.3.1.min.js'),
+      urlFile: WebUri('https://code.jquery.com/jquery-3.3.1.min.js'),
       scriptHtmlTagAttributes: ScriptHtmlTagAttributes(id: 'jquery', onLoad: () {
         print("jQuery loaded and ready to be used!");
       }, onError: () {

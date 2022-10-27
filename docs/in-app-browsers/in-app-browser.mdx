@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
         child: ElevatedButton(
             onPressed: () {
               widget.browser.openUrlRequest(
-                  urlRequest: URLRequest(url: Uri.parse("https://flutter.dev")),
+                  urlRequest: URLRequest(url: WebUri("https://flutter.dev")),
                   settings: settings);
             },
             child: Text("Open InAppBrowser")),

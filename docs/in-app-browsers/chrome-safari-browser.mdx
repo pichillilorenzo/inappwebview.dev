@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
         child: ElevatedButton(
             onPressed: () async {
               await widget.browser.open(
-                  url: Uri.parse("https://flutter.dev/"),
+                  url: WebUri("https://flutter.dev/"),
                   settings: ChromeSafariBrowserSettings(
                       shareState: CustomTabsShareState.SHARE_STATE_OFF,
                       barCollapsingEnabled: true));
@@ -139,7 +139,7 @@ class AndroidTWABrowser extends ChromeSafariBrowser {
   }
 
   @override
-  void onCompletedInitialLoad() {
+  void onCompletedInitialLoad(didLoadSuccessfully) {
     print("Android TWA browser initial load completed");
   }
 
@@ -182,7 +182,7 @@ class _MyAppState extends State<MyApp> {
         child: ElevatedButton(
             onPressed: () async {
               await widget.browser.open(
-                url: Uri.parse("https://flutter.dev/"),
+                url: WebUri("https://flutter.dev/"),
                 settings:
                     ChromeSafariBrowserSettings(isTrustedWebActivity: true),
               );

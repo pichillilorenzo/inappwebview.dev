@@ -1,5 +1,5 @@
 ---
-sidebar_position: 12
+sidebar_position: 13
 date: 2022-12-10 12:00:00
 ---
 
@@ -10,6 +10,45 @@ date: 2022-12-10 12:00:00
 Version `6.x.x` now requires minimum Flutter version to be `3.0.0`,
 Android `minSdkVersion` to be `19` (`android/app/build.gradle`),
 and the minimum iOS version to be `9.0` (`ios/Podfile`) with XCode version `>= 14`.
+
+## `Uri` type to `WebUri` type
+
+The usage of `Uri` type has been replaced with the new `WebUri` type.
+
+`WebUri` is a class that implements the `Uri` interface to maintain also the raw string value used by `Uri.parse`.
+
+This class is used because some strings coming from the native platform side
+are not parsed correctly or could lose letter case information,
+so `rawValue` can be used as a fallback value.
+
+Basic examples:
+```dart
+// InAppWebView example
+InAppWebView(
+  initialUrlRequest:
+    URLRequest(url: WebUri('https://flutter.dev'))
+)
+
+// example of letter case difference
+final uri = WebUri('scheme://customDomain');
+print(uri.rawValue); // scheme://customDomain
+print(uri.isValidUri); // true
+print(uri.uriValue.toString()); // scheme://customdomain
+print(uri.toString()); // scheme://customdomain
+
+uri.forceToStringRawValue = true;
+print(uri.toString()); // scheme://customDomain
+
+// example of a not valid URI
+// Uncaught Error: FormatException: Invalid port (at character 14)
+final invalidUri = WebUri('intent://not:valid_uri');
+print(invalidUri.rawValue); // intent://not:valid_uri
+print(invalidUri.isValidUri); // false
+print(invalidUri.uriValue.toString()); // ''
+print(invalidUri.toString()); // intent://not:valid_uri
+```
+
+Check [WebUri](/docs/web-uri) for more details.
 
 ## Deprecated Option classes
 

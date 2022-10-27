@@ -26,7 +26,7 @@ For each `UserScript`, you can set an optional [Content World](/docs/webview/jav
 To add a `UserScript` to a WebView, you can use the `WebView.initialUserScripts` property:
 ```dart
 InAppWebView(
-  initialUrlRequest: URLRequest(url: Uri.parse('https://flutter.dev')),
+  initialUrlRequest: URLRequest(url: WebUri('https://flutter.dev')),
   initialUserScripts: UnmodifiableListView<UserScript>([
     UserScript(
         source: "var foo = 49;",

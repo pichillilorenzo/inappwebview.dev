@@ -94,13 +94,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    var isFindInteractionEnabled = settings.isFindInteractionEnabled ?? false;
+
     return Scaffold(
         appBar: AppBar(
             title: const Text('Find Interaction Controller'),
             actions: defaultTargetPlatform != TargetPlatform.iOS
                 ? []
                 : [
-                    (settings.isFindInteractionEnabled)
+                    (isFindInteractionEnabled)
                         ? IconButton(
                             icon: Icon(Icons.search),
                             onPressed: () async {
@@ -117,20 +119,21 @@ class _MyAppState extends State<MyApp> {
                           )
                         : Container(),
                     TextButton(
-                      child: Text(!settings.isFindInteractionEnabled
+                      child: Text(!isFindInteractionEnabled
                           ? 'Native UI'
                           : 'Custom UI'),
                       style:
                           TextButton.styleFrom(foregroundColor: Colors.white),
                       onPressed: () async {
-                        if (settings.isFindInteractionEnabled) {
+                        if (isFindInteractionEnabled) {
                           searchController.text =
                               await findInteractionController.getSearchText() ??
                                   '';
                         }
                         await findInteractionController.clearMatches();
-                        settings.isFindInteractionEnabled =
-                            !settings.isFindInteractionEnabled;
+                        isFindInteractionEnabled =
+                            settings.isFindInteractionEnabled =
+                                !isFindInteractionEnabled;
                         await webViewController?.setSettings(
                             settings: settings);
                         setState(() {
@@ -138,7 +141,7 @@ class _MyAppState extends State<MyApp> {
                         });
                         await findInteractionController
                             .setSearchText(searchController.text);
-                        if (settings.isFindInteractionEnabled) {
+                        if (isFindInteractionEnabled) {
                           await findInteractionController
                               .presentFindNavigator();
                         }
@@ -146,7 +149,7 @@ class _MyAppState extends State<MyApp> {
                     )
                   ]),
         body: Column(children: <Widget>[
-          settings.isFindInteractionEnabled
+          isFindInteractionEnabled
               ? Container()
               : TextField(
                   decoration: InputDecoration(
@@ -190,8 +193,7 @@ class _MyAppState extends State<MyApp> {
           Expanded(
               child: InAppWebView(
             key: webViewKey,
-            initialUrlRequest:
-                URLRequest(url: Uri.parse("https://flutter.dev/")),
+            initialUrlRequest: URLRequest(url: WebUri("https://flutter.dev/")),
             findInteractionController: findInteractionController,
             initialSettings: settings,
             onWebViewCreated: (InAppWebViewController controller) {

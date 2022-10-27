@@ -108,7 +108,7 @@ class _MyAppState extends State<MyApp> {
                       defaultTargetPlatform == TargetPlatform.iOS &&
                       await WebAuthenticationSession.isAvailable()) {
                     session = await WebAuthenticationSession.create(
-                        url: Uri.parse(
+                        url: WebUri(
                             "http://localhost:8080/assets/web-auth.html"),
                         callbackURLScheme: "test",
                         onComplete: (url, error) async {
