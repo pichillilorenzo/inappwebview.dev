@@ -28,7 +28,12 @@ Check the documentation of each specific method you want to use to understand if
   It requires *Android API 20+* (see [AndroidView](https://api.flutter.dev/flutter/widgets/AndroidView-class.html)) or *Android API 19+* if you set the `useHybridComposition: true` Android-specific option.
 :::
 
-Use `InAppWebViewController` to control the WebView instance.
+`InAppWebViewSettings` provides access to a variety of settings that you might find useful.
+For example, if you're developing a web application that's designed specifically for the WebView in your app,
+then you can define a custom user agent string with `InAppWebViewSettings.userAgent`,
+then query the custom user agent in your web page to verify that the client requesting your web page is actually your app.
+
+Instead, use `InAppWebViewController` to control the WebView instance.
 
 Example:
 ```dart
@@ -239,3 +244,252 @@ This is the result:
   </TabItem>
 </Tabs>
 ```
+
+## Use JavaScript in WebView
+
+JavaScript support is enabled by default. To disable it, set `InAppWebViewSettings.javaScriptEnabled` to `false`.
+
+In general, calling methods that evaluates javascript code (such as `evaluateJavascript`)
+too early (for example inside `onWebViewCreated` or `onLoadStart` events), won't work
+because the WebView is not ready to handle it yet.
+
+Instead, you should call these methods, for example, inside the `onLoadStop` event or in any other events
+where you know the page is ready "enough".
+
+Check [JavaScript](/docs/category/javascript) docs for more details.
+
+## Handle page navigation
+
+The basic navigation events are `onLoadStart` and on `onLoadStop`.
+Also, the `onPageCommitVisible` event is fired when the web view begins to receive web content.
+
+:::caution
+The `onLoadStop` event could be called multiple times.
+That's platform-specific, and it's related on how the native platform implements the WebView!
+:::
+
+The `onLoadStart` and `onLoadStop` events are not called when the navigation state of the `WebView` changes through the usage of javascript,
+without a complete reload of the web page.
+
+To detect these cases, use the `onUpdateVisitedHistory` event, that is an event fired when the host application updates its visited links database or
+when the navigation state of the `WebView` changes through the usage of
+javascript **[History API](https://developer.mozilla.org/en-US/docs/Web/API/History_API)** functions (`pushState()`, `replaceState()`) and `onpopstate` event
+or, also, when the javascript `window.location` changes without reloading the webview (for example appending or modifying a hash to the url).
+
+Instead, to detect HTTP errors or loading errors, use `onReceivedHttpError` or `onReceivedError` respectively.
+
+To cancel or allow the navigation requests, you should use the navigation event `shouldOverrideUrlLoading`,
+which gives the host application a chance to take control when a URL is about to be loaded in the current WebView using `NavigationActionPolicy`.
+To be able to listen this event, you **must** set `InAppWebViewSettings.useShouldOverrideUrlLoading` to `true`.
+
+:::info `shouldOverrideUrlLoading` NOTE for Android
+Note that on Android there isn't any way to load an URL for a frame that is not the main frame,
+so if the request is not for the main frame, the navigation is allowed by default.
+However, if you want to cancel requests for subframes, you can use the `InAppWebViewSettings.regexToCancelSubFramesLoading` setting
+to write a Regular Expression that, if the url request of a subframe matches, then the request of that subframe is canceled.
+
+Also, on Android, this event is not called for POST requests.
+:::
+
+On Android, you can also use the `shouldInterceptRequest` event, that is an event that
+notifies the host application of a resource request and allow the application to return the data.
+If the return value is `null`, the WebView will continue to load the resource as usual.
+Otherwise, the return response and data will be used.
+To be able to listen this event, you **must** set `InAppWebViewSettings.useShouldInterceptRequest` to `true`.
+
+This event is invoked for a variety of URL schemes (e.g., `http(s):`, `data:`, `file:`, etc.),
+not only those schemes which send requests over the network.
+This is not called for `javascript:` URLs, `blob:` URLs, or for assets accessed via `file:///android_asset/` or `file:///android_res/` URLs.
+
+In the case of redirects, this is only called for the initial resource URL, not any subsequent redirect URLs.
+
+## Handle custom URLs
+
+WebView applies restrictions when requesting resources and resolving links that use a custom URL scheme.
+For example, if you implement events such as `shouldOverrideUrlLoading` or `shouldInterceptRequest`, then WebView invokes them only for valid URLs.
+
+For example, WebView may not call your `shouldOverrideUrlLoading` event for links like this:
+
+```html
+<a href="showProfile">Show Profile</a>
+```
+
+Invalid URLs like above are handled inconsistently in WebView,
+so we recommend using a well-formed URL instead,
+such as using a custom scheme or using an HTTPS URL for a domain that your organization controls.
+
+Instead of using a simple string in a link as shown earlier, you can use a custom scheme such as the following:
+
+```html
+<a href="example-app:showProfile">Show Profile</a>
+```
+
+You can then handle this URL in your `shouldOverrideUrlLoading` event like this:
+
+```dart
+static final String APP_SCHEME = "example-app:";
+// ...
+InAppWebView(
+  initialSettings: InAppWebViewSettings(
+    useShouldOverrideUrlLoading: true
+  ),
+  shouldOverrideUrlLoading: (controller, navigationAction) async {
+    final uri = navigationAction.request.url;
+    if (uri != null && uri.toString().startsWith(APP_SCHEME)) {
+      // do whatever you want and cancel the request.
+      return NavigationActionPolicy.CANCEL;
+    }
+    return NavigationActionPolicy.ALLOW;
+  },
+)
+```
+
+The `shouldOverrideUrlLoading` API is primarily intended for launching intents for specific URLs.
+When implementing it, make sure to return `NavigationActionPolicy.ALLOW` for URLs the WebView should handle.
+You're not limited to launching intents, though; you can replace launching intents with any custom behavior in the preceding code samples.
+
+### Handle custom schemes
+
+Instead, if you want to handle custom schemes and return a custom response for that specific request,
+you can use the `onLoadResourceWithCustomScheme` event.
+With that event, you can handle the url request and return a `CustomSchemeResponse` to load a specific resource encoded to `base64`.
+
+To register the list of custom schemes you want to capture, set the `InAppWebViewSettings.resourceCustomSchemes` with a list of string values.
+
+Example:
+```dart
+import 'package:flutter/services.dart';
+//...
+InAppWebView(
+  initialUrlRequest: URLRequest(url: WebUri('https://example.com')),
+  initialSettings: InAppWebViewSettings(resourceCustomSchemes: ["my-special-custom-scheme"]),
+  onLoadResourceWithCustomScheme: (controller, request) async {
+    if (request.url.scheme == "my-special-custom-scheme") {
+      var bytes = await rootBundle.load("assets/" +
+          request.url
+              .toString()
+              .replaceFirst("my-special-custom-scheme://", "", 0));
+      var response = CustomSchemeResponse(
+          data: bytes.buffer.asUint8List(),
+          contentType: "image/svg+xml",
+          contentEncoding: "utf-8");
+      return response;
+    }
+    return null;
+  },
+)
+```
+
+## Navigate web page history
+
+When your WebView overrides URL loading, it automatically accumulates a history of visited web pages.
+You can navigate backward and forward through the history with
+`InAppWebViewController.goBack()`, `InAppWebViewController.goForward()`, and `InAppWebViewController.goBackOrForward()`.
+
+The `InAppWebViewController.canGoBack()` method returns true if there is actually web page history for the user to visit.
+Likewise, you can use `InAppWebViewController.canGoForward()` to check whether there is a forward history.
+If you don't perform this check, then once the user reaches the end of the history,
+`InAppWebViewController.goBack()`, `InAppWebViewController.goForward()`, or `InAppWebViewController.goBackOrForward()` does nothing.
+
+To get the WebView history, use the `InAppWebViewController.getCopyBackForwardList` method, which returns the list of visited URLs and titles during the current session.
+
+## Manage windows
+
+By default, requests to open new windows are ignored.
+This is true whether they are opened by JavaScript or by the target attribute in a link.
+You can customize this behaviour implementing `onCreateWindow` event.
+
+:::info
+To allow JavaScript to open windows, you need to set `InAppWebViewSettings.javaScriptCanOpenWindowsAutomatically` setting to `true`.
+:::
+
+:::info NOTE for Android
+You need to set `InAppWebViewSettings.supportMultipleWindows` setting to `true`.
+:::
+
+:::caution
+To keep your app more secure, it's best to prevent popups and new windows from opening.
+The safest way to implement this behavior is to set `InAppWebViewSettings.supportMultipleWindows` setting to `true`
+but not implement `onCreateWindow` or simply return `false`.
+Note that this logic prevents any page that uses `target="_blank"` in its links from loading.
+:::
+
+Instead, to detect when a WebView or a window should be closed and removed from the view system,
+you should implement the `onCloseWindow` event.
+At this point, WebCore has stopped any loading in this window and has removed any cross-scripting ability in javascript.
+
+Use the `onWindowFocus` and `onWindowBlur` events to detect when a WebView has received or lost focus respectively.
+
+## Load local content
+
+You can provide web-based content—such as HTML, JavaScript, and CSS—for your app to use that you
+statically compile into the application rather than fetch over the internet.
+
+In-app content doesn't require internet access or consume a user's bandwidth, and if the content is
+designed specifically for WebView-only—that is, it depends on communicating with a native
+app—then users can't accidentally load it in a web browser.
+
+However, there are some drawbacks to in-app content. Updating web-based content requires shipping a new app update,
+and there is the possibility of mismatched content between what's on a web site and what's in the app
+on your device if users have outdated app versions.
+
+### Android WebView Asset Loader
+On Android, you can use `WebViewAssetLoader`, that is a flexible and performant way to load in-app content in a WebView object.
+This class supports:
+
+- Loading content with an HTTP(S) URL for compatibility with the [same-origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy).
+- Loading subresources such as JavaScript, CSS, images, and iframes.
+
+Check [WebView Asset Loader](/docs/webview/webview-asset-loader) docs for more details
+
+### In-App Localhost Server
+
+The `InAppLocalhostServer` allows you to create a simple server on `http://localhost:[port]/`
+in order to be able to load your assets file on a local server.
+
+Check [In-App Localhost Server](/docs/in-app-localhost-server) docs for more details
+
+### loadData
+
+When your app only needs to load an HTML page and doesn't need to intercept subresources,
+consider using `loadData()`, which doesn't require application assets.
+You can use it as shown in the following code sample:
+
+```dart
+final html = """<html><body><p>Hello world</p></body></html>""";
+final baseUrl = WebUri("https://example.com/");
+
+webViewController.loadData(data: html, baseUrl: baseUrl, historyUrl: baseUrl);
+```
+
+Choose argument values carefully:
+
+- `baseUrl`: This is the URL your HTML content will be loaded as. This must be an HTTP(S) URL.
+- `data`: This is the HTML content you want to display, as a string.
+- `mimeType`: The default value is `text/html`.
+- `encoding`: The default value is `utf8`. On Android, this is unused when baseUrl is an HTTP(S) URL.
+- `historyUrl`: available only on Android. It represents the URL to use as the history entry.
+- `allowingReadAccessTo`: available only on iOS. Used in combination with baseUrl (using the `file://` scheme),
+it represents the URL from which to read the web content.
+
+It is strongly recommend using an HTTP(S) URL as the `baseUrl`, as this ensures your app complies with the same-origin policy.
+
+### Antipatterns
+
+There are several other ways to load in-app content, but we strongly recommend against them:
+
+- `file://` URLs and `data:` URLs are considered to be opaque origins, meaning that they can't take advantage of
+powerful web APIs such as [fetch()](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) or
+[XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest).
+
+- Although `InAppWebViewSettings.allowFileAccessFromFileURLs` and `InAppWebViewSettings.allowUniversalAccessFromFileURLs`
+can work around the issues with `file://` URLs, it is recommend against setting these to `true` because
+it leaves your app vulnerable to file-based exploits.
+It is recommend explicitly setting these to false on all API levels for the strongest security.
+
+- For the same reasons, it is recommend against `file://android_assets/` and `file://android_res/` URLs.
+The WebView Asset Loader `AssetsPathHandler` and `ResourcesPathHandler` classes are meant to be drop-in replacements.
+
+- Avoid using `MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW`. This setting generally is not necessary and weakens the security of your app.
+It is recommend loading your in-app content over the same scheme (HTTP or HTTPS) as your website's resources and using either
+`MixedContentMode.MIXED_CONTENT_COMPATIBILITY_MODE` or `MixedContentMode.MIXED_CONTENT_NEVER_ALLOW`, as appropriate.

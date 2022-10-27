@@ -5,11 +5,17 @@ date: 2022-12-10 12:00:00
 
 # In-App Localhost Server
 
-The `InAppLocalhostServer` class allows you to create a simple server on `http://localhost:[port]/` in order to be able to load your assets file on a server. The default port value is `8080`.
+The `InAppLocalhostServer` class allows you to create a simple server on `http://localhost:[port]/` in order to be able to load your assets file on a local server.
 
 ## Basic Usage
 
 To start and stop the server, you can use the `InAppLocalhostServer.start` and `InAppLocalhostServer.stop` methods.
+
+The default port value is `8080`.
+
+Use `directoryIndex` to change the index file to use. The default value is `index.html`.
+
+Use `documentRoot` to change the document root path to serve. The default value is `./`.
 
 Example:
 ```dart
@@ -17,7 +23,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-final InAppLocalhostServer localhostServer = new InAppLocalhostServer();
+final InAppLocalhostServer localhostServer = new InAppLocalhostServer(documentRoot: 'assets');
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +57,7 @@ class _MyAppState extends State<MyApp> {
             Expanded(
               child: InAppWebView(
                 initialUrlRequest: URLRequest(
-                    url: WebUri("http://localhost:8080/assets/index.html")),
+                    url: WebUri("http://localhost:8080/index.html")),
                 onWebViewCreated: (controller) {},
                 onLoadStart: (controller, url) {},
                 onLoadStop: (controller, url) {},
