@@ -226,9 +226,9 @@ Also, you need to add the following code inside the `<application>` tag of your 
 On iOS, you need to add the following properties in your `Info.plist` file to be able to use camera for taking images and videos:
 ```xml
 <key>NSMicrophoneUsageDescription</key>
-<string>Flutter requires acess to microphone.</string>
+<string>Flutter requires access to microphone.</string>
 
 <key>NSCameraUsageDescription</key>
-<string>Flutter requires acess to camera.</string>
+<string>Flutter requires access to camera.</string>
 ```
 If you open this file In Xcode, then the `NSMicrophoneUsageDescription` property is represented by `Privacy - Microphone Usage Description` and `NSCameraUsageDescription` is represented by `Privacy - Camera Usage Description`.
