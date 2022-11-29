@@ -1,7 +1,7 @@
 ---
 title: Proxy Controller
 sidebar_position: 8
-date: 2022-12-10 12:00:00
+date: 2022-10-12 12:00:00
 ---
 
 `ProxyController` represents the proxy settings that govern network requests made by `WebView`.

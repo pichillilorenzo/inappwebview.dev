@@ -1,7 +1,7 @@
 ---
 title: "Web Authentication Session"
 sidebar_position: 11
-date: 2022-12-10 12:00:00
+date: 2022-10-12 12:00:00
 ---
 
 `WebAuthenticationSession` represents a session that an app uses to authenticate a user through a web service.

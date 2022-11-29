@@ -17,7 +17,7 @@ const FeatureList: FeatureItem[] = [
         <p>Adding the <code>InAppWebView</code> widget into your app is very simple.
           It’s just a widget like any other Flutter widget:
         </p>
-        <pre><code>InAppWebView(initialUrlRequest: <br/>&nbsp;&nbsp;URLRequest(url: Uri.parse(<span
+        <pre><code>InAppWebView(initialUrlRequest: <br/>&nbsp;&nbsp;URLRequest(url: WebUri(<span
           style={{color: 'rgb(215, 58, 73)'}}>"https://flutter.dev"</span>))<br/>)</code></pre>
         <p>You can listen to a lot of events and use the <code>InAppWebViewController</code> to control
           your <code>InAppWebView</code> instances!</p>
