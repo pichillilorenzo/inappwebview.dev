@@ -114,6 +114,10 @@ const config = {
                 to: '/docs/intro',
               },
               {
+                label: 'Project Examples',
+                href: '/docs/project-examples',
+              },
+              {
                 label: 'Migration Guide from 5.x.x',
                 to: '/docs/migration-guide',
               },
@@ -127,12 +131,12 @@ const config = {
                 to: '/blog',
               },
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/flutter-inappwebview?tab=Newest',
-              },
-              {
                 label: 'Medium',
                 to: 'https://medium.com/@pichillilorenzo',
+              },
+              {
+                label: 'Stack Overflow',
+                href: 'https://stackoverflow.com/questions/tagged/flutter-inappwebview?tab=Newest',
               },
             ],
           },
