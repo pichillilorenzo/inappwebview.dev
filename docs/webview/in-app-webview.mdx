@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 
 `InAppWebView` is a Flutter Widget for adding an **inline native WebView** integrated into the flutter widget tree.
 
-The plugin relies on Flutter's mechanism for embedding Android and iOS native views: [AndroidView](https://api.flutter.dev/flutter/widgets/AndroidView-class.html) and [UiKitView](https://api.flutter.dev/flutter/widgets/UiKitView-class.html).
+The plugin relies on Flutter's mechanism for embedding Android and iOS native views: [AndroidViewSurface](https://api.flutter.dev/flutter/widgets/AndroidViewSurface-class.html) and [UiKitView](https://api.flutter.dev/flutter/widgets/UiKitView-class.html).
 Known issues are tagged with the [platform-views](https://github.com/flutter/flutter/labels/a%3A%20platform-views) label in the [Flutter official repo](https://github.com/flutter/flutter).
 
 On Web platform, the WebView is embedded using the [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) HTML element.
@@ -23,10 +23,6 @@ Check the documentation of each specific method you want to use to understand if
 :::
 
 ## Basic Usage
-
-:::caution
-  It requires *Android API 20+* (see [AndroidView](https://api.flutter.dev/flutter/widgets/AndroidView-class.html)) or *Android API 19+* if you set the `useHybridComposition: true` Android-specific option.
-:::
 
 `InAppWebViewSettings` provides access to a variety of settings that you might find useful.
 For example, if you're developing a web application that's designed specifically for the WebView in your app,
