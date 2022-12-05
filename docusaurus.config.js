@@ -89,7 +89,12 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {to: 'https://pub.dartlang.org/packages/flutter_inappwebview', label: 'Pub.dev', position: 'left'},
-          {to: 'https://pub.dev/documentation/flutter_inappwebview/latest/', label: 'API Reference', position: 'left'},
+          {
+            label: 'API Reference', position: 'left', items: [
+              {to: 'https://pub.dev/documentation/flutter_inappwebview/6.0.0-beta.20/', label: '6.x.x'},
+              {to: 'https://pub.dev/documentation/flutter_inappwebview/latest/', label: '5.x.x'}
+            ]
+          },
           {to: '/showcase', label: 'Showcase', position: 'left'},
           {to: '/donate', label: 'Donate', position: 'left'},
           {
