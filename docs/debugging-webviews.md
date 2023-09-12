@@ -44,17 +44,15 @@ DebugLoggingSettings(
 ## Inspect Android WebViews
 On Android, in order to enable/disable debugging WebViews using `chrome://inspect/#devices` on Chrome, you should use the `AndroidInAppWebViewController.setWebContentsDebuggingEnabled(bool debuggingEnabled)` static method.
 
-For example, you could call it inside the main function:
+For example, you could call it inside the `onWebViewCreated` callback:
 ```dart
-Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+InAppWebView(
+  onWebViewCreated: (InAppWebViewController controller) async {
+   if (!kIsWeb && kDebugMode && defaultTargetPlatform == TargetPlatform.android) {
+     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+   }
   }
-
-  runApp(new MyApp());
-}
+),
 ```
 
 ## Inspect iOS and MacOS WebViews
