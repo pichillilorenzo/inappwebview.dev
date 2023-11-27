@@ -24,11 +24,11 @@ void main() {
 
 ## Requirements
 
-- Dart sdk: ">=2.15.0 <3.0.0"
+- Dart sdk: ">=2.17.0 <3.0.0"
 - Flutter: ">=3.0.0"
 - Android: `minSdkVersion 19` and add support for `androidx` (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app)
-- iOS 9.0+: `--ios-language swift`, Xcode version `>= 14`
-- MacOS 10.11+: Xcode version `>= 14`
+- iOS 9.0+: `--ios-language swift`, Xcode version `>= 14.3`
+- MacOS 10.11+: Xcode version `>= 14.3`
 
 ## Setup Android
 
@@ -140,7 +140,7 @@ To make it work properly on the Web platform, you need to add the `web_support.j
 ```html
 <head>
   <!-- ... -->
-    <script type="application/javascript" src="/assets/packages/flutter_inappwebview/assets/web/web_support.js" defer></script>
+    <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js" defer></script>
   <!-- ... -->
 </head>
 ```
@@ -212,8 +212,8 @@ On Android, you need to add these permissions in your `AndroidManifest.xml` file
 Also, you need to add the following code inside the `<application>` tag of your `AndroidManifest.xml` file:
 ```xml
 <provider
-    android:name="com.pichillilorenzo.flutter_inappwebview.InAppWebViewFileProvider"
-    android:authorities="${applicationId}.flutter_inappwebview.fileprovider"
+    android:name="com.pichillilorenzo.flutter_inappwebview_android.InAppWebViewFileProvider"
+    android:authorities="${applicationId}.flutter_inappwebview_android.fileprovider"
     android:exported="false"
     android:grantUriPermissions="true">
     <meta-data

@@ -43,15 +43,17 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
 
-  runApp(MaterialApp(home: new MyApp()));
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -59,12 +61,11 @@ class _MyAppState extends State<MyApp> {
 
   InAppWebViewController? webViewController;
   InAppWebViewSettings settings = InAppWebViewSettings(
-      useShouldOverrideUrlLoading: true,
+      isInspectable: kDebugMode,
       mediaPlaybackRequiresUserGesture: false,
       allowsInlineMediaPlayback: true,
       iframeAllow: "camera; microphone",
-      iframeAllowFullscreen: true
-  );
+      iframeAllowFullscreen: true);
 
   PullToRefreshController? pullToRefreshController;
   String url = "";
@@ -75,146 +76,151 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    pullToRefreshController = kIsWeb ? null : PullToRefreshController(
-      settings: PullToRefreshSettings(
-        color: Colors.blue,
-      ),
-      onRefresh: () async {
-        if (defaultTargetPlatform == TargetPlatform.android) {
-          webViewController?.reload();
-        } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-          webViewController?.loadUrl(
-              urlRequest: URLRequest(url: await webViewController?.getUrl()));
-        }
-      },
-    );
+    pullToRefreshController = kIsWeb
+        ? null
+        : PullToRefreshController(
+            settings: PullToRefreshSettings(
+              color: Colors.blue,
+            ),
+            onRefresh: () async {
+              if (defaultTargetPlatform == TargetPlatform.android) {
+                webViewController?.reload();
+              } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+                webViewController?.loadUrl(
+                    urlRequest:
+                        URLRequest(url: await webViewController?.getUrl()));
+              }
+            },
+          );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Official InAppWebView website")),
+        appBar: AppBar(title: const Text("Official InAppWebView website")),
         body: SafeArea(
             child: Column(children: <Widget>[
-              TextField(
-                decoration: InputDecoration(prefixIcon: Icon(Icons.search)),
-                controller: urlController,
-                keyboardType: TextInputType.url,
-                onSubmitted: (value) {
-                  var url = WebUri(value);
-                  if (url.scheme.isEmpty) {
-                    url = WebUri("https://www.google.com/search?q=" + value);
-                  }
-                  webViewController?.loadUrl(urlRequest: URLRequest(url: url));
+          TextField(
+            decoration: const InputDecoration(prefixIcon: Icon(Icons.search)),
+            controller: urlController,
+            keyboardType: TextInputType.url,
+            onSubmitted: (value) {
+              var url = WebUri(value);
+              if (url.scheme.isEmpty) {
+                url = WebUri("https://www.google.com/search?q=$value");
+              }
+              webViewController?.loadUrl(urlRequest: URLRequest(url: url));
+            },
+          ),
+          Expanded(
+            child: Stack(
+              children: [
+                InAppWebView(
+                  key: webViewKey,
+                  initialUrlRequest:
+                      URLRequest(url: WebUri("https://inappwebview.dev/")),
+                  initialSettings: settings,
+                  pullToRefreshController: pullToRefreshController,
+                  onWebViewCreated: (controller) {
+                    webViewController = controller;
+                  },
+                  onLoadStart: (controller, url) {
+                    setState(() {
+                      this.url = url.toString();
+                      urlController.text = this.url;
+                    });
+                  },
+                  onPermissionRequest: (controller, request) async {
+                    return PermissionResponse(
+                        resources: request.resources,
+                        action: PermissionResponseAction.GRANT);
+                  },
+                  shouldOverrideUrlLoading:
+                      (controller, navigationAction) async {
+                    var uri = navigationAction.request.url!;
+
+                    if (![
+                      "http",
+                      "https",
+                      "file",
+                      "chrome",
+                      "data",
+                      "javascript",
+                      "about"
+                    ].contains(uri.scheme)) {
+                      if (await canLaunchUrl(uri)) {
+                        // Launch the App
+                        await launchUrl(
+                          uri,
+                        );
+                        // and cancel the request
+                        return NavigationActionPolicy.CANCEL;
+                      }
+                    }
+
+                    return NavigationActionPolicy.ALLOW;
+                  },
+                  onLoadStop: (controller, url) async {
+                    pullToRefreshController?.endRefreshing();
+                    setState(() {
+                      this.url = url.toString();
+                      urlController.text = this.url;
+                    });
+                  },
+                  onReceivedError: (controller, request, error) {
+                    pullToRefreshController?.endRefreshing();
+                  },
+                  onProgressChanged: (controller, progress) {
+                    if (progress == 100) {
+                      pullToRefreshController?.endRefreshing();
+                    }
+                    setState(() {
+                      this.progress = progress / 100;
+                      urlController.text = url;
+                    });
+                  },
+                  onUpdateVisitedHistory: (controller, url, androidIsReload) {
+                    setState(() {
+                      this.url = url.toString();
+                      urlController.text = this.url;
+                    });
+                  },
+                  onConsoleMessage: (controller, consoleMessage) {
+                    if (kDebugMode) {
+                      print(consoleMessage);
+                    }
+                  },
+                ),
+                progress < 1.0
+                    ? LinearProgressIndicator(value: progress)
+                    : Container(),
+              ],
+            ),
+          ),
+          ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                child: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  webViewController?.goBack();
                 },
               ),
-              Expanded(
-                child: Stack(
-                  children: [
-                    InAppWebView(
-                      key: webViewKey,
-                      initialUrlRequest:
-                      URLRequest(url: WebUri("https://inappwebview.dev/")),
-                      initialSettings: settings,
-                      pullToRefreshController: pullToRefreshController,
-                      onWebViewCreated: (controller) {
-                        webViewController = controller;
-                      },
-                      onLoadStart: (controller, url) {
-                        setState(() {
-                          this.url = url.toString();
-                          urlController.text = this.url;
-                        });
-                      },
-                      onPermissionRequest: (controller, request) async {
-                        return PermissionResponse(
-                            resources: request.resources,
-                            action: PermissionResponseAction.GRANT);
-                      },
-                      shouldOverrideUrlLoading:
-                          (controller, navigationAction) async {
-                        var uri = navigationAction.request.url!;
-
-                        if (![
-                          "http",
-                          "https",
-                          "file",
-                          "chrome",
-                          "data",
-                          "javascript",
-                          "about"
-                        ].contains(uri.scheme)) {
-                          if (await canLaunchUrl(uri)) {
-                            // Launch the App
-                            await launchUrl(
-                              uri,
-                            );
-                            // and cancel the request
-                            return NavigationActionPolicy.CANCEL;
-                          }
-                        }
-
-                        return NavigationActionPolicy.ALLOW;
-                      },
-                      onLoadStop: (controller, url) async {
-                        pullToRefreshController?.endRefreshing();
-                        setState(() {
-                          this.url = url.toString();
-                          urlController.text = this.url;
-                        });
-                      },
-                      onReceivedError: (controller, request, error) {
-                        pullToRefreshController?.endRefreshing();
-                      },
-                      onProgressChanged: (controller, progress) {
-                        if (progress == 100) {
-                          pullToRefreshController?.endRefreshing();
-                        }
-                        setState(() {
-                          this.progress = progress / 100;
-                          urlController.text = this.url;
-                        });
-                      },
-                      onUpdateVisitedHistory: (controller, url, androidIsReload) {
-                        setState(() {
-                          this.url = url.toString();
-                          urlController.text = this.url;
-                        });
-                      },
-                      onConsoleMessage: (controller, consoleMessage) {
-                        print(consoleMessage);
-                      },
-                    ),
-                    progress < 1.0
-                        ? LinearProgressIndicator(value: progress)
-                        : Container(),
-                  ],
-                ),
+              ElevatedButton(
+                child: const Icon(Icons.arrow_forward),
+                onPressed: () {
+                  webViewController?.goForward();
+                },
               ),
-              ButtonBar(
-                alignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ElevatedButton(
-                    child: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      webViewController?.goBack();
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Icon(Icons.arrow_forward),
-                    onPressed: () {
-                      webViewController?.goForward();
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Icon(Icons.refresh),
-                    onPressed: () {
-                      webViewController?.reload();
-                    },
-                  ),
-                ],
+              ElevatedButton(
+                child: const Icon(Icons.refresh),
+                onPressed: () {
+                  webViewController?.reload();
+                },
               ),
-            ])));
+            ],
+          ),
+        ])));
   }
 }
 ```
@@ -326,9 +332,6 @@ You can then handle this URL in your `shouldOverrideUrlLoading` event like this:
 static final String APP_SCHEME = "example-app:";
 // ...
 InAppWebView(
-  initialSettings: InAppWebViewSettings(
-    useShouldOverrideUrlLoading: true
-  ),
   shouldOverrideUrlLoading: (controller, navigationAction) async {
     final uri = navigationAction.request.url;
     if (uri != null && uri.toString().startsWith(APP_SCHEME)) {
@@ -361,11 +364,9 @@ InAppWebView(
   initialSettings: InAppWebViewSettings(resourceCustomSchemes: ["my-special-custom-scheme"]),
   onLoadResourceWithCustomScheme: (controller, request) async {
     if (request.url.scheme == "my-special-custom-scheme") {
-      var bytes = await rootBundle.load("assets/" +
-          request.url
-              .toString()
-              .replaceFirst("my-special-custom-scheme://", "", 0));
-      var response = CustomSchemeResponse(
+      final bytes = await rootBundle.load(
+          "assets/${request.url.toString().replaceFirst("my-special-custom-scheme://", "", 0)}");
+      final response = CustomSchemeResponse(
           data: bytes.buffer.asUint8List(),
           contentType: "image/svg+xml",
           contentEncoding: "utf-8");
@@ -373,7 +374,7 @@ InAppWebView(
     }
     return null;
   },
-)
+),
 ```
 
 ## Navigate web page history

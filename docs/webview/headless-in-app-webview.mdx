@@ -39,15 +39,17 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
 
-  runApp(MaterialApp(home: new MyApp()));
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -58,11 +60,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    headlessWebView = new HeadlessInAppWebView(
-      initialUrlRequest:
-          URLRequest(url: WebUri("https://github.com/flutter")),
+    headlessWebView = HeadlessInAppWebView(
+      initialUrlRequest: URLRequest(url: WebUri("https://github.com/flutter")),
+      initialSettings: InAppWebViewSettings(isInspectable: kDebugMode),
       onWebViewCreated: (controller) {
-        final snackBar = SnackBar(
+        const snackBar = SnackBar(
           content: Text('HeadlessInAppWebView created!'),
           duration: Duration(seconds: 1),
         );
@@ -71,14 +73,14 @@ class _MyAppState extends State<MyApp> {
       onConsoleMessage: (controller, consoleMessage) {
         final snackBar = SnackBar(
           content: Text('Console Message: ${consoleMessage.message}'),
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       },
       onLoadStart: (controller, url) async {
         final snackBar = SnackBar(
           content: Text('onLoadStart $url'),
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -89,7 +91,7 @@ class _MyAppState extends State<MyApp> {
       onLoadStop: (controller, url) async {
         final snackBar = SnackBar(
           content: Text('onLoadStop $url'),
-          duration: Duration(seconds: 1),
+          duration: const Duration(seconds: 1),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
@@ -110,15 +112,15 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text(
+            title: const Text(
           "HeadlessInAppWebView Example",
         )),
         body: SafeArea(
             child: Column(children: <Widget>[
           Container(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Text(
-                "URL: ${(url.length > 50) ? url.substring(0, 50) + "..." : url}"),
+                "URL: ${(url.length > 50) ? "${url.substring(0, 50)}..." : url}"),
           ),
           Center(
             child: ElevatedButton(
@@ -126,16 +128,17 @@ class _MyAppState extends State<MyApp> {
                   await headlessWebView?.dispose();
                   await headlessWebView?.run();
                 },
-                child: Text("Run HeadlessInAppWebView")),
+                child: const Text("Run HeadlessInAppWebView")),
           ),
           Center(
             child: ElevatedButton(
                 onPressed: () async {
                   if (headlessWebView?.isRunning() ?? false) {
-                    await headlessWebView?.webViewController.evaluateJavascript(
-                        source: "console.log('Here is the message!');");
+                    await headlessWebView?.webViewController
+                        ?.evaluateJavascript(
+                            source: "console.log('Here is the message!');");
                   } else {
-                    final snackBar = SnackBar(
+                    const snackBar = SnackBar(
                       content: Text(
                           'HeadlessInAppWebView is not running. Click on "Run HeadlessInAppWebView"!'),
                       duration: Duration(milliseconds: 1500),
@@ -143,17 +146,17 @@ class _MyAppState extends State<MyApp> {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                 },
-                child: Text("Send console.log message")),
+                child: const Text("Send console.log message")),
           ),
           Center(
             child: ElevatedButton(
                 onPressed: () {
                   headlessWebView?.dispose();
                   setState(() {
-                    this.url = '';
+                    url = '';
                   });
                 },
-                child: Text("Dispose HeadlessInAppWebView")),
+                child: const Text("Dispose HeadlessInAppWebView")),
           )
         ])));
   }
@@ -202,15 +205,17 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
 
-  runApp(MaterialApp(home: new MyApp()));
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -246,13 +251,14 @@ class _MyAppState extends State<MyApp> {
             },
           );
 
-    headlessWebView = new HeadlessInAppWebView(
+    headlessWebView = HeadlessInAppWebView(
       initialUrlRequest: URLRequest(url: WebUri("https://flutter.dev")),
+      initialSettings: InAppWebViewSettings(isInspectable: kDebugMode),
       pullToRefreshController: pullToRefreshController,
       onWebViewCreated: (controller) {
         webViewController = controller;
 
-        final snackBar = SnackBar(
+        const snackBar = SnackBar(
           content: Text('HeadlessInAppWebView created!'),
           duration: Duration(seconds: 1),
         );
@@ -286,15 +292,15 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text(
+            title: const Text(
           "HeadlessInAppWebView to InAppWebView",
           textScaleFactor: .8,
         )),
         body: Column(children: <Widget>[
           Container(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Text(
-                "URL: ${(url.length > 40) ? url.substring(0, 40) + "..." : url} - $progress%"),
+                "URL: ${(url.length > 40) ? "${url.substring(0, 40)}..." : url} - $progress%"),
           ),
           !convertFlag
               ? Center(
@@ -306,7 +312,7 @@ class _MyAppState extends State<MyApp> {
                           await headlessWebView.run();
                         }
                       },
-                      child: Text("Run HeadlessInAppWebView")),
+                      child: const Text("Run HeadlessInAppWebView")),
                 )
               : Container(),
           !convertFlag
@@ -319,7 +325,7 @@ class _MyAppState extends State<MyApp> {
                           });
                         }
                       },
-                      child: Text("Convert to InAppWebView")),
+                      child: const Text("Convert to InAppWebView")),
                 )
               : Container(),
           convertFlag
@@ -330,7 +336,7 @@ class _MyAppState extends State<MyApp> {
                     headlessWebView = null;
                     webViewController = controller;
 
-                    final snackBar = SnackBar(
+                    const snackBar = SnackBar(
                       content: Text(
                           'HeadlessInAppWebView converted to InAppWebView!'),
                       duration: Duration(seconds: 1),

@@ -48,15 +48,17 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
 
-  runApp(MaterialApp(home: new MyApp()));
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -104,7 +106,7 @@ class _MyAppState extends State<MyApp> {
                 : [
                     (isFindInteractionEnabled)
                         ? IconButton(
-                            icon: Icon(Icons.search),
+                            icon: const Icon(Icons.search),
                             onPressed: () async {
                               if (await findInteractionController
                                       .isFindNavigatorVisible() ??
@@ -119,9 +121,6 @@ class _MyAppState extends State<MyApp> {
                           )
                         : Container(),
                     TextButton(
-                      child: Text(!isFindInteractionEnabled
-                          ? 'Native UI'
-                          : 'Custom UI'),
                       style:
                           TextButton.styleFrom(foregroundColor: Colors.white),
                       onPressed: () async {
@@ -146,6 +145,9 @@ class _MyAppState extends State<MyApp> {
                               .presentFindNavigator();
                         }
                       },
+                      child: Text(!isFindInteractionEnabled
+                          ? 'Native UI'
+                          : 'Custom UI'),
                     )
                   ]),
         body: Column(children: <Widget>[
@@ -153,23 +155,23 @@ class _MyAppState extends State<MyApp> {
               ? Container()
               : TextField(
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
+                    prefixIcon: const Icon(Icons.search),
                     suffixText: textFound,
                     suffixIcon: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         IconButton(
-                          icon: Icon(Icons.arrow_upward),
+                          icon: const Icon(Icons.arrow_upward),
                           onPressed: () {
                             findInteractionController.findNext(forward: false);
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.arrow_downward),
+                          icon: const Icon(Icons.arrow_downward),
                           onPressed: () {
                             findInteractionController.findNext();
                           },

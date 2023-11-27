@@ -43,22 +43,25 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
 
-  runApp(MaterialApp(home: new MyApp()));
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   final GlobalKey webViewKey = GlobalKey();
 
   InAppWebViewController? webViewController;
-  InAppWebViewSettings settings = InAppWebViewSettings();
+  InAppWebViewSettings settings =
+      InAppWebViewSettings(isInspectable: kDebugMode);
   late ContextMenu contextMenu;
 
   @override
@@ -71,7 +74,7 @@ class _MyAppState extends State<MyApp> {
               id: 1,
               title: "Special",
               action: () async {
-                final snackBar = SnackBar(
+                const snackBar = SnackBar(
                   content: Text("Special clicked!"),
                   duration: Duration(seconds: 1),
                 );
@@ -84,7 +87,7 @@ class _MyAppState extends State<MyApp> {
           final snackBar = SnackBar(
             content: Text(
                 "Selected text: '$selectedText', of type: ${hitTestResult.type.toString()}"),
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         },
@@ -92,7 +95,7 @@ class _MyAppState extends State<MyApp> {
           final snackBar = SnackBar(
             content: Text(
                 "Menu item with ID ${menuItem.id} and title '${menuItem.title}' clicked!"),
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         });
@@ -108,8 +111,7 @@ class _MyAppState extends State<MyApp> {
           Expanded(
               child: InAppWebView(
             key: webViewKey,
-            initialUrlRequest:
-                URLRequest(url: WebUri("https://flutter.dev/")),
+            initialUrlRequest: URLRequest(url: WebUri("https://flutter.dev/")),
             contextMenu: contextMenu,
             initialSettings: settings,
             onWebViewCreated: (InAppWebViewController controller) {
