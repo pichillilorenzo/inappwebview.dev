@@ -63,7 +63,6 @@ For example, the old:
 ```dart
 InAppWebViewGroupOptions(
   crossPlatform: InAppWebViewOptions(
-      useShouldOverrideUrlLoading: true,
       mediaPlaybackRequiresUserGesture: false
   ),
   android: AndroidInAppWebViewOptions(
@@ -78,7 +77,6 @@ InAppWebViewGroupOptions(
 would now be:
 ```dart
 InAppWebViewSettings(
-  useShouldOverrideUrlLoading: true,
   mediaPlaybackRequiresUserGesture: false,
   useHybridComposition: true,
   allowsInlineMediaPlayback: true,

@@ -16,7 +16,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
 
     var swAvailable = await WebViewFeature.isFeatureSupported(
         WebViewFeature.SERVICE_WORKER_BASIC_USAGE);
@@ -67,7 +67,8 @@ You can specify up to 10 "app-bound" domains using the new Info.plist key `WKApp
 After that, you need to set to `true` the `limitsNavigationsToAppBoundDomains` iOS-specific WebView option, for example:
 ```dart
 InAppWebViewSettings(
-  limitsNavigationsToAppBoundDomains: true // adds Service Worker API on iOS 14.0+
+  isInspectable: kDebugMode,
+  limitsNavigationsToAppBoundDomains: true, // adds Service Worker API on iOS 14.0+
 )
 ```
 

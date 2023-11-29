@@ -23,7 +23,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-final InAppLocalhostServer localhostServer = new InAppLocalhostServer(documentRoot: 'assets');
+final InAppLocalhostServer localhostServer =
+    InAppLocalhostServer(documentRoot: 'assets');
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,15 +35,17 @@ Future main() async {
   }
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
 
-  runApp(MaterialApp(home: MyApp()));
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -54,16 +57,19 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Container(
           child: Column(children: <Widget>[
-            Expanded(
-              child: InAppWebView(
-                initialUrlRequest: URLRequest(
-                    url: WebUri("http://localhost:8080/index.html")),
-                onWebViewCreated: (controller) {},
-                onLoadStart: (controller, url) {},
-                onLoadStop: (controller, url) {},
-              ),
-            )
-          ])),
+        Expanded(
+          child: InAppWebView(
+            initialSettings: InAppWebViewSettings(
+              isInspectable: kDebugMode,
+            ),
+            initialUrlRequest:
+                URLRequest(url: WebUri("http://localhost:8080/index.html")),
+            onWebViewCreated: (controller) {},
+            onLoadStart: (controller, url) {},
+            onLoadStop: (controller, url) {},
+          ),
+        )
+      ])),
     );
   }
 }

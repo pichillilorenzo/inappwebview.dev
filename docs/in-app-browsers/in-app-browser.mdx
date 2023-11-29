@@ -58,27 +58,30 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
 
   runApp(
-    MaterialApp(
+    const MaterialApp(
       home: MyApp(),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
-  final MyInAppBrowser browser = new MyInAppBrowser();
+  const MyApp({super.key});
 
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  var settings = InAppBrowserClassSettings(
+  final browser = MyInAppBrowser();
+
+  final settings = InAppBrowserClassSettings(
       browserSettings: InAppBrowserSettings(hideUrlBar: false),
-      webViewSettings: InAppWebViewSettings(javaScriptEnabled: true));
+      webViewSettings: InAppWebViewSettings(
+          javaScriptEnabled: true, isInspectable: kDebugMode));
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +92,11 @@ class _MyAppState extends State<MyApp> {
       body: Center(
         child: ElevatedButton(
             onPressed: () {
-              widget.browser.openUrlRequest(
+              browser.openUrlRequest(
                   urlRequest: URLRequest(url: WebUri("https://flutter.dev")),
                   settings: settings);
             },
-            child: Text("Open InAppBrowser")),
+            child: const Text("Open InAppBrowser")),
       ),
     );
   }

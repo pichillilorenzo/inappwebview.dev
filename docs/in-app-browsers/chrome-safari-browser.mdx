@@ -33,7 +33,7 @@ class MyChromeSafariBrowser extends ChromeSafariBrowser {
   }
 
   @override
-  void onCompletedInitialLoad() {
+  void onCompletedInitialLoad(didLoadSuccessfully) {
     print("ChromeSafari browser initial load completed");
   }
 
@@ -47,26 +47,28 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
 
-  runApp(MaterialApp(home: MyApp()));
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
-  final ChromeSafariBrowser browser = new MyChromeSafariBrowser();
+  const MyApp({super.key});
 
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  final browser = MyChromeSafariBrowser();
+
   @override
   void initState() {
-    widget.browser.addMenuItem(new ChromeSafariBrowserMenuItem(
+    browser.addMenuItem(ChromeSafariBrowserMenuItem(
         id: 1,
         label: 'Custom item menu 1',
-        action: (url, title) {
+        onClick: (url, title) {
           print('Custom item menu 1 clicked!');
         }));
     super.initState();
@@ -81,13 +83,13 @@ class _MyAppState extends State<MyApp> {
       body: Center(
         child: ElevatedButton(
             onPressed: () async {
-              await widget.browser.open(
+              await browser.open(
                   url: WebUri("https://flutter.dev/"),
                   settings: ChromeSafariBrowserSettings(
                       shareState: CustomTabsShareState.SHARE_STATE_OFF,
                       barCollapsingEnabled: true));
             },
-            child: Text("Open Chrome Safari Browser")),
+            child: const Text("Open Chrome Safari Browser")),
       ),
     );
   }

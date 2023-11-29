@@ -85,22 +85,26 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
 
-  runApp(MaterialApp(home: new MyApp()));
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   final GlobalKey webViewKey = GlobalKey();
 
   InAppWebViewSettings settings = InAppWebViewSettings(
-    // Setting this off for security. Off by default for SDK versions >= 16.
+      isInspectable: kDebugMode,
+
+      // Setting this off for security. Off by default for SDK versions >= 16.
       allowFileAccessFromFileURLs: false,
       // Off by default, deprecated for SDK versions >= 30.
       allowUniversalAccessFromFileURLs: false,
@@ -113,11 +117,7 @@ class _MyAppState extends State<MyApp> {
       // Basic WebViewAssetLoader with custom domain
       webViewAssetLoader: WebViewAssetLoader(
           domain: "my.custom.domain.com",
-          pathHandlers: [
-            AssetsPathHandler(path: '/assets/')
-          ]
-      )
-  );
+          pathHandlers: [AssetsPathHandler(path: '/assets/')]));
 
   @override
   Widget build(BuildContext context) {
@@ -128,11 +128,12 @@ class _MyAppState extends State<MyApp> {
         body: Column(children: <Widget>[
           Expanded(
               child: InAppWebView(
-                key: webViewKey,
-                initialUrlRequest:
-                URLRequest(url: WebUri("https://my.custom.domain.com/assets/flutter_assets/assets/website/index.html")),
-                initialSettings: settings,
-              )),
+            key: webViewKey,
+            initialUrlRequest: URLRequest(
+                url: WebUri(
+                    "https://my.custom.domain.com/assets/flutter_assets/assets/website/index.html")),
+            initialSettings: settings,
+          )),
         ]));
   }
 }

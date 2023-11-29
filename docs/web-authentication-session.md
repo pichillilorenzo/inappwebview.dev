@@ -59,7 +59,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-InAppLocalhostServer localhostServer = new InAppLocalhostServer();
+InAppLocalhostServer localhostServer = InAppLocalhostServer();
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,12 +68,14 @@ Future main() async {
     await localhostServer.start();
   }
 
-  runApp(MaterialApp(home: new MyApp()));
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => new _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -95,70 +97,72 @@ class _MyAppState extends State<MyApp> {
         body: Column(children: <Widget>[
           Center(
               child: Container(
-                padding: EdgeInsets.all(20.0),
-                child: Text("Token: $token"),
-              )),
+            padding: const EdgeInsets.all(20.0),
+            child: Text("Token: $token"),
+          )),
           session != null
               ? Container()
               : Center(
-            child: ElevatedButton(
-                onPressed: () async {
-                  if (session == null &&
-                      !kIsWeb &&
-                      defaultTargetPlatform == TargetPlatform.iOS &&
-                      await WebAuthenticationSession.isAvailable()) {
-                    session = await WebAuthenticationSession.create(
-                        url: WebUri(
-                            "http://localhost:8080/assets/web-auth.html"),
-                        callbackURLScheme: "test",
-                        onComplete: (url, error) async {
-                          if (url != null) {
-                            setState(() {
-                              token = url.queryParameters["token"];
-                            });
-                          }
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        if (session == null &&
+                            !kIsWeb &&
+                            defaultTargetPlatform == TargetPlatform.iOS &&
+                            await WebAuthenticationSession.isAvailable()) {
+                          session = await WebAuthenticationSession.create(
+                              url: WebUri(
+                                  "http://localhost:8080/assets/web-auth.html"),
+                              callbackURLScheme: "test",
+                              onComplete: (url, error) async {
+                                if (url != null) {
+                                  setState(() {
+                                    token = url.queryParameters["token"];
+                                  });
+                                }
+                              });
+                          setState(() {});
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                'Cannot create Web Authentication Session!'),
+                          ));
+                        }
+                      },
+                      child: const Text("Create Web Auth Session")),
+                ),
+          session == null
+              ? Container()
+              : Center(
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        var started = false;
+                        if (await session?.canStart() ?? false) {
+                          started = await session?.start() ?? false;
+                        }
+                        if (!started) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text(
+                                'Cannot start Web Authentication Session!'),
+                          ));
+                        }
+                      },
+                      child: const Text("Start Web Auth Session")),
+                ),
+          session == null
+              ? Container()
+              : Center(
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        await session?.dispose();
+                        setState(() {
+                          token = null;
+                          session = null;
                         });
-                    setState(() {});
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          'Cannot create Web Authentication Session!'),
-                    ));
-                  }
-                },
-                child: Text("Create Web Auth Session")),
-          ),
-          session == null
-              ? Container()
-              : Center(
-            child: ElevatedButton(
-                onPressed: () async {
-                  var started = false;
-                  if (await session?.canStart() ?? false) {
-                    started = await session?.start() ?? false;
-                  }
-                  if (!started) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          'Cannot start Web Authentication Session!'),
-                    ));
-                  }
-                },
-                child: Text("Start Web Auth Session")),
-          ),
-          session == null
-              ? Container()
-              : Center(
-            child: ElevatedButton(
-                onPressed: () async {
-                  await session?.dispose();
-                  setState(() {
-                    token = null;
-                    session = null;
-                  });
-                },
-                child: Text("Dispose Web Auth Session")),
-          )
+                      },
+                      child: const Text("Dispose Web Auth Session")),
+                )
         ]));
   }
 }

@@ -12,10 +12,10 @@ import config from '../../../docusaurus.config';
 </head>
 
 You can inject JavaScript code in different ways:
-- [using the evaluateJavascript method](#Using-the-evaluateJavascript-method);
-- [using the callAsyncJavaScript method](#Using-the-callAsyncJavaScript-method);
-- [injecting a JavaScript file from URL](#Injecting-a-JavaScript-file-from-URL);
-- [injecting JavaScript code from an asset file](#Injecting-JavaScript-code-from-an-asset-file).
+- [using the evaluateJavascript method](#using-the-evaluatejavascript-method);
+- [using the callAsyncJavaScript method](#using-the-callasyncjavascript-method);
+- [injecting a JavaScript file from URL](#injecting-a-javascript-file-from-url);
+- [injecting JavaScript code from an asset file](#injecting-javascript-code-from-an-asset-file).
 
 :::info
   These methods shouldn't be called in the `onWebViewCreated` or `onLoadStart` events, because, in these events, the WebView is not ready to handle it yet. Instead, you should call these methods, for example, inside the `onLoadStop` event or in any other events where you know the page is ready "enough".
