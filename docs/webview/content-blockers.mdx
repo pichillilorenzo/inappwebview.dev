@@ -1,0 +1,209 @@
+---
+title: "Content Blockers"
+sidebar_position: 11
+date: 2023-11-29 18:00:00
+description: Content Blockers are used to block content, such as ads.
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import config from '../../docusaurus.config';
+
+<head>
+  <title>WebView Content Blockers | {config.title}</title>
+</head>
+
+Content Blockers are used to block content, such as ads.
+Blocking behaviors include hiding elements, blocking loads, and, on iOS and macOS, stripping cookies from the WebView requests.
+
+You use them to prevent the web view from loading specific content, either based on the original location of that content or other criteria you specify.
+For example, a corporate app might use rules to prevent the web view from loading content that originates from outside the corporate network
+
+## Basic Usage
+
+The `ContentBlocker` represents the main class used to define a content blocker behavior
+through the `action` and `trigger` properties.
+
+A list of content blockers can be used by a WebView instance using the `InAppWebViewSettings.contentBlockers` property.
+
+Check the official API reference of `ContentBlockerTrigger` and `ContentBlockerAction` for a deep customization.
+
+Example 1:
+```dart
+initialSettings: InAppWebViewSettings(contentBlockers: [
+  ContentBlocker(
+    trigger: ContentBlockerTrigger(
+      urlFilter: ".*",
+      resourceType: [
+        ContentBlockerTriggerResourceType.IMAGE,
+        ContentBlockerTriggerResourceType.STYLE_SHEET
+      ],
+      unlessDomain: ["example.com", "github.com", "pub.dev"]
+    ),
+    action: ContentBlockerAction(
+      type: ContentBlockerActionType.BLOCK
+    )
+  )
+]),
+```
+
+It will block every image and stylesheet resource type unless the domain is one of "example.com", "github.com", "pub.dev".
+
+Example 2:
+```dart
+initialSettings: InAppWebViewSettings(contentBlockers: [
+  ContentBlocker(
+    trigger: ContentBlockerTrigger(
+      urlFilter: "https://flutter.dev/.*",
+    ),
+    action: ContentBlockerAction(
+      type: ContentBlockerActionType.CSS_DISPLAY_NONE,
+      selector: '.notification, .media, #developer-story'
+    )
+  )
+]),
+```
+
+For every URL that matches the filter `https://flutter.dev/.*`, it will apply the CSS `display: none` rule to every
+HTML element in the page that matches the defined CSS selector `.notification, .media, #developer-story`.
+
+Here is a simple ad blocker implementation:
+
+```dart
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
+  }
+
+  runApp(const MaterialApp(home: MyApp()));
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey webViewKey = GlobalKey();
+
+  // list of Ad URL filters to be used to block ads loading.
+  final adUrlFilters = [
+    ".*.doubleclick.net/.*",
+    ".*.ads.pubmatic.com/.*",
+    ".*.googlesyndication.com/.*",
+    ".*.google-analytics.com/.*",
+    ".*.adservice.google.*/.*",
+    ".*.adbrite.com/.*",
+    ".*.exponential.com/.*",
+    ".*.quantserve.com/.*",
+    ".*.scorecardresearch.com/.*",
+    ".*.zedo.com/.*",
+    ".*.adsafeprotected.com/.*",
+    ".*.teads.tv/.*",
+    ".*.outbrain.com/.*"
+  ];
+
+  final List<ContentBlocker> contentBlockers = [];
+  var contentBlockerEnabled = false;
+
+  InAppWebViewController? webViewController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // for each Ad URL filter, add a Content Blocker to block its loading.
+    for (final adUrlFilter in adUrlFilters) {
+      contentBlockers.add(ContentBlocker(
+          trigger: ContentBlockerTrigger(
+            urlFilter: adUrlFilter,
+          ),
+          action: ContentBlockerAction(
+            type: ContentBlockerActionType.BLOCK,
+          )));
+    }
+
+    // apply the "display: none" style to some HTML elements
+    contentBlockers.add(ContentBlocker(
+        trigger: ContentBlockerTrigger(
+          urlFilter: ".*",
+        ),
+        action: ContentBlockerAction(
+            type: ContentBlockerActionType.CSS_DISPLAY_NONE,
+            selector:
+                ".banner, .banners, .ads, .ad, .advert, .widget-ads, .ad-unit")));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("Ads Content Blocker"),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                contentBlockerEnabled = !contentBlockerEnabled;
+                if (contentBlockerEnabled) {
+                  await webViewController?.setSettings(
+                      settings: InAppWebViewSettings(
+                          contentBlockers: contentBlockers));
+                } else {
+                  await webViewController?.setSettings(
+                      settings: InAppWebViewSettings(contentBlockers: []));
+                }
+                webViewController?.reload();
+
+                setState(() {});
+              },
+              style: TextButton.styleFrom(foregroundColor: Colors.white),
+              child: Text(contentBlockerEnabled ? 'Disable' : 'Enable'),
+            )
+          ],
+        ),
+        body: SafeArea(
+            child: Column(children: <Widget>[
+          Expanded(
+            child: Stack(
+              children: [
+                InAppWebView(
+                  key: webViewKey,
+                  initialUrlRequest:
+                      URLRequest(url: WebUri('https://www.tomshardware.com/')),
+                  initialSettings: InAppWebViewSettings(
+                      contentBlockers:
+                          contentBlockerEnabled ? contentBlockers : null),
+                  onWebViewCreated: (controller) {
+                    webViewController = controller;
+                  },
+                ),
+              ],
+            ),
+          ),
+        ])));
+  }
+}
+```
+
+Using these rules will prevent a bunch of ads to appear, such as Google Ads.
+
+Click the Disable/Enable button to disable or enable the Ad Blocker feature.
+
+This is the result:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="ios" label="iOS">
+```
+![iOS context menu basic usage](./content-blockers/ios-content-blockers-basic-usage.gif "iOS content blocker basic usage.")
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```

@@ -1,0 +1,130 @@
+---
+title: "Keep Alive"
+sidebar_position: 12
+date: 2023-11-29 18:00:00
+description: Feature to keep alive a native WebView in background.
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import config from '../../docusaurus.config';
+
+<head>
+  <title>WebView Keep Alive | {config.title}</title>
+</head>
+
+This feature is used to keep alive a native WebView in background instead of disposing it when the
+corresponding `InAppWebView` Flutter widget is removed from the widget tree.
+
+`InAppWebViewKeepAlive` represents a token to be used by the `InAppWebView.keepAlive` property.
+Once the `InAppWebView` is created for the first time on the native platform side,
+all the other `InAppWebView` widgets that will use the same `InAppWebViewKeepAlive` instance
+will render the same native WebView with the same settings.
+
+There could be only **one** active `InAppWebView` instance per `InAppWebViewKeepAlive` instance.
+Trying to use the same `InAppWebViewKeepAlive` instance for two active `InAppWebView` s will result in a crash.
+
+## Basic Usage
+
+Here is an example using the same `InAppWebViewKeepAlive` to render the same WebView inside two different pages.
+When you go from Page A to Page B or vice-versa, the `InAppWebView` will render the same native WebView
+without reloading and maintaining the current WebView native state (current url, scroll position, ecc...),
+as if you never removed it from the Flutter widget tree.
+
+Example:
+```dart
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+final keepAlive = InAppWebViewKeepAlive();
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
+  }
+
+  runApp(const MaterialApp(home: PageA()));
+}
+
+class PageA extends StatelessWidget {
+  const PageA({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Page A - Keep Alive Example'),
+        actions: [
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const PageB(),
+                  ),
+                );
+              },
+              child: const Text('Go To Page B'))
+        ],
+      ),
+      body: Column(children: <Widget>[
+        Expanded(
+          child: InAppWebView(
+            keepAlive: keepAlive,
+            initialUrlRequest:
+                URLRequest(url: WebUri("http://github.com/flutter")),
+            initialSettings: InAppWebViewSettings(
+              isInspectable: kDebugMode,
+            ),
+          ),
+        )
+      ]),
+    );
+  }
+}
+
+class PageB extends StatelessWidget {
+  const PageB({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Page B - Keep Alive Example'),
+        actions: [
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const PageA(),
+                  ),
+                );
+              },
+              child: const Text('Go To Page A'))
+        ],
+      ),
+      body: Column(children: <Widget>[
+        Expanded(
+          child: InAppWebView(
+            keepAlive: keepAlive,
+          ),
+        )
+      ]),
+    );
+  }
+}
+```
+
+This is the result:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="android" label="Android">
+```
+![Android keep alive basic usage](./keep-alive/android-keep-alive-basic-usage.gif "Android keep alive basic usage.")
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```

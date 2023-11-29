@@ -404,57 +404,45 @@ Each `WebMessageListener.allowedOriginRules` entry must follow the format `SCHEM
       </tr>
       <tr>
          <td>http/https with hostname</td>
-         <td><code translate="no" dir="ltr">SCHEME</code> is http or https; <code translate="no" dir="ltr">HOSTNAME_&lt;wbr&gt;PATTERN</code> is a regular hostname; <code translate="no" dir="ltr">PORT</code> is optional, when not present, the rule will match port <code translate="no" dir="ltr">80</code> for http and port
-            <code translate="no" dir="ltr">443</code> for https.
+         <td>
+            <code translate="no" dir="ltr">SCHEME</code> is http or https; <code translate="no" dir="ltr">HOSTNAME_&lt;wbr&gt;PATTERN</code> is a regular hostname; <code translate="no" dir="ltr">PORT</code> is optional, when not present, the rule will match port <code translate="no" dir="ltr">80</code> for http and port <code translate="no" dir="ltr">443</code> for https.
          </td>
          <td>
             <ul>
-               <li><code translate="no" dir="ltr">https://foobar.com:8080</code> - Matches https:// URL on port 8080, whose normalized
-                  host is foobar.com.
-               </li>
-               <li><code translate="no" dir="ltr">https://www.example.com</code> - Matches https:// URL on port 443, whose normalized host
-                  is www.example.com.
-               </li>
+               <li><code translate="no" dir="ltr">https://foobar.com:8080</code> - Matches https:// URL on port 8080, whose normalized host is foobar.com.</li>
+               <li><code translate="no" dir="ltr">https://www.example.com</code> - Matches https:// URL on port 443, whose normalized host is www.example.com.</li>
             </ul>
          </td>
       </tr>
       <tr>
          <td>http/https with pattern matching</td>
-         <td><code translate="no" dir="ltr">SCHEME</code> is http or https; <code translate="no" dir="ltr">HOSTNAME_&lt;wbr&gt;PATTERN</code> is a sub-domain matching
-            pattern with a leading <code translate="no" dir="ltr">*.&lt;wbr&gt;</code>; <code translate="no" dir="ltr">PORT</code> is optional, when not present, the rule will
-            match port <code translate="no" dir="ltr">80</code> for http and port <code translate="no" dir="ltr">443</code> for https.
+         <td>
+            <code translate="no" dir="ltr">SCHEME</code> is http or https; <code translate="no" dir="ltr">HOSTNAME_&lt;wbr&gt;PATTERN</code> is a sub-domain matching pattern with a leading <code translate="no" dir="ltr">*.&lt;wbr&gt;</code>; <code translate="no" dir="ltr">PORT</code> is optional, when not present, the rule will match port <code translate="no" dir="ltr">80</code> for http and port <code translate="no" dir="ltr">443</code> for https.
          </td>
          <td>
             <ul>
-               <li><code translate="no" dir="ltr">https://*.example.com</code> - Matches https://calendar.example.com and
-                  https://foo.bar.example.com but not https://example.com.
-               </li>
-               <li><code translate="no" dir="ltr">https://*.example.com:8080</code> - Matches https://calendar.example.com:8080</li>
+               <li><code translate="no" dir="ltr">https://\*.example.com</code> - Matches https://calendar.example.com and https://foo.bar.example.com but not https://example.com.</li>
+               <li><code translate="no" dir="ltr">https://\*.example.com:8080</code> - Matches https://calendar.example.com:8080</li>
             </ul>
          </td>
       </tr>
       <tr>
          <td>http/https with IP literal</td>
-         <td><code translate="no" dir="ltr">SCHEME</code> is https or https; <code translate="no" dir="ltr">HOSTNAME_&lt;wbr&gt;PATTERN</code> is IP literal; <code translate="no" dir="ltr">PORT</code> is
-            optional, when not present, the rule will match port <code translate="no" dir="ltr">80</code> for http and port <code translate="no" dir="ltr">443</code>
-            for https.
+         <td>
+            <code translate="no" dir="ltr">SCHEME</code> is https or https; <code translate="no" dir="ltr">HOSTNAME_&lt;wbr&gt;PATTERN</code> is IP literal; <code translate="no" dir="ltr">PORT</code> is optional, when not present, the rule will match port <code translate="no" dir="ltr">80</code> for http and port <code translate="no" dir="ltr">443</code> for https.
          </td>
          <td>
             <ul>
-               <li><code translate="no" dir="ltr">https://127.0.0.1</code> - Matches https:// URL on port 443, whose IPv4 address is
-                  127.0.0.1
-               </li>
-               <li><code translate="no" dir="ltr">https://[::1]</code> or <code translate="no" dir="ltr">https://[0:0::1]</code>- Matches any URL to the IPv6 loopback
-                  address with port 443.
-               </li>
+               <li><code translate="no" dir="ltr">https://127.0.0.1</code> - Matches https:// URL on port 443, whose IPv4 address is 127.0.0.1</li>
+               <li><code translate="no" dir="ltr">https://[::1]</code> or <code translate="no" dir="ltr">https://[0:0::1]</code>- Matches any URL to the IPv6 loopback address with port 443.</li>
                <li><code translate="no" dir="ltr">https://[::1]:99</code> - Matches any https:// URL to the IPv6 loopback on port 99.</li>
             </ul>
          </td>
       </tr>
       <tr>
          <td>Custom scheme</td>
-         <td><code translate="no" dir="ltr">SCHEME</code> is a custom scheme; <code translate="no" dir="ltr">HOSTNAME_&lt;wbr&gt;PATTERN</code> and <code translate="no" dir="ltr">PORT</code> must not be
-            present.
+         <td>
+            <code translate="no" dir="ltr">SCHEME</code> is a custom scheme; <code translate="no" dir="ltr">HOSTNAME_&lt;wbr&gt;PATTERN</code> and <code translate="no" dir="ltr">PORT</code> must not be present.
          </td>
          <td>
             <ul>
