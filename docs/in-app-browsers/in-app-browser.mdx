@@ -124,3 +124,170 @@ This is the result:
   </TabItem>
 </Tabs>
 ```
+
+## Custom Menu Items
+
+Using the `InAppBrowser.addMenuItem` method, custom menu items can be added to the `InAppBrowser` instance and
+implement a custom logic when the user clicks on it using the `InAppBrowserMenuItem.onClick` callback function.
+
+For each menu item, an identifier must be specified using the `int id` property.
+Each menu item can be customized using the other properties, for example using a custom icon image or a default native icon.
+
+Also, to hide the default menu items, set `InAppBrowserSettings.hideDefaultMenuItems` to `true`:
+
+Here is an example with 3 custom menu items:
+```dart
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+class MyInAppBrowser extends InAppBrowser {
+  @override
+  Future onBrowserCreated() async {
+    print("Browser Created!");
+  }
+
+  @override
+  Future onLoadStart(url) async {
+    print("Started $url");
+  }
+
+  @override
+  Future onLoadStop(url) async {
+    print("Stopped $url");
+  }
+
+  @override
+  void onExit() {
+    print("Browser closed!");
+  }
+}
+
+Uint8List? dataIcon;
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
+  }
+
+  dataIcon = (await rootBundle.load('assets/images/flutter-logo.png'))
+      .buffer
+      .asUint8List();
+
+  runApp(
+    const MaterialApp(
+      home: MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final browser = MyInAppBrowser();
+
+  final settings = InAppBrowserClassSettings(
+      browserSettings: InAppBrowserSettings(
+          hideUrlBar: true,
+          toolbarTopBackgroundColor: Colors.white,
+          presentationStyle: ModalPresentationStyle.POPOVER),
+      webViewSettings: InAppWebViewSettings(
+          isInspectable: kDebugMode));
+
+  @override
+  void initState() {
+    super.initState();
+
+    browser.addMenuItem(InAppBrowserMenuItem(
+      id: 0,
+      title: 'Menu Item 0',
+      iconColor: Colors.black,
+      order: 0,
+      onClick: () {
+        browser.webViewController?.reload();
+      },
+    ));
+
+    browser.addMenuItem(InAppBrowserMenuItem(
+      id: 1,
+      title: 'Menu Item 1',
+      icon: dataIcon,
+      showAsAction: true,
+      order: 2,
+      onClick: () {
+        browser.webViewController?.reload();
+      },
+    ));
+
+    dynamic icon;
+    if ([
+      TargetPlatform.iOS,
+      TargetPlatform.macOS,
+    ].contains(defaultTargetPlatform)) {
+      icon = UIImage(systemName: 'ellipsis.circle');
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
+      icon =
+          AndroidResource.drawable(name: 'ic_menu_edit', defPackage: 'android');
+    }
+    browser.addMenuItem(InAppBrowserMenuItem(
+      id: 2,
+      title: 'Menu Item 2',
+      icon: icon,
+      iconColor: Colors.red,
+      showAsAction: true,
+      order: 1,
+      onClick: () {
+        browser.webViewController?.reload();
+      },
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('InAppBrowser Menu Items Example'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+            onPressed: () {
+              browser.openUrlRequest(
+                  urlRequest: URLRequest(url: WebUri("https://flutter.dev")),
+                  settings: settings);
+            },
+            child: const Text("Open InAppBrowser")),
+      ),
+    );
+  }
+}
+```
+
+This is the result:
+
+```mdx-code-block
+<Tabs>
+  <TabItem value="android" label="Android" default>
+```
+![InAppBrowser android menu items](./in-app-browser/android-in-app-browser-menu-items-example.gif "InAppBrowser android menu items.")
+```mdx-code-block
+  </TabItem>
+  <TabItem value="ios" label="iOS">
+```
+![InAppBrowser iOS menu items](./in-app-browser/ios-in-app-browser-menu-items-example.gif "InAppBrowser iOS menu items.")
+```mdx-code-block
+  </TabItem>
+  <TabItem value="macos" label="MacOS">
+```
+![InAppBrowser MacOS menu items](./in-app-browser/macos-in-app-browser-menu-items-example.gif "InAppBrowser MacOS menu items.")
+```mdx-code-block
+  </TabItem>
+</Tabs>
+```
