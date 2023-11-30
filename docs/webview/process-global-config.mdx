@@ -1,0 +1,90 @@
+---
+title: "Process Global Config"
+sidebar_position: 12
+date: 2023-11-30 10:00:00
+description: Process Global Configuration for Android WebView.
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import config from '../../docusaurus.config';
+
+<head>
+  <title>WebView Process Global Config | {config.title}</title>
+</head>
+
+Process Global Configuration for Android-specific WebView.
+WebView has some process-global configuration parameters that cannot be changed once WebView has been loaded.
+This class allows apps to set these parameters.
+
+If it is used, the configuration should be set and `apply` should be called prior to loading WebView
+into the calling process.
+Most of the methods in `android.webkit` and `androidx.webkit` packages load WebView,
+so the configuration should be applied before calling any of these methods.
+
+## Basic Usage
+
+`apply` can only be called once.
+Trying to call it more than once, will result in a `PlatformException`.
+
+Only a single thread should access this class at a given time.
+
+The configuration should be set up as early as possible during application startup,
+to ensure that it happens before any other thread can call a method that loads WebView.
+
+The following code configures the data and cache directory base path and the data directory suffix
+that WebView uses and then applies the configuration.
+WebView uses this configuration when it is loaded.
+
+Before applying the configuration, you should check if the related Android WebView startup feature is
+currently supported or not.
+
+In this example, I'm also using the [path_provider](https://pub.dev/packages/path_provider)
+plugin to get the Application Documents Directory as the directory base path.
+
+Example:
+```dart
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final dataDirectorySuffix = (await WebViewFeature.isStartupFeatureSupported(
+          WebViewFeature.STARTUP_FEATURE_SET_DATA_DIRECTORY_SUFFIX))
+      ? 'suffix_inappwebviewexample'
+      : null;
+
+  final appDocsPath = (await getApplicationDocumentsDirectory()).absolute.path;
+
+  final directoryBasePaths = (await WebViewFeature.isStartupFeatureSupported(
+          WebViewFeature.STARTUP_FEATURE_SET_DIRECTORY_BASE_PATHS))
+      ? ProcessGlobalConfigDirectoryBasePaths(
+          cacheDirectoryBasePath: '$appDocsPath/inappwebviewexample/cache',
+          dataDirectoryBasePath: '$appDocsPath/inappwebviewexample/data')
+      : null;
+
+  try {
+    // call apply before any API related to Android WebViews
+    await ProcessGlobalConfig.instance().apply(
+        settings: ProcessGlobalConfigSettings(
+            dataDirectorySuffix: dataDirectorySuffix,
+            directoryBasePaths: directoryBasePaths));
+  } catch (e) {
+    // use try/catch if you are calling more than once
+    // for example, when hot restarting your Flutter App.
+    print(e);
+  }
+
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    // for example, this API is related to Android WebViews.
+    // if you call this method before ProcessGlobalConfig.apply,
+    // the apply method won't work
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
+  }
+
+  runApp(const MaterialApp(home: MyApp()));
+}
+```

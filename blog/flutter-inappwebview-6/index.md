@@ -44,7 +44,7 @@ To correctly setup the Web platform, you need to add the `web_support.js` file i
 ```html
 <head>
   <!-- ... -->
-    <script type="application/javascript" src="/assets/packages/flutter_inappwebview/assets/web/web_support.js" defer></script>
+    <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js" defer></script>
   <!-- ... -->
 </head>
 ```
@@ -92,9 +92,9 @@ WebViews and some controllers have debugging info enabled by default when your f
 
 For example, while an `InAppWebView` or `HeadlessInAppWebView` is running, you will see debugging info in your IDE log console with details of the various fired WebView events.
 
-Through the `WebView.debugLoggingSettings` static property, you can change the `DebugLoggingSettings` values.
+Through the `PlatformInAppWebViewController.debugLoggingSettings` static property, you can change the `DebugLoggingSettings` values.
 
-If you want to disable WebView debugging info, simply set the `WebView.debugLoggingSettings.enabled` to `false`.
+If you want to disable WebView debugging info, simply set the `PlatformInAppWebViewController.debugLoggingSettings.enabled` to `false`.
 
 Check more on [Debugging WebViews](https://inappwebview.dev/docs/debugging-webviews/).
 
