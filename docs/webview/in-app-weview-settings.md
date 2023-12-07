@@ -1461,7 +1461,7 @@ This logic will not be applied for `PlatformInAppBrowser`, where you must set th
 - iOS
 - MacOS
 
-### usehouldInterceptFetchRequest;
+### useShouldInterceptFetchRequest;
 
 `bool? use`
 
@@ -1476,7 +1476,7 @@ This logic will not be applied for `PlatformInAppBrowser`, where you must set th
 - iOS
 - MacOS
 
-### usehouldInterceptRequest;
+### useShouldInterceptRequest;
 
 `bool? use`
 
