@@ -1504,7 +1504,7 @@ This logic will not be applied for `PlatformInAppBrowser`, where you must set th
 - iOS
 - MacOS
 
-### useideViewPort;
+### useHideViewPort;
 
 `bool? use`
 
@@ -1540,9 +1540,9 @@ Define whether the vertical scrollbar should be drawn or not. The default value 
 - iOS ([Official API - UIScrollView.showsVerticalScrollIndicator](https://developer.apple.com/documentation/uikit/uiscrollview/1619405-showsverticalscrollindicator/))
 - Web but iframe requires same origin
 
-### verticalScrolbarPosition;
+### verticalScrollbarPosition;
 
-`VerticalScrollbarPosition? verticalScro`
+`VerticalScrollbarPosition? verticalScroll`
 
 Sets the position of the vertical scroll bar.
 The default value is `VerticalScrollbarPosition.SCROLLBAR_POSITION_DEFAULT`.
