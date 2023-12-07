@@ -1542,7 +1542,7 @@ Define whether the vertical scrollbar should be drawn or not. The default value 
 
 ### verticalScrollbarPosition;
 
-`VerticalScrollbarPosition? verticalScroll`
+`VerticalScrollbarPosition? verticalScrollbarPosition`
 
 Sets the position of the vertical scroll bar.
 The default value is `VerticalScrollbarPosition.SCROLLBAR_POSITION_DEFAULT`.
