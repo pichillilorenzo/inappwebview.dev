@@ -38,17 +38,29 @@ The path should start and end with a `"/"` and it shouldn't collide with a real 
 `WebViewAssetLoader` will try Path Handlers in the order they're registered, and will use whichever is the first to return a non-null.
 
 Native path handlers:
-- `AssetsPathHandler`: handler class to open a file from assets directory in the application APK;
-- `ResourcesPathHandler`: handler class to open a file from resources directory in the application APK;
-- `InternalStoragePathHandler`: handler class to open files from application internal storage.
+- `AssetsPathHandler`: handler class to open a file from the Android **assets directory** in the application APK;
+- `ResourcesPathHandler`: handler class to open a file from the Android **resources directory** in the application APK;
+- `InternalStoragePathHandler`: handler class to open files from the Android **application internal storage**.
+
+The matched prefix path used shouldn't be a prefix of a real web path.
+Thus, if the requested file cannot be found a `WebResourceResponse` object with a `null` data will be returned instead of `null`.
+This saves the time of falling back to network and trying to resolve a path that doesn't exist.
+A `WebResourceResponse` with `null` data will be received as an HTTP response with status code `404` and no body.
+
+The MIME type for the file will be determined from the file's extension using
+[guessContentTypeFromName](https://developer.android.com/reference/java/net/URLConnection.html#guessContentTypeFromName-java.lang.String-).
+Developers should ensure that asset files are named using standard file extensions.
+If the file does not have a recognised extension, `text/plain` will be used by default.
 
 Your flutter asset files can be found under the folder `/assets/flutter_assets` of the application APK.
 
-Extend the `PathHandler` abstract class to handle other use-cases according to your app's needs.
-For example:
+Extend the `CustomPathHandler` abstract class to handle other use-cases according to your app's needs.
+Here is an example using also the [mime](https://pub.dev/packages/mime) package to try to get the correct resource content type:
 ```dart
-class CustomPathHandler extends PathHandler {
-  CustomPathHandler({required String path}) : super(path: path);
+import 'package:mime/mime.dart';
+
+class MyCustomPathHandler extends CustomPathHandler {
+  MyCustomPathHandler({required super.path});
 
   @override
   Future<WebResourceResponse?> handle(String path) async {
@@ -56,21 +68,24 @@ class CustomPathHandler extends PathHandler {
       final assetPath = path.replaceFirst("flutter_assets/", "");
       final data = await rootBundle.load(assetPath);
       return WebResourceResponse(
+        contentType: lookupMimeType(path),
         data: data.buffer.asUint8List(),
       );
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     return WebResourceResponse(data: null);
   }
 }
 // ...
 InAppWebViewSettings settings = InAppWebViewSettings(
-    webViewAssetLoader: WebViewAssetLoader(
-        pathHandlers: [
-          CustomPathHandler(path: '/assets/')
-        ]
-    )
+  webViewAssetLoader: WebViewAssetLoader(
+    pathHandlers: [
+      MyCustomPathHandler(path: '/assets/')
+    ]
+  )
 );
 ```
 
