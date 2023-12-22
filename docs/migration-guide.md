@@ -5,11 +5,21 @@ date: 2022-10-12 12:00:00
 
 # Migration Guide from 5.x.x
 
-## Requirements
+## New requirements
 
 Version `6.x.x` now requires minimum Flutter version to be `3.0.0`,
 Android `minSdkVersion` to be `19` (`android/app/build.gradle`),
-and the minimum iOS version to be `9.0` (`ios/Podfile`) with XCode version `>= 14`.
+and the minimum iOS version to be `9.0` (`ios/Podfile`) with XCode version `>= 14.3`.
+
+- Dart sdk: ">=2.17.0 <4.0.0"
+- Flutter: ">=3.0.0"
+- Android: `minSdkVersion >= 19`, `compileSdk >= 34`, [AGP](https://developer.android.com/build/releases/gradle-plugin) version `>= 7.3.0` (use [Android Studio - Android Gradle plugin Upgrade Assistant](https://developer.android.com/build/agp-upgrade-assistant) for help), support for `androidx` (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app)
+- iOS 9.0+: `--ios-language swift`, Xcode version `>= 14.3`
+- MacOS 10.11+: Xcode version `>= 14.3`
+
+Android package name has been changed to `com.pichillilorenzo.flutter_inappwebview_android`.
+References to old package name `com.pichillilorenzo.flutter_inappwebview` should be updated,
+for example inside `AndroidManifest.xml` file: `<provider android:name="com.pichillilorenzo.flutter_inappwebview_android.InAppWebViewFileProvider" android:authorities="${applicationId}.flutter_inappwebview_android.fileprovider" ...`
 
 ## `Uri` type to `WebUri` type
 
@@ -97,4 +107,4 @@ Check the code docs to know which class/property/method you should use now.
 
 ## Changelog
 
-Check the [CHANGELOG](https://github.com/pichillilorenzo/flutter_inappwebview/blob/master/CHANGELOG.md) file to know all the BREAKING CHANGES.
+Check the [CHANGELOG](https://github.com/pichillilorenzo/flutter_inappwebview/blob/master/flutter_inappwebview/CHANGELOG.md) file to know all the BREAKING CHANGES.
