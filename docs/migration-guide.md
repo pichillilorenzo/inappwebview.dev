@@ -11,7 +11,7 @@ Version `6.x.x` now requires minimum Flutter version to be `3.0.0`,
 Android `minSdkVersion` to be `19` (`android/app/build.gradle`),
 and the minimum iOS version to be `9.0` (`ios/Podfile`) with XCode version `>= 14.3`.
 
-- Dart sdk: ">=2.17.0 <4.0.0"
+- Dart sdk: ">=2.17.0 \<4.0.0"
 - Flutter: ">=3.0.0"
 - Android: `minSdkVersion >= 19`, `compileSdk >= 34`, [AGP](https://developer.android.com/build/releases/gradle-plugin) version `>= 7.3.0` (use [Android Studio - Android Gradle plugin Upgrade Assistant](https://developer.android.com/build/agp-upgrade-assistant) for help), support for `androidx` (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app)
 - iOS 9.0+: `--ios-language swift`, Xcode version `>= 14.3`
