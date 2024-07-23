@@ -90,9 +90,9 @@ The default value is `false`.
 - iOS
 - MacOS
 
-### allwUniversalAccessFromFileURLs;
+### allowUniversalAccessFromFileURLs;
 
-`bool? all`
+`bool? allowUniversalAccessFromFileURLs`
 
 Sets whether cross-origin requests in the context of a file scheme URL should be allowed to access content from any origin.
 This includes access to content from other file scheme URLs or web contexts.
@@ -109,9 +109,9 @@ The default value is `false`.
 - iOS
 - MacOS
 
-### alowingReadAccessTo;
+### allowingReadAccessTo;
 
-`WebUri? a`
+`WebUri? allowingReadAccessTo`
 
 Used in combination with `PlatformWebViewCreationParams.initialUrlRequest` or `PlatformWebViewCreationParams.initialData` (using the `file://` scheme), it represents the URL from which to read the web content.
 This URL must be a file-based URL (using the `file://` scheme).
@@ -123,9 +123,9 @@ Specify a directory to give WebView permission to read additional files in the s
 - iOS
 - MacOS
 
-### allwsAirPlayForMediaPlayback;
+### allowsAirPlayForMediaPlayback;
 
-`bool? all`
+`bool? allowsAirPlayForMediaPlayback`
 
 Set to `true` to allow AirPlay. The default value is `true`.
 
@@ -281,9 +281,9 @@ Also, on MacOS:
 - iOS 13.0+
 - MacOS 10.15+
 
-### applicatonNameForUserAgent;
+### applicationNameForUserAgent;
 
-`String? applicat`
+`String? applicationNameForUserAgent`
 
 Append to the existing user-agent. Setting userAgent will override this.
 
@@ -361,18 +361,18 @@ Set to `true` to have all the browser's cache cleared before the new WebView is 
 - iOS
 - MacOS
 
-### clerSessionCache;
+### clearSessionCache;
 
-`bool? cle`
+`bool? clearSessionCache`
 
 Set to `true` to have the session cookie cache cleared before the new window is opened.
 
 **Officially Supported Platforms/Implementations**:
 - Android native WebView
 
-### contntBlockers;
+### contentBlockers;
 
-`List<ContentBlocker>? cont`
+`List<ContentBlocker>? contentBlockers`
 
 List of `ContentBlocker` that are a set of rules used to block content in the browser window.
 
@@ -381,9 +381,9 @@ List of `ContentBlocker` that are a set of rules used to block content in the br
 - iOS 11.0+
 - MacOS 10.13+
 
-### ScrollViewContenInsetAdjustmentBehavior? contentInsetAdjustmentBehavior;
+### contentInsetAdjustmentBehavior;
 
-`ScrollViewConten`
+`ScrollViewContentInsetAdjustmentBehavior? contentInsetAdjustmentBehavior`
 
 Configures how safe area insets are added to the adjusted content inset.
 The default value is `ScrollViewContentInsetAdjustmentBehavior.NEVER`.
@@ -404,7 +404,7 @@ Sets the cursive font family name. The default value is `"cursive"`.
 
 `List<DataDetectorTypes>? dataDetectorTypes`
 
-Specifying a dataDetectoryTypes value adds interactivity to web content that matches the value.
+Specifying a dataDetectorTypes value adds interactivity to web content that matches the value.
 For example, Safari adds a link to “apple.com” in the text “Visit apple.com” if the dataDetectorTypes property is set to `DataDetectorTypes.LINK`.
 The default value is `DataDetectorTypes.NONE`.
 
@@ -490,7 +490,7 @@ Sets whether the default Android WebView’s internal error page should be suppr
 **Officially Supported Platforms/Implementations**:
 - Android native WebView
 
-### disableHorizontalScrll;
+### disableHorizontalScroll;
 
 `bool? disableHorizontalScr`
 
@@ -511,9 +511,9 @@ The default value is `false`.
 **Officially Supported Platforms/Implementations**:
 - iOS
 
-### dsableLongPressContextMenuOnLinks;
+### disableLongPressContextMenuOnLinks;
 
-`bool? d`
+`bool? disableLongPressContextMenuOnLinks`
 
 Set to `true` to disable the context menu (copy, select, etc.) that is shown when the user emits a long press event on a HTML link.
 This is implemented using also JavaScript, so it must be enabled or it won't work.
@@ -522,9 +522,9 @@ The default value is `false`.
 **Officially Supported Platforms/Implementations**:
 - iOS
 
-### dsableVerticalScroll;
+### disableVerticalScroll;
 
-`bool? d`
+`bool? disableVerticalScroll`
 
 Set to `true` to disable vertical scroll. The default value is `false`.
 
@@ -551,9 +551,9 @@ Set to `true` to disable the bouncing of the WebView when the scrolling has reac
 **Officially Supported Platforms/Implementations**:
 - iOS
 
-### dsplayZoomControls;
+### displayZoomControls;
 
-`bool? d`
+`bool? displayZoomControls`
 
 Set to `true` if the WebView should display on-screen zoom controls when using the built-in zoom mechanisms. The default value is `false`.
 
@@ -579,9 +579,9 @@ Set to `true` to allow a viewport meta tag to either disable or restrict the ran
 - iOS
 - MacOS
 
-### entrpriseAuthenticationAppLinkPolicyEnabled;
+### enterpriseAuthenticationAppLinkPolicyEnabled;
 
-`bool? ent`
+`bool? enterpriseAuthenticationAppLinkPolicyEnabled`
 
 Sets whether EnterpriseAuthenticationAppLinkPolicy if set by admin is allowed to have any
 effect on WebView.
@@ -771,9 +771,9 @@ because there isn't any way to make the website data store non-persistent for th
 - iOS
 - MacOS
 
-### initalScale;
+### initialScale;
 
-`int? init`
+`int? initialScale`
 
 Sets the initial scale for this WebView. 0 means default. The behavior for the default scale depends on the state of `useWideViewPort` and `loadWithOverviewMode`.
 If the content fits into the WebView control by width, then the zoom is set to 100%. For wide content, the behavior depends on the state of `loadWithOverviewMode`.
@@ -904,9 +904,9 @@ Set to `true` to enable JavaScript. The default value is `true`.
 - MacOS ([Official API - WKWebpagePreferences.allowsContentJavaScript](https://developer.apple.com/documentation/webkit/wkwebpagepreferences/3552422-allowscontentjavascript/))
 - Web
 
-### LayoutAgorithm? layoutAlgorithm;
+### layoutAlgorithm;
 
-`LayoutA`
+`LayoutAlgorithm? layoutAlgorithm`
 
 Sets the underlying layout algorithm. This will cause a re-layout of the WebView.
 
@@ -1117,9 +1117,9 @@ If the url request of a subframe matches the regular expression, then the reques
 **Officially Supported Platforms/Implementations**:
 - Android native WebView
 
-### redererPriorityPolicy;
+### rendererPriorityPolicy;
 
-`RendererPriorityPolicy? re`
+`RendererPriorityPolicy? rendererPriorityPolicy`
 
 Sets the renderer priority policy for this WebView.
 
@@ -1154,9 +1154,9 @@ List of custom schemes that the WebView must handle. Use the `PlatformWebViewCre
 - iOS 11.0+
 - MacOS 10.13+
 
-### safeBrowsigEnabled;
+### safeBrowsingEnabled
 
-`bool? safeBrowsi`
+`bool? safeBrowsingEnabled`
 
 Sets whether Safe Browsing is enabled. Safe Browsing allows WebView to protect against malware and phishing attacks by verifying the links.
 Safe Browsing is enabled by default for devices which support it.
@@ -1268,9 +1268,9 @@ The default value is `false`.
 - iOS 11.0+
 - MacOS 10.13+
 
-### shouldPrinBackgrounds;
+### shouldPrintBackgrounds;
 
-`bool? shouldPrin`
+`bool? shouldPrintBackgrounds`
 
 A Boolean value that indicates whether to include any background color or graphics when printing content.
 
@@ -1312,7 +1312,7 @@ Set to `false` if the WebView should not support zooming using its on-screen zoo
 
 ### supressesIncrementalRendering;
 
-`bool? sup`
+`bool? supressesIncrementalRendering`
 
 Set to `true` if you want the WebView suppresses content rendering until it is fully loaded into memory. The default value is `false`.
 
@@ -1404,9 +1404,9 @@ This logic will not be applied for `PlatformInAppBrowser`, where you must set th
 - iOS
 - MacOS
 
-### usenLoadResource;
+### useOnLoadResource;
 
-`bool? use`
+`bool? useOnLoadResource`
 
 Set to `true` to be able to listen at the `PlatformWebViewCreationParams.onLoadResource` event.
 
@@ -1419,9 +1419,9 @@ This logic will not be applied for `PlatformInAppBrowser`, where you must set th
 - iOS
 - MacOS
 
-### usenNavigationResponse;
+### useOnNavigationResponse;
 
-`bool? use`
+`bool? useOnNavigationResponse`
 
 Set to `true` to be able to listen to the `PlatformWebViewCreationParams.onNavigationResponse` event.
 
@@ -1433,9 +1433,9 @@ This logic will not be applied for `PlatformInAppBrowser`, where you must set th
 - iOS
 - MacOS
 
-### usenRenderProcessGone;
+### useOnRenderProcessGone;
 
-`bool? use`
+`bool? useOnRenderProcessGone`
 
 Set to `true` to be able to listen at the `PlatformWebViewCreationParams.onRenderProcessGone` event.
 
@@ -1461,9 +1461,9 @@ This logic will not be applied for `PlatformInAppBrowser`, where you must set th
 - iOS
 - MacOS
 
-### usehouldInterceptFetchRequest;
+### useShouldInterceptFetchRequest;
 
-`bool? use`
+`bool? useShouldInterceptFetchRequest`
 
 Set to `true` to be able to listen at the `PlatformWebViewCreationParams.shouldInterceptFetchRequest` event.
 
@@ -1476,9 +1476,9 @@ This logic will not be applied for `PlatformInAppBrowser`, where you must set th
 - iOS
 - MacOS
 
-### usehouldInterceptRequest;
+### useShouldInterceptRequest;
 
-`bool? use`
+`bool? useShouldInterceptRequest`
 
 Set to `true` to be able to listen at the `PlatformWebViewCreationParams.shouldInterceptRequest` event.
 
@@ -1489,9 +1489,9 @@ This logic will not be applied for `PlatformInAppBrowser`, where you must set th
 **Officially Supported Platforms/Implementations**:
 - Android native WebView
 
-### useShouldOverrideUrloading;
+### useShouldOverrideUrlLoading;
 
-`bool? useShouldOverrideUrl`
+`bool? `
 
 Set to `true` to be able to listen at the `PlatformWebViewCreationParams.shouldOverrideUrlLoading` event.
 
@@ -1504,9 +1504,9 @@ This logic will not be applied for `PlatformInAppBrowser`, where you must set th
 - iOS
 - MacOS
 
-### useideViewPort;
+### useWideViewPort;
 
-`bool? use`
+`bool? useWideViewPort`
 
 Set to `true` if the WebView should enable support for the "viewport" HTML meta tag or should use a wide viewport.
 When the value of the setting is false, the layout width is always set to the width of the WebView control in device-independent (CSS) pixels.
@@ -1540,9 +1540,9 @@ Define whether the vertical scrollbar should be drawn or not. The default value 
 - iOS ([Official API - UIScrollView.showsVerticalScrollIndicator](https://developer.apple.com/documentation/uikit/uiscrollview/1619405-showsverticalscrollindicator/))
 - Web but iframe requires same origin
 
-### verticalScrolbarPosition;
+### verticalScrollbarPosition;
 
-`VerticalScrollbarPosition? verticalScro`
+`VerticalScrollbarPosition? verticalScrollbarPosition`
 
 Sets the position of the vertical scroll bar.
 The default value is `VerticalScrollbarPosition.SCROLLBAR_POSITION_DEFAULT`.
