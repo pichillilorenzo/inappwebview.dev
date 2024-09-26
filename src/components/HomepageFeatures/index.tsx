@@ -84,7 +84,7 @@ export default function HomepageFeatures(): JSX.Element {
           <p>
             <a target="_blank" href="https://pub.dartlang.org/packages/flutter_inappwebview" rel="nofollow">
               <img className={styles.badge} src="https://img.shields.io/pub/v/flutter_inappwebview?include_prereleases"
-                   alt="Pub"/>
+                   alt="flutter_inappwebview version"/>
             </a>
             <a target="_blank" href="https://pub.dev/packages/flutter_inappwebview/score" rel="nofollow">
               <img className={styles.badge} src="https://img.shields.io/pub/points/flutter_inappwebview"
@@ -105,8 +105,8 @@ export default function HomepageFeatures(): JSX.Element {
                    alt="Awesome Flutter"/>
             </a>
             <a target="_blank" href="https://github.com/pichillilorenzo/flutter_inappwebview/blob/master/LICENSE"><img
-              className={styles.badge} src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"
-              alt="License"/>
+                className={styles.badge} src="https://img.shields.io/badge/License-Apache%202.0-blue.svg"
+                alt="License"/>
             </a>
           </p>
           <p><a target="_blank" href="https://inappwebview.dev/donate/" rel="nofollow">
@@ -124,10 +124,43 @@ export default function HomepageFeatures(): JSX.Element {
                    alt="GitHub stars"/>
             </a>
           </p>
+          <p>
+            <h6>Supported Platforms</h6>
+            <a target="_blank" href="https://pub.dartlang.org/packages/flutter_inappwebview_platform_interface" rel="nofollow">
+              <img className={styles.badge}
+                   src="https://img.shields.io/pub/v/flutter_inappwebview_platform_interface?include_prereleases&label=Platform Interface"
+                   alt="flutter_inappwebview_platform_interface version"/>
+            </a>
+            <a target="_blank" href="https://pub.dartlang.org/packages/flutter_inappwebview_android" rel="nofollow">
+              <img className={styles.badge}
+                   src="https://img.shields.io/pub/v/flutter_inappwebview_android?include_prereleases&label=Android"
+                   alt="flutter_inappwebview_android version"/>
+            </a>
+            <a target="_blank" href="https://pub.dartlang.org/packages/flutter_inappwebview_ios" rel="nofollow">
+              <img className={styles.badge}
+                   src="https://img.shields.io/pub/v/flutter_inappwebview_ios?include_prereleases&label=iOS"
+                   alt="flutter_inappwebview_ios version"/>
+            </a>
+            <a target="_blank" href="https://pub.dartlang.org/packages/flutter_inappwebview_macos" rel="nofollow">
+              <img className={styles.badge}
+                   src="https://img.shields.io/pub/v/flutter_inappwebview_macos?include_prereleases&label=macOS"
+                   alt="flutter_inappwebview_macos version"/>
+            </a>
+            <a target="_blank" href="https://pub.dartlang.org/packages/flutter_inappwebview_windows" rel="nofollow">
+              <img className={styles.badge}
+                   src="https://img.shields.io/pub/v/flutter_inappwebview_windows?include_prereleases&label=Windows"
+                   alt="flutter_inappwebview_windows version"/>
+            </a>
+            <a target="_blank" href="https://pub.dartlang.org/packages/flutter_inappwebview_web" rel="nofollow">
+              <img className={styles.badge}
+                   src="https://img.shields.io/pub/v/flutter_inappwebview_web?include_prereleases&label=Web"
+                   alt="flutter_inappwebview_web version"/>
+            </a>
+          </p>
         </div>
         <div className="row">
           {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
+              <Feature key={idx} {...props} />
           ))}
         </div>
       </div>
