@@ -8,10 +8,18 @@ description: Content Blockers are used to block content, such as ads.
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import config from '../../docusaurus.config';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 <head>
-  <title>WebView Content Blockers | {config.title}</title>
+    <title>WebView Content Blockers | {config.title}</title>
 </head>
+
+<SupportedPlatforms
+    platforms={[Platform.Android, {platform: Platform.iOS, version: '11.0'}, {
+        platform: Platform.macOS,
+        version: '10.13'
+    }]}></SupportedPlatforms>
 
 Content Blockers are used to block content, such as ads.
 Blocking behaviors include hiding elements, blocking loads, and, on iOS and macOS, stripping cookies from the WebView requests.
@@ -198,12 +206,9 @@ Click the Disable/Enable button to disable or enable the Ad Blocker feature.
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="ios" label="iOS">
-```
-![iOS context menu basic usage](./content-blockers/ios-content-blockers-basic-usage.gif "iOS content blocker basic usage.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![iOS context menu basic usage](./content-blockers/ios-content-blockers-basic-usage.gif "iOS content blocker
+        basic usage.")
+    </TabItem>
 </Tabs>
-```

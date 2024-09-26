@@ -5,6 +5,27 @@ date: 2022-10-12 12:00:00
 
 # Getting Started
 
+## What is a WebView? Differences between a WebView and a Browser
+
+Before we get started, we should talk about the differences between a WebView and a Browser.
+
+A WebView is a tool that allows you to display web content within a mobile or desktop application. 
+However, it is not a full browser. This means that many advanced browser features 
+(such as managing multiple tabs, extensions, advanced security features, developer tools, etc.) 
+may not be available or will need to be manually implemented.
+
+If you wish to create an app that behaves like a browser, it is possible to do so using WebViews, 
+but keep in mind that there will be limitations depending on the platform (Android, iOS, Windows, etc.). 
+Each operating system has rules and restrictions that might affect your implementation. 
+For example, advanced features such as file system access or handling custom HTTPS certificates may require additional configurations.
+
+A WebView is primarily designed to embed web content into native apps, rather than providing a complete browsing experience like a full browser. 
+If your project requires browser-like functionality, it's important to be aware of these differences and the potential challenges.
+
+Here you can find a Browser example implemented using this plugin: https://github.com/pichillilorenzo/flutter_browser_app
+
+Let's get started now!
+
 ## Installation
 
 Add `flutter_inappwebview` as a [dependency in your pubspec.yaml file](https://flutter.io/using-packages/).
@@ -24,11 +45,24 @@ void main() {
 
 ## Requirements
 
-- Dart sdk: ">=2.17.0 \<4.0.0"
-- Flutter: ">=3.0.0"
+- Dart sdk: "^3.5.0"
+- Flutter: ">=3.24.0"
 - Android: `minSdkVersion >= 19`, `compileSdk >= 34`, [AGP](https://developer.android.com/build/releases/gradle-plugin) version `>= 7.3.0` (use [Android Studio - Android Gradle plugin Upgrade Assistant](https://developer.android.com/build/agp-upgrade-assistant) for help), support for `androidx` (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app)
-- iOS 9.0+: `--ios-language swift`, Xcode version `>= 14.3`
-- MacOS 10.11+: Xcode version `>= 14.3`
+- iOS 12.0+: `--ios-language swift`, Xcode version `>= 15.0`
+- MacOS 10.14+: Xcode version `>= 15.0`
+
+## Native WebView implementation
+
+These are the native WebView classes used by the plugin to implement its features:
+- Android: [android.webkit.WebView](https://developer.android.com/reference/android/webkit/WebView)
+- iOS: [WebKit\/WKWebView](https://developer.apple.com/documentation/webkit/wkwebview)
+- macOS: [WebKit\/WKWebView](https://developer.apple.com/documentation/webkit/wkwebview)
+- Windows: [Microsoft.Web.WebView2](https://learn.microsoft.com/en-us/microsoft-edge/webview2/)
+- Web: [HTMLIFrameElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement)
+
+:::info
+Since each platform has its own native implementation, keep in mind that in some cases they may behave differently.
+:::
 
 ## Setup Android
 
@@ -132,6 +166,14 @@ Here is an example of configuration:
 ![MacOS App Sandbox example](./intro/macos_app_sandbox_example.png "MacOS App Sandbox example.")
 
 For more details, check the [Apple Official Guide](https://developer.apple.com/documentation/xcode/configuring-the-macos-app-sandbox/).
+
+## Setup Windows
+
+To be able to build on Windows, you must have the `nuget` CLI tool available on your Windows environment.
+
+Follow the instructions here: https://learn.microsoft.com/en-us/nuget/install-nuget-client-tools?tabs=windows#nugetexe-cli
+
+Add the folder location for the `nuget.exe` file to your Windows `PATH` environment variable.
 
 ## Setup Web
 

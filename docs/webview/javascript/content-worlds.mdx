@@ -6,10 +6,15 @@ description: Content worlds help prevent issues that occur when two scripts modi
 ---
 
 import config from '../../../docusaurus.config';
+import {Platform} from "../../../src/Platform.enum";
+import {SupportedPlatforms} from '../../../src/components/SupportedPlatforms';
 
 <head>
   <title>Javascript Content Worlds | {config.title}</title>
 </head>
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Windows]}></SupportedPlatforms>
 
 Starting from iOS 14.0+, WebKit introduces the concept of [WKContentWorld](https://developer.apple.com/documentation/webkit/wkcontentworld), which is an object that defines a scope of execution for JavaScript code, and which you use to prevent conflicts between different scripts.
 

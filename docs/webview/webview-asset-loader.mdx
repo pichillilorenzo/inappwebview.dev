@@ -1,9 +1,16 @@
 ---
 sidebar_position: 10
 date: 2022-21-10 17:00:00
+description: WebViewAssetLoader is an Android-only helper class used to load local files.
 ---
 
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
+
 # WebView Asset Loader
+
+<SupportedPlatforms
+    platforms={[Platform.Android]}></SupportedPlatforms>
 
 `WebViewAssetLoader` is an **Android-only** helper class used to load local files including application's static assets and resources using http(s):// URLs inside a WebView.
 Loading local files using web-like URLs instead of `"file://"` is desirable as it is compatible with the Same-Origin policy.

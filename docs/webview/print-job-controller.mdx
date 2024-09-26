@@ -8,10 +8,15 @@ description: PrintJobController represents the controller used by the WebView to
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import config from '../../docusaurus.config';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 <head>
-  <title>WebView Print Job Controller | {config.title}</title>
+    <title>WebView Print Job Controller | {config.title}</title>
 </head>
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS]}></SupportedPlatforms>
 
 `PrintJobController` represents the controller used by the `WebView` to manage print jobs.
 
@@ -136,17 +141,13 @@ class _MyAppState extends State<MyApp> {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![Android print job controller basic usage](./print-job-controller/android-print-job-controller-basic-usage.gif "Android print job controller basic usage.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ios" label="iOS">
-```
-![iOS print job controller basic usage](./print-job-controller/ios-print-job-controller-basic-usage.gif "iOS print job controller basic usage.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![Android print job controller basic usage](./print-job-controller/android-print-job-controller-basic-usage.gif
+        "Android print job controller basic usage.")
+    </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![iOS print job controller basic usage](./print-job-controller/ios-print-job-controller-basic-usage.gif "iOS
+        print job controller basic usage.")
+    </TabItem>
 </Tabs>
-```

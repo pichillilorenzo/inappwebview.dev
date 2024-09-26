@@ -8,10 +8,15 @@ description: PullToRefreshController represents the controller used by the WebVi
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import config from '../../docusaurus.config';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 <head>
-  <title>WebView Pull-To-Refresh Controller | {config.title}</title>
+    <title>WebView Pull-To-Refresh Controller | {config.title}</title>
 </head>
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS]}></SupportedPlatforms>
 
 `PullToRefreshController` represents the controller used by the `WebView` to manage the pull-to-refresh feature.
 
@@ -128,17 +133,15 @@ class _MyAppState extends State<MyApp> {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![Android pull-to-refresh controller basic usage](./pull-to-refresh-controller/android-pull-to-refresh-controller-basic-usage.gif "Android pull-to-refresh controller basic usage.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ios" label="iOS">
-```
-![iOS pull-to-refresh controller basic usage](./pull-to-refresh-controller/ios-pull-to-refresh-controller-basic-usage.gif "iOS pull-to-refresh controller basic usage.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![Android pull-to-refresh controller basic
+        usage](./pull-to-refresh-controller/android-pull-to-refresh-controller-basic-usage.gif "Android pull-to-refresh
+        controller basic usage.")
+    </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![iOS pull-to-refresh controller basic
+        usage](./pull-to-refresh-controller/ios-pull-to-refresh-controller-basic-usage.gif "iOS pull-to-refresh
+        controller basic usage.")
+    </TabItem>
 </Tabs>
-```

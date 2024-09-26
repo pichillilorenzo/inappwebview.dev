@@ -1,12 +1,18 @@
 ---
 sidebar_position: 1
 date: 2022-10-12 12:00:00
+description: The InAppBrowser class represents a native WebView displayed on top of the Flutter App, so it's not integrated into the Flutter widget tree.
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 # InAppBrowser
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Windows]}></SupportedPlatforms>
 
 The `InAppBrowser` class represents a native WebView displayed on top of the Flutter App, so it's not integrated into the Flutter widget tree.
 
@@ -22,7 +28,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
+WebViewEnvironment? webViewEnvironment;
+
 class MyInAppBrowser extends InAppBrowser {
+  MyInAppBrowser({super.webViewEnvironment});
+
   @override
   Future onBrowserCreated() async {
     print("Browser Created!");
@@ -57,6 +67,16 @@ class MyInAppBrowser extends InAppBrowser {
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+    final availableVersion = await WebViewEnvironment.getAvailableVersion();
+    assert(availableVersion != null,
+        'Failed to find an installed WebView2 Runtime or non-stable Microsoft Edge installation.');
+
+    webViewEnvironment = await WebViewEnvironment.create(
+        settings:
+            WebViewEnvironmentSettings(userDataFolder: 'YOUR_CUSTOM_PATH'));
+  }
+
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
@@ -76,7 +96,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final browser = MyInAppBrowser();
+  final browser = MyInAppBrowser(webViewEnvironment: webViewEnvironment);
 
   final settings = InAppBrowserClassSettings(
       browserSettings: InAppBrowserSettings(hideUrlBar: false),
@@ -105,27 +125,28 @@ class _MyAppState extends State<MyApp> {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![InAppBrowser android basic usage](./in-app-browser/android-in-app-browser-basic-usage.gif "InAppBrowser android basic usage.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ios" label="iOS">
-```
-![InAppBrowser iOS basic usage](./in-app-browser/ios-in-app-browser-basic-usage.gif "InAppBrowser iOS basic usage.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="macos" label="MacOS">
-```
-![InAppBrowser MacOS basic usage](./in-app-browser/macos-in-app-browser-basic-usage.gif "InAppBrowser MacOS basic usage.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![InAppBrowser android basic usage](./in-app-browser/android-in-app-browser-basic-usage.gif "InAppBrowser
+        android basic usage.")
+    </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![InAppBrowser iOS basic usage](./in-app-browser/ios-in-app-browser-basic-usage.gif "InAppBrowser iOS basic
+        usage.")
+    </TabItem>
+    <TabItem value={Platform.macOS} label={Platform.macOS}>
+        ![InAppBrowser MacOS basic usage](./in-app-browser/macos-in-app-browser-basic-usage.gif "InAppBrowser MacOS
+        basic usage.")
+    </TabItem>
 </Tabs>
-```
 
 ## Custom Menu Items
+
+<SupportedPlatforms
+    platforms={[Platform.Android, {platform: Platform.iOS, version: '14.0'}, {
+        platform: Platform.macOS,
+        version: '10.15'
+    }]}></SupportedPlatforms>
 
 Using the `InAppBrowser.addMenuItem` method, custom menu items can be added to the `InAppBrowser` instance and
 implement a custom logic when the user clicks on it using the `InAppBrowserMenuItem.onClick` callback function.
@@ -229,8 +250,7 @@ class _MyAppState extends State<MyApp> {
 
     dynamic icon;
     if ([
-      TargetPlatform.iOS,
-      TargetPlatform.macOS,
+      TargetPlatform.iOS
     ].contains(defaultTargetPlatform)) {
       icon = UIImage(systemName: 'ellipsis.circle');
     } else if (defaultTargetPlatform == TargetPlatform.android) {
@@ -272,22 +292,17 @@ class _MyAppState extends State<MyApp> {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![InAppBrowser android menu items](./in-app-browser/android-in-app-browser-menu-items-example.gif "InAppBrowser android menu items.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ios" label="iOS">
-```
-![InAppBrowser iOS menu items](./in-app-browser/ios-in-app-browser-menu-items-example.gif "InAppBrowser iOS menu items.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="macos" label="MacOS">
-```
-![InAppBrowser MacOS menu items](./in-app-browser/macos-in-app-browser-menu-items-example.gif "InAppBrowser MacOS menu items.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![InAppBrowser android menu items](./in-app-browser/android-in-app-browser-menu-items-example.gif "InAppBrowser
+        android menu items.")
+    </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![InAppBrowser iOS menu items](./in-app-browser/ios-in-app-browser-menu-items-example.gif "InAppBrowser iOS menu
+        items.")
+    </TabItem>
+    <TabItem value={Platform.macOS} label={Platform.macOS}>
+        ![InAppBrowser MacOS menu items](./in-app-browser/macos-in-app-browser-menu-items-example.gif "InAppBrowser
+        MacOS menu items.")
+    </TabItem>
 </Tabs>
-```

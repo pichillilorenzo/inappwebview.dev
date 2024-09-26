@@ -1,16 +1,28 @@
 ---
 sidebar_position: 1
 date: 2022-10-12 12:00:00
+description: InAppWebView is a Flutter Widget for adding an inline native WebView integrated into the flutter widget tree.
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 # InAppWebView
 
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Windows, Platform.Web]}></SupportedPlatforms>
+
 `InAppWebView` is a Flutter Widget for adding an **inline native WebView** integrated into the flutter widget tree.
 
-The plugin relies on Flutter's mechanism for embedding Android and iOS native views: [AndroidViewSurface](https://api.flutter.dev/flutter/widgets/AndroidViewSurface-class.html) and [UiKitView](https://api.flutter.dev/flutter/widgets/UiKitView-class.html).
+The plugin relies on Flutter's mechanism for embedding native views:
+- Android: [AndroidViewSurface](https://api.flutter.dev/flutter/widgets/AndroidViewSurface-class.html)
+- iOS: [UiKitView](https://api.flutter.dev/flutter/widgets/UiKitView-class.html)
+- macOS: [AppKitView](https://api.flutter.dev/flutter/widgets/AppKitView-class.html)
+- Windows: custom implementation
+- Web: [HtmlElementView](https://api.flutter.dev/flutter/widgets/HtmlElementView-class.html)
+
 Known issues are tagged with the [platform-views](https://github.com/flutter/flutter/labels/a%3A%20platform-views) label in the [Flutter official repo](https://github.com/flutter/flutter).
 
 On Web platform, the WebView is embedded using the [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) HTML element.
@@ -31,6 +43,22 @@ then query the custom user agent in your web page to verify that the client requ
 
 Instead, use `InAppWebViewController` to control the WebView instance.
 
+:::caution Windows Platform
+Before initializing the WebView, call the `WebViewEnvironment.getAvailableVersion()` static method
+to check whether the required WebView2 Runtime is installed or not on the user system.
+
+WebView2 Runtime is ship in box with Windows 11, but it may not be installed on Windows 10 devices.
+If it isn't installed, the method will return `null`, so you need consider how to distribute the WebView2 Runtime to your users.
+
+You can guide your user to install WebView2 Runtime from this [page](https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH)
+or choose one of the distribution method described in detail here: https://docs.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution
+
+Also, on Windows Platform, you should create a `WebViewEnvironment` with a custom user data folder.
+The default user data folder of WebView2 is `your_exe_file\WebView2`, which is not a good place to store user data.
+For example, if the application is installed in a read-only directory, the application will crash when WebView2 tries to write data.
+After that, use it as the `InAppWebView.webViewEnvironment` argument when you create an `InAppWebView` widget.
+:::
+
 Example:
 ```dart
 import 'dart:async';
@@ -39,8 +67,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+WebViewEnvironment? webViewEnvironment;
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+    final availableVersion = await WebViewEnvironment.getAvailableVersion();
+    assert(availableVersion != null,
+        'Failed to find an installed WebView2 Runtime or non-stable Microsoft Edge installation.');
+
+    webViewEnvironment = await WebViewEnvironment.create(
+        settings: WebViewEnvironmentSettings(userDataFolder: 'YOUR_CUSTOM_PATH'));
+  }
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
@@ -76,7 +115,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    pullToRefreshController = kIsWeb
+    pullToRefreshController = kIsWeb ||
+            ![TargetPlatform.iOS, TargetPlatform.android]
+                .contains(defaultTargetPlatform)
         ? null
         : PullToRefreshController(
             settings: PullToRefreshSettings(
@@ -117,6 +158,7 @@ class _MyAppState extends State<MyApp> {
               children: [
                 InAppWebView(
                   key: webViewKey,
+                  webViewEnvironment: webViewEnvironment,
                   initialUrlRequest:
                       URLRequest(url: WebUri("https://inappwebview.dev/")),
                   initialSettings: settings,
@@ -227,25 +269,24 @@ class _MyAppState extends State<MyApp> {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![InAppWebView android basic usage](./in-app-webview/android-basic-usage.gif "InAppWebView android basic usage.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ios" label="iOS">
-```
-![InAppWebView iOS basic usage](./in-app-webview/ios-basic-usage.gif "InAppWebView iOS basic usage.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="web" label="Web">
-```
-![InAppWebView web basic usage](./in-app-webview/web-basic-usage.gif "InAppWebView web basic usage.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![InAppWebView Android basic usage](./in-app-webview/android-basic-usage.gif "InAppWebView android basic
+        usage.")
+    </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![InAppWebView iOS basic usage](./in-app-webview/ios-basic-usage.gif "InAppWebView iOS basic usage.")
+    </TabItem>
+    <TabItem value={Platform.macOS} label={Platform.macOS}>
+        ![InAppWebView macOS basic usage](./in-app-webview/macos-basic-usage.gif "InAppWebView macOS basic usage.")
+    </TabItem>
+    <TabItem value={Platform.Windows} label={Platform.Windows}>
+        ![InAppWebView Windows basic usage](./in-app-webview/windows-basic-usage.gif "InAppWebView Windows basic usage.")
+    </TabItem>
+    <TabItem value={Platform.Web} label={Platform.Web}>
+        ![InAppWebView Web basic usage](./in-app-webview/web-basic-usage.gif "InAppWebView web basic usage.")
+    </TabItem>
 </Tabs>
-```
 
 ## Use JavaScript in WebView
 
@@ -480,13 +521,13 @@ powerful web APIs such as [fetch()](https://developer.mozilla.org/en-US/docs/Web
 [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest).
 
 - Although `InAppWebViewSettings.allowFileAccessFromFileURLs` and `InAppWebViewSettings.allowUniversalAccessFromFileURLs`
-can work around the issues with `file://` URLs, it is recommend against setting these to `true` because
+can work around the issues with `file://` URLs, it is recommended against setting these to `true` because
 it leaves your app vulnerable to file-based exploits.
-It is recommend explicitly setting these to false on all API levels for the strongest security.
+It is recommended explicitly setting these to false on all API levels for the strongest security.
 
-- For the same reasons, it is recommend against `file://android_assets/` and `file://android_res/` URLs.
+- For the same reasons, it is recommended against `file://android_assets/` and `file://android_res/` URLs.
 The WebView Asset Loader `AssetsPathHandler` and `ResourcesPathHandler` classes are meant to be drop-in replacements.
 
 - Avoid using `MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW`. This setting generally is not necessary and weakens the security of your app.
-It is recommend loading your in-app content over the same scheme (HTTP or HTTPS) as your website's resources and using either
+It is recommended loading your in-app content over the same scheme (HTTP or HTTPS) as your website's resources and using either
 `MixedContentMode.MIXED_CONTENT_COMPATIBILITY_MODE` or `MixedContentMode.MIXED_CONTENT_NEVER_ALLOW`, as appropriate.

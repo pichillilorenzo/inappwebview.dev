@@ -6,6 +6,8 @@ description: You can inject JavaScript code in different ways.
 ---
 
 import config from '../../../docusaurus.config';
+import {Platform} from "../../../src/Platform.enum";
+import {SupportedPlatforms} from '../../../src/components/SupportedPlatforms';
 
 <head>
   <title>Javascript Injection | {config.title}</title>
@@ -22,6 +24,9 @@ You can inject JavaScript code in different ways:
 :::
 
 ## Using the evaluateJavascript method
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Windows, Platform.Web]}></SupportedPlatforms>
 
 To evaluate JavaScript code, you can use the `InAppWebViewController.evaluateJavascript` method. It accepts a String as source code to be evaluated by the WebView and an optional [Content World](/docs/webview/javascript/content-worlds) and returns the result of the evaluation as a `dynamic`type.
 The return type depends on the type you returned from the JavaScript side.
@@ -49,6 +54,9 @@ it will print `String` as the `result` variable runtime type with the whole web 
 The same for other JSON serializable JavaScript types such as `boolean` (`bool` in Dart) and `object literals` (`Map` in Dart).
 
 ## Using the callAsyncJavaScript method
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Windows]}></SupportedPlatforms>
 
 Unlike the `evaluateJavascript` method, the `InAppWebViewController.callAsyncJavaScript` method evaluate and executes the specified source code string as an asynchronous JavaScript function.
 
@@ -97,6 +105,9 @@ return p;
 
 ## Injecting a JavaScript file from URL
 
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Web]}></SupportedPlatforms>
+
 You can add an external JavaScript file from a URL using the `InAppWebViewController.injectJavascriptFileFromUrl` method. It will append to the `document.body` a `<script>` HTML tag using the specified URL.
 
 It accepts an `Uri` as the URL of the file and a `ScriptHtmlTagAttributes` parameter that represents the html `<script>` attributes to use when adding this external file to the web page document.
@@ -121,6 +132,9 @@ onLoadStop: (controller, url) async {
 ```
 
 ## Injecting JavaScript code from an asset file
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Windows, Platform.Web]}></SupportedPlatforms>
 
 You can inject a JavaScript file from the Flutter assets folder using the `InAppWebViewController.injectJavascriptFileFromAsset` method. It accepts a String representing the path of the asset file.
 

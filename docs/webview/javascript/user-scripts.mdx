@@ -6,10 +6,15 @@ description: A User Script is a JavaScript code that the WebView injects into th
 ---
 
 import config from '../../../docusaurus.config';
+import {Platform} from "../../../src/Platform.enum";
+import {SupportedPlatforms} from '../../../src/components/SupportedPlatforms';
 
 <head>
   <title>Javascript User Scripts | {config.title}</title>
 </head>
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Windows]}></SupportedPlatforms>
 
 What is a User Script? We can say that the `UserScript` class is the equivalent of the [WKUserScript](https://developer.apple.com/documentation/webkit/wkuserscript) iOS native class.
 It represents a JavaScript code that the WebView injects into the web page and in any other subsequent navigated web page.

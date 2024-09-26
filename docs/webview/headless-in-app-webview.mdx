@@ -1,14 +1,20 @@
 ---
 sidebar_position: 3
 date: 2022-10-12 12:00:00
+description: The HeadlessInAppWebView class represents a WebView in headless mode.
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 # Headless InAppWebView
 
-The `HeadlessInAppWebView` class  represents a WebView in headless mode.
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Windows, Platform.Web]}></SupportedPlatforms>
+
+The `HeadlessInAppWebView` class represents a WebView in headless mode.
 It can be used to run a WebView in background without attaching an `InAppWebView` to the widget tree.
 
 ## Basic Usage
@@ -165,22 +171,22 @@ class _MyAppState extends State<MyApp> {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![Android headless webview basic usage](./headless-in-app-webview/android-headless-in-app-webview-basic-usage.gif "Android headless webview basic usage.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ios" label="iOS">
-```
-![iOS headless webview basic usage](./headless-in-app-webview/ios-headless-in-app-webview-basic-usage.gif "iOS headless webview basic usage.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![Android headless webview basic
+        usage](./headless-in-app-webview/android-headless-in-app-webview-basic-usage.gif "Android headless webview basic
+        usage.")
+    </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![iOS headless webview basic usage](./headless-in-app-webview/ios-headless-in-app-webview-basic-usage.gif "iOS
+        headless webview basic usage.")
+    </TabItem>
 </Tabs>
-```
 
 ## Convert to an InAppWebView widget
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Web]}></SupportedPlatforms>
 
 It's possible to convert a `HeadlessInAppWebView` to an `InAppWebView` widget using the `InAppWebView.headlessWebView` property.
 
@@ -242,8 +248,7 @@ class _MyAppState extends State<MyApp> {
             onRefresh: () async {
               if (defaultTargetPlatform == TargetPlatform.android) {
                 webViewController?.reload();
-              } else if (defaultTargetPlatform == TargetPlatform.iOS ||
-                  defaultTargetPlatform == TargetPlatform.macOS) {
+              } else if (defaultTargetPlatform == TargetPlatform.iOS) {
                 webViewController?.loadUrl(
                     urlRequest:
                         URLRequest(url: await webViewController?.getUrl()));
@@ -374,17 +379,14 @@ class _MyAppState extends State<MyApp> {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![Android headless to inappwebview example](./headless-in-app-webview/android-headless-to-inappwebview-example.gif "Android headless to inappwebview example.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ios" label="iOS">
-```
-![iOS headless to inappwebview example](./headless-in-app-webview/ios-headless-to-inappwebview-example.gif "iOS headless to inappwebview example.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![Android headless to inappwebview
+        example](./headless-in-app-webview/android-headless-to-inappwebview-example.gif "Android headless to
+        inappwebview example.")
+    </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![iOS headless to inappwebview example](./headless-in-app-webview/ios-headless-to-inappwebview-example.gif "iOS
+        headless to inappwebview example.")
+    </TabItem>
 </Tabs>
-```

@@ -8,10 +8,15 @@ description: ContextMenu represents the WebView's context menu.
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import config from '../../docusaurus.config';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 <head>
-  <title>WebView Context Menu | {config.title}</title>
+    <title>WebView Context Menu | {config.title}</title>
 </head>
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS]}></SupportedPlatforms>
 
 `ContextMenu` represents the `WebView`'s context menu.
 
@@ -25,11 +30,11 @@ So, the `ContextMenu` class represents the WebView context menu. It used by `Web
 `ContextMenu.menuItems` contains the list of the custom `ContextMenuItem`.
 
 :::caution Note for Android
-  To make it work properly, JavaScript must be enabled.
+To make it work properly, JavaScript must be enabled.
 :::
 
 :::info Note for iOS
-  To make it work with links, you need to set the `allowsLinkPreview` iOS-specific WebView option to `false`.
+To make it work with links, you need to set the `allowsLinkPreview` iOS-specific WebView option to `false`.
 :::
 
 Example:
@@ -125,17 +130,12 @@ class _MyAppState extends State<MyApp> {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![Android context menu basic usage](./context-menu/android-context-menu-basic-usage.gif "Android context menu basic usage.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ios" label="iOS">
-```
-![iOS context menu basic usage](./context-menu/ios-context-menu-basic-usage.gif "iOS context menu basic usage.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![Android context menu basic usage](./context-menu/android-context-menu-basic-usage.gif "Android context menu
+        basic usage.")
+    </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![iOS context menu basic usage](./context-menu/ios-context-menu-basic-usage.gif "iOS context menu basic usage.")
+    </TabItem>
 </Tabs>
-```

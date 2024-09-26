@@ -8,10 +8,15 @@ description: FindInteractionController represents the controller used by the Web
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import config from '../../docusaurus.config';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 <head>
-  <title>WebView Find Interaction Controller | {config.title}</title>
+    <title>WebView Find Interaction Controller | {config.title}</title>
 </head>
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS]}></SupportedPlatforms>
 
 `FindInteractionController` represents the controller used by the `WebView` to add text-finding capabilities, such as the "Find on page" feature.
 
@@ -209,17 +214,15 @@ class _MyAppState extends State<MyApp> {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![Android find interaction controller basic usage](./find-interaction-controller/android-find-interaction-controller-basic-usage.gif "Android find interaction controller basic usage.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ios" label="iOS">
-```
-![iOS find interaction controller basic usage](./find-interaction-controller/ios-find-interaction-controller-basic-usage.gif "iOS find interaction controller basic usage.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![Android find interaction controller basic
+        usage](./find-interaction-controller/android-find-interaction-controller-basic-usage.gif "Android find
+        interaction controller basic usage.")
+    </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![iOS find interaction controller basic
+        usage](./find-interaction-controller/ios-find-interaction-controller-basic-usage.gif "iOS find interaction
+        controller basic usage.")
+    </TabItem>
 </Tabs>
-```

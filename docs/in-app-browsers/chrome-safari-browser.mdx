@@ -1,20 +1,25 @@
 ---
 sidebar_position: 2
 date: 2022-10-12 12:00:00
+description: The ChromeSafariBrowser class represents Chrome Custom Tabs on Android and SFSafariViewController on iOS.
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 # ChromeSafariBrowser
 
-The `ChromeSafariBrowser` class represents [Chrome Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs/overview/) on Android and
-[SFSafariViewController](https://developer.apple.com/documentation/safariservices/sfsafariviewcontroller) on iOS.
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS]}></SupportedPlatforms>
+
+The `ChromeSafariBrowser` class represents [Chrome Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs/overview/) on Android and [SFSafariViewController](https://developer.apple.com/documentation/safariservices/sfsafariviewcontroller) on iOS.
 
 ## Basic Usage
 
 :::caution Note for Android
-  If you want to use the `ChromeSafariBrowser` class on Android 11+, then you need to specify your app querying for `android.support.customtabs.action.CustomTabsService`
+If you want to use the `ChromeSafariBrowser` class on Android 11+, then you need to specify your app querying for `android.support.customtabs.action.CustomTabsService`
 in your `AndroidManifest.xml` (you can read more about it [here](https://developer.chrome.com/docs/android/custom-tabs/best-practices/#applications-targeting-android-11-api-level-30-or-above)).
 :::
 
@@ -98,20 +103,16 @@ class _MyAppState extends State<MyApp> {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![ChromeSafariBrowser android basic usage](./chrome-safari-browser/android-chrome-safari-browser-basic-usage.gif "ChromeSafariBrowser android basic usage.")
-```mdx-code-block
-  </TabItem>
-  <TabItem value="ios" label="iOS">
-```
-![ChromeSafariBrowser iOS basic usage](./chrome-safari-browser/ios-chrome-safari-browser-basic-usage.gif "ChromeSafariBrowser iOS basic usage.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![ChromeSafariBrowser android basic usage](./chrome-safari-browser/android-chrome-safari-browser-basic-usage.gif
+        "ChromeSafariBrowser android basic usage.")
+    </TabItem>
+    <TabItem value={Platform.iOS} label={Platform.iOS}>
+        ![ChromeSafariBrowser iOS basic usage](./chrome-safari-browser/ios-chrome-safari-browser-basic-usage.gif
+        "ChromeSafariBrowser iOS basic usage.")
+    </TabItem>
 </Tabs>
-```
 
 ## Style and Animations
 
@@ -476,12 +477,8 @@ Note: It may needed to force close Chrome so it restarts with the correct comman
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android" default>
-```
-![Android TWA example](./chrome-safari-browser/android-twa.gif "Android TWA example.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value={Platform.Android} label={Platform.Android} default>
+        ![Android TWA example](./chrome-safari-browser/android-twa.gif "Android TWA example.")
+    </TabItem>
 </Tabs>
-```

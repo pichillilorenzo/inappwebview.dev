@@ -5,13 +5,16 @@ date: 2023-11-30 10:00:00
 description: Process Global Configuration for Android WebView.
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import config from '../../docusaurus.config';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 <head>
   <title>WebView Process Global Config | {config.title}</title>
 </head>
+
+<SupportedPlatforms
+    platforms={[Platform.Android]}></SupportedPlatforms>
 
 Process Global Configuration for Android-specific WebView.
 WebView has some process-global configuration parameters that cannot be changed once WebView has been loaded.

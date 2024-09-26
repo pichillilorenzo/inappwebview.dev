@@ -4,6 +4,12 @@ sidebar_position: 8
 date: 2022-10-12 12:00:00
 ---
 
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
+
+<SupportedPlatforms
+    platforms={[Platform.Android]}></SupportedPlatforms>
+
 `ProxyController` represents the proxy settings that govern network requests made by `WebView`.
 It's available only on Android.
 

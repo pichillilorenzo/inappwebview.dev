@@ -8,10 +8,15 @@ description: Feature to keep alive a native WebView in background.
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import config from '../../docusaurus.config';
+import {Platform} from "../../src/Platform.enum";
+import {SupportedPlatforms} from '../../src/components/SupportedPlatforms';
 
 <head>
-  <title>WebView Keep Alive | {config.title}</title>
+    <title>WebView Keep Alive | {config.title}</title>
 </head>
+
+<SupportedPlatforms
+    platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Windows]}></SupportedPlatforms>
 
 This feature is used to keep alive a native WebView in background instead of disposing it when the
 corresponding `InAppWebView` Flutter widget is removed from the widget tree.
@@ -37,10 +42,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
+WebViewEnvironment? webViewEnvironment;
 final keepAlive = InAppWebViewKeepAlive();
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+    final availableVersion = await WebViewEnvironment.getAvailableVersion();
+    assert(availableVersion != null,
+        'Failed to find an installed WebView2 Runtime or non-stable Microsoft Edge installation.');
+
+    webViewEnvironment = await WebViewEnvironment.create(
+        settings:
+            WebViewEnvironmentSettings(userDataFolder: 'YOUR_CUSTOM_PATH'));
+  }
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
@@ -72,6 +88,7 @@ class PageA extends StatelessWidget {
       body: Column(children: <Widget>[
         Expanded(
           child: InAppWebView(
+            webViewEnvironment: webViewEnvironment,
             keepAlive: keepAlive,
             initialUrlRequest:
                 URLRequest(url: WebUri("http://github.com/flutter")),
@@ -119,12 +136,9 @@ class PageB extends StatelessWidget {
 
 This is the result:
 
-```mdx-code-block
 <Tabs>
-  <TabItem value="android" label="Android">
-```
-![Android keep alive basic usage](./keep-alive/android-keep-alive-basic-usage.gif "Android keep alive basic usage.")
-```mdx-code-block
-  </TabItem>
+    <TabItem value="android" label="Android">
+        ![Android keep alive basic usage](./keep-alive/android-keep-alive-basic-usage.gif "Android keep alive basic
+        usage.")
+    </TabItem>
 </Tabs>
-```
