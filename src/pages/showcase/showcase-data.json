@@ -89,5 +89,27 @@
     "sourceCode": "",
     "website": "https://kryptogo.com/wallet",
     "usedFor": "Create an In-App browser to interact with blockchain"
+  },
+  {
+    "appName": "Aspirant APP",
+    "insertDate": "2024-06-13T06:38:25.419Z",
+    "icon": "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/cde3cba6-7d52-4e9d-9513-4cd0cd59eba1",
+    "platforms": [
+      "mobile"
+    ],
+    "shortDescription": "Aspirant APP is developed for the aspirant of the library, it is free to use app to help the library aspirant in their study as well as to automate the attendace process in Self Study Library across India.",
+    "screenshots": [
+      "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/48e95b49-33b6-492e-a761-a88f9b0d9db4",
+      "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/a7c58b1b-7117-4cb2-aa60-d51517bd7852",
+      "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/e903d650-cc1d-441b-90eb-3f66cb161f3f",
+      "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/3f186422-aab0-4ef8-9137-d66a5a87ff5b",
+      "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/d336b662-bc93-4df6-a219-24a7ea4eafd3"
+    ],
+    "googlePlayStore": "https://play.google.com/store/apps/details?id=com.managelibs.aspirantapp&pcampaignid=web_share",
+    "appleAppStore": "",
+    "sourceCode": "",
+    "website": "https://managelibs.com/",
+    "longDescription": "The Library Aspirant App is an integral component of our comprehensive Library Management System, specifically designed to cater to the needs of library patrons. Exclusively crafted for aspirants of the library, this mobile application offers a suite of features tailored to enhance their experience and streamline their interaction with library services.\n\nHere's a detailed description of the app's functionalities:\n\n1. QR-Based Attendance: Simplify the attendance process with QR code scanning, allowing aspirants to check in swiftly upon arrival at the library premises.\n\n2. Fee Notifications: Stay informed about pending payments and overdue fees through instant notifications, ensuring seamless financial transactions within the library ecosystem.\n\n3. Time-Up Alerts: Receive timely alerts prior to the expiration of your library session, enabling effective time management and maximizing productivity during your visit.\n\n4. Create Your Dream Quiz: Empower aspirants to create customized quizzes tailored to their interests, academic pursuits, or specific subjects, fostering a collaborative learning environment within the library community.\n\n5. Give Dream Quiz: Facilitate knowledge sharing and engagement among library patrons by enabling them to share their created quizzes with fellow aspirants.\n\n6. Doubt Discussion Panel: Engage in meaningful discussions, seek clarification, and resolve doubts in an interactive panel, fostering a collaborative and supportive learning environment.\n\n7. In-App Web-View of Useful Websites: Enhance learning and stay up-to-date with a web view of informative and educational websites like ChatGPT, ensuring aspirants have access to valuable resources and opportunities.\n\n8. Digital Writing Pad: Draw or write notes using the paint feature, allowing for a creative and versatile way to record information or brainstorm ideas.\n\n9. Library Smart Card: The smart card contains your information and library details for library purposes only. The QR data is encrypted using the AES algorithm, ensuring that your data is secure and inaccessible to unauthorized parties.\n\n10. Feedback: Provide feedback directly to your library. This feature ensures that your feedback is only accessible to the library manager, keeping your engagement with the library private and secure.\n\n11. Guidance: Career guidance provides an overview of opportunity available after K-12.\n\nThe Library Aspirant App serves as a dedicated platform for library enthusiasts, providing them with the tools and resources necessary to optimize their library experience and make the most out of their academic endeavours. With its user-friendly interface and robust features, the app aims to empower aspirants and foster a culture of learning and exploration within the library ecosystem.",
+    "usedFor": "The InAppWebView plugin is highly beneficial for us. In the Aspirant App, we utilize it to display various useful websites that our library aspirants frequently visit."
   }
 ]
