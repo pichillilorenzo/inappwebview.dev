@@ -100,9 +100,10 @@ function ShowcaseItemInfo(item: ShowcaseItem) {
           </div>
           <div className="card__image">
             <img loading="lazy"
-              src={item.screenshots[0]}
-              alt={item.appName}
-              title={item.appName}/>
+                 className={styles.appScreenshot}
+                 src={item.screenshots[0]}
+                 alt={item.appName}
+                 title={item.appName}/>
 
           </div>
 
@@ -111,13 +112,13 @@ function ShowcaseItemInfo(item: ShowcaseItem) {
           <div className="button-group button-group--block">
             {item.googlePlayStore && <a href={item.googlePlayStore} target="_blank" rel="noopener noreferrer"
                                         className={clsx("button button--link", styles.appStoreLink)}>
-              Google Play
+                Google Play
             </a>}
             {item.appleAppStore &&
-              <a href={item.appleAppStore} target="_blank" rel="noopener noreferrer"
-                 className={clsx("button button--link", styles.appStoreLink)}>
-                Apple Store
-              </a>}
+                <a href={item.appleAppStore} target="_blank" rel="noopener noreferrer"
+                   className={clsx("button button--link", styles.appStoreLink)}>
+                    Apple Store
+                </a>}
           </div>
         </div>
       </div>

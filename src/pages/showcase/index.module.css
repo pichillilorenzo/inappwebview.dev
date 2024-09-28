@@ -7,6 +7,10 @@
   box-sizing: border-box;
 }
 
+.showcaseItem {
+  margin-bottom: 15px;
+}
+
 .appIcon {
   border-radius: 5px;
   box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 20%), 0 1px 5px 0 rgb(0 0 0 / 12%);
@@ -25,10 +29,10 @@
 }
 
 .appShortDesc {
-  height: 3em;
+  height: 5em;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
 }
@@ -40,4 +44,11 @@
 .flutterAppLink, .flutterAppLink:hover {
   color: initial;
   text-decoration: none;
+}
+
+.appScreenshot {
+  max-height: 435px;
+  object-fit: cover;
+  object-position: top;
+  width: 100%;
 }

@@ -101,9 +101,7 @@
     "screenshots": [
       "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/48e95b49-33b6-492e-a761-a88f9b0d9db4",
       "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/a7c58b1b-7117-4cb2-aa60-d51517bd7852",
-      "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/e903d650-cc1d-441b-90eb-3f66cb161f3f",
-      "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/3f186422-aab0-4ef8-9137-d66a5a87ff5b",
-      "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/d336b662-bc93-4df6-a219-24a7ea4eafd3"
+      "https://github.com/pichillilorenzo/inappwebview.dev/assets/112231455/e903d650-cc1d-441b-90eb-3f66cb161f3f"
     ],
     "googlePlayStore": "https://play.google.com/store/apps/details?id=com.managelibs.aspirantapp&pcampaignid=web_share",
     "appleAppStore": "",
@@ -111,5 +109,75 @@
     "website": "https://managelibs.com/",
     "longDescription": "The Library Aspirant App is an integral component of our comprehensive Library Management System, specifically designed to cater to the needs of library patrons. Exclusively crafted for aspirants of the library, this mobile application offers a suite of features tailored to enhance their experience and streamline their interaction with library services.\n\nHere's a detailed description of the app's functionalities:\n\n1. QR-Based Attendance: Simplify the attendance process with QR code scanning, allowing aspirants to check in swiftly upon arrival at the library premises.\n\n2. Fee Notifications: Stay informed about pending payments and overdue fees through instant notifications, ensuring seamless financial transactions within the library ecosystem.\n\n3. Time-Up Alerts: Receive timely alerts prior to the expiration of your library session, enabling effective time management and maximizing productivity during your visit.\n\n4. Create Your Dream Quiz: Empower aspirants to create customized quizzes tailored to their interests, academic pursuits, or specific subjects, fostering a collaborative learning environment within the library community.\n\n5. Give Dream Quiz: Facilitate knowledge sharing and engagement among library patrons by enabling them to share their created quizzes with fellow aspirants.\n\n6. Doubt Discussion Panel: Engage in meaningful discussions, seek clarification, and resolve doubts in an interactive panel, fostering a collaborative and supportive learning environment.\n\n7. In-App Web-View of Useful Websites: Enhance learning and stay up-to-date with a web view of informative and educational websites like ChatGPT, ensuring aspirants have access to valuable resources and opportunities.\n\n8. Digital Writing Pad: Draw or write notes using the paint feature, allowing for a creative and versatile way to record information or brainstorm ideas.\n\n9. Library Smart Card: The smart card contains your information and library details for library purposes only. The QR data is encrypted using the AES algorithm, ensuring that your data is secure and inaccessible to unauthorized parties.\n\n10. Feedback: Provide feedback directly to your library. This feature ensures that your feedback is only accessible to the library manager, keeping your engagement with the library private and secure.\n\n11. Guidance: Career guidance provides an overview of opportunity available after K-12.\n\nThe Library Aspirant App serves as a dedicated platform for library enthusiasts, providing them with the tools and resources necessary to optimize their library experience and make the most out of their academic endeavours. With its user-friendly interface and robust features, the app aims to empower aspirants and foster a culture of learning and exploration within the library ecosystem.",
     "usedFor": "The InAppWebView plugin is highly beneficial for us. In the Aspirant App, we utilize it to display various useful websites that our library aspirants frequently visit."
+  },
+  {
+    "appName": "PixEz",
+    "insertDate": "2024-09-27T22:00:00Z",
+    "icon": "https://github.com/user-attachments/assets/c1fd7e04-4ab6-4891-af43-afb066eafd95",
+    "platforms": [
+      "mobile"
+    ],
+    "shortDescription": "PixEz is an illustration collection client.",
+    "screenshots": [
+      "https://github.com/user-attachments/assets/80f2f220-d5d3-4ccb-8aec-ebb88f3cd0e2",
+      "https://github.com/user-attachments/assets/79b5cdb1-4218-4347-b95e-d4a0c7fc879d",
+      "https://github.com/user-attachments/assets/c0c00e24-5fd2-4146-a91f-04ab904eaf04"
+    ],
+    "googlePlayStore": "https://play.google.com/store/apps/details?id=com.perol.play.pixez",
+    "appleAppStore": "https://apps.apple.com/us/app/pixez/id1494435126",
+    "sourceCode": "https://github.com/Notsfsssf/pixez-flutter",
+    "website": "",
+    "longDescription": "This is an illustration collection client. Use this application to discover and explore more creative illustrations!\n\n○Latest works\n\n・You can quickly view the latest works of the users you follow\n\n・You can view ranked works\n\n○Search\n\n・Search for works using any keywords\n\n・You can also search by work title and character name\n\n・You can also search by work ID and character ID or link\n\n・Frequently searched keywords will remain on the search bar\n\n○Features\n\n・Supports blocking of specific authors, tags or works",
+    "usedFor": "This app mainly uses flutter_inappwebview for logging in on the web, specifically utilizing shouldOverrideUrlLoading for handling the login redirection."
+  },
+  {
+    "appName": "Ente Photos",
+    "insertDate": "2024-09-28T00:00:00Z",
+    "icon": "https://github.com/user-attachments/assets/023a0881-b870-4990-ba5f-5ff6834c8c67",
+    "platforms": [
+      "mobile"
+    ],
+    "shortDescription": "Ente is a simple app to automatically backup and organize your photos and videos.",
+    "screenshots": [
+      "https://github.com/user-attachments/assets/67e03274-e497-424b-b115-4bb152e7d049",
+      "https://github.com/user-attachments/assets/ffca4b68-0c48-4173-a99b-87cd19c9850f",
+      "https://github.com/user-attachments/assets/135d601b-8077-4faf-9421-2578bafa1938",
+      "https://github.com/user-attachments/assets/339770f0-77c7-49b2-a384-6cefffc94bb9",
+      "https://github.com/user-attachments/assets/a0b11955-79fd-4e1c-8e6f-40696d7bae9e",
+      "https://github.com/user-attachments/assets/121addce-f3db-408c-ac0a-a2c354dd7485",
+      "https://github.com/user-attachments/assets/7aa01374-aad3-4102-ac10-b4558711ce04",
+      "https://github.com/user-attachments/assets/710009b9-d367-430f-bb0f-390bcc613a6a"
+    ],
+    "googlePlayStore": "https://play.google.com/store/apps/details?id=io.ente.photos",
+    "appleAppStore": "https://apps.apple.com/us/app/ente-photos/id1542026904",
+    "sourceCode": "https://github.com/ente-io/ente",
+    "website": "https://ente.io/",
+    "longDescription": "Ente is a simple app to automatically backup and organize your photos and videos.\n\nIf you've been looking for a privacy-friendly alternative to preserve your memories, you've come to the right place. With Ente, they are stored end-to-end encrypted (e2ee). This means that only you can view them.\n\nWe have apps across all platforms, and your photos will seamlessly sync between all your devices in an end-to-end encrypted (e2ee) manner.\n\nEnte also makes it simple to share your albums with your loved ones. You can either share them directly with other Ente users, end-to-end encrypted; or with publicly viewable links.\n\nYour encrypted data is stored across multiple locations, including a fall-out shelter in Paris. We take posterity seriously and make it easy to ensure that your memories outlive you.\n\nWe are here to make the safest photos app ever, come join our journey!\n\nFEATURES\n- Original quality backups, because every pixel is important\n- Family plans, so you can share storage with your family\n- Shared folders, in case you want your partner to enjoy your \"Camera\" clicks\n- Album links, that can be protected with a password and set to expire\n- Ability to free up space, by removing files that have been safely backed up\n- Image and video editor, to add finishing touches\n- Favorite, hide and relive your memories, for they are precious\n- One-click import from all major storage providers\n- Dark theme, because your photos look good in it\n- 2FA, 3FA, biometric auth\n- and a LOT more!\n\nPRICING\nWe don't offer forever free plans, because it is important to us that we remain sustainable and withstand the test of time. Instead we offer affordable plans that you can freely share with your family. You can find more information at ente.io.\n\nSUPPORT\nWe take pride in offering human support. If you are our paid customer, you can reach out to team@ente.io and expect a response from our team within 24 hours.\n\nTERMS\nhttps://ente.io/terms",
+    "usedFor": "To render web content in various sections of the app"
+  },
+  {
+    "appName": "Ente Auth - 2FA Authenticator",
+    "insertDate": "2024-09-28T01:00:00Z",
+    "icon": "https://github.com/user-attachments/assets/abfc3bd6-870f-4d8f-8c93-6556c10195c9",
+    "platforms": [
+      "mobile"
+    ],
+    "shortDescription": "Ente's Authenticator app helps you generate and store 2 step verification (2FA) tokens on your mobile devices.",
+    "screenshots": [
+      "https://github.com/user-attachments/assets/c0ba2641-e7c3-4625-8374-b0d8e6864a05",
+      "https://github.com/user-attachments/assets/8737666f-794e-49a6-a3f3-4cf8fc708f15",
+      "https://github.com/user-attachments/assets/b6836b0b-0662-476c-8e51-983ad4748732",
+      "https://github.com/user-attachments/assets/6bf97d37-8018-4016-b1db-25ea161fa021",
+      "https://github.com/user-attachments/assets/f1ebf9bf-360b-4aaa-b566-65c515e63b0b",
+      "https://github.com/user-attachments/assets/4eabaefe-aaf4-4c31-a77c-fd82f7df34c2",
+      "https://github.com/user-attachments/assets/3e5c8521-65f5-420e-b981-f1ddb56276e2",
+      "https://github.com/user-attachments/assets/2e061020-4647-4cbd-8310-523841769e7c"
+    ],
+    "googlePlayStore": "https://play.google.com/store/apps/details?id=io.ente.auth",
+    "appleAppStore": "https://apps.apple.com/us/app/ente-auth/id6444121398",
+    "sourceCode": "https://github.com/ente-io/ente",
+    "website": "https://ente.io/",
+    "longDescription": "Ente's Authenticator app helps you generate and store 2 step verification (2FA) tokens on your mobile devices.\n\nFEATURES\n\nSECURE BACKUPS\nAuth provides end-to-end encrypted cloud backups so that you don't have to worry about losing your tokens. We use the same protocols Ente Photos uses to encrypt and preserve your data.\n\nMULTI DEVICE SYNC\nAuth will automatically sync the 2FA tokens you add to your account, across all your devices. Every new device you sign into will have access to these tokens.\n\nWEB ACCESS\nYou can access your 2FA tokens on any device by using https://auth.ente.io.\n\nOFFLINE MODE\nAuth generates 2FA tokens offline, so your network connectivity will not get in the way of your workflow.\n\nIMPORT AND EXPORT\nYou can add tokens to ente by one of the following methods:\n- Scanning a QR code\n- Manually entering (copy-pasting) a 2FA secret\n- Bulk importing from a file that contains a list of codes in the following format:\n\notpauth://totp/provider.com:you@email.com?secret=YOUR_SECRET\n\nThe codes maybe separated by new lines or commas.\n\nYou can also export the codes you have added to ente, to an unencrypted text file, that adheres to the above format.\n\nTERMS\nhttps://ente.io/terms",
+    "usedFor": "To render web content in various sections of the app"
   }
 ]

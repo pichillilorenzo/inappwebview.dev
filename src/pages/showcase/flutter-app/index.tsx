@@ -42,9 +42,21 @@ function ShowcaseItemInfo(item: ShowcaseItem) {
             <img src="/img/apple-store.png" alt={`${item.appName} apple app store link`}/>
           </a>
         </div>
-        {item.sourceCode && <p className="margin-top--sm">
-          <strong>Source Code</strong>: <a href={item.sourceCode} target="_blank"
-                                           rel="noopener noreferrer">{item.sourceCode}</a>
+        {item.sourceCode && <p className="margin-top--sm margin-bottom--sm">
+            <strong>Source Code</strong>: <a href={item.sourceCode} target="_blank"
+                                             rel="noopener noreferrer">{item.sourceCode}</a>
+            <div className="margin-top--sm">
+                <a target="_blank" rel="noopener noreferrer" href={item.sourceCode}>
+                    <img className={styles.badge}
+                         src={`https://img.shields.io/github/stars/${item.sourceCode.replace('https://github.com/', '')}?style=social`}
+                         alt="GitHub stars"/>
+                </a>
+                <a className="margin-horiz--md" target="_blank" rel="noopener noreferrer" href={item.sourceCode}>
+                    <img className={styles.badge}
+                         src={`https://img.shields.io/github/forks/${item.sourceCode.replace('https://github.com/', '')}?style=social`}
+                         alt="GitHub forks"/>
+                </a>
+            </div>
         </p>}
         <p>
           <strong>For what the InAppWebView plugin is used</strong>?<br/>
@@ -79,7 +91,8 @@ function ShowcaseItemInfo(item: ShowcaseItem) {
       {item.screenshots.length > 0 && <div className="row">
         {item.screenshots.map((url, idx) => (
           <div key={idx} className="col col--3">
-            <img loading="lazy" className={styles.appScreenshot} src={url} alt={`${item.appName} screenshot ${idx + 1}`}/>
+            <img loading="lazy" className={styles.appScreenshot} src={url}
+                 alt={`${item.appName} screenshot ${idx + 1}`}/>
           </div>
         ))}
       </div>}
