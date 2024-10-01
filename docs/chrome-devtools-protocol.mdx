@@ -1,0 +1,166 @@
+---
+sidebar_position: 12
+date: 2022-10-12 12:00:00
+---
+
+import {Platform} from "../src/Platform.enum";
+import {SupportedPlatforms} from '../src/components/SupportedPlatforms';
+
+# Chrome DevTools Protocol
+
+<SupportedPlatforms
+    platforms={[Platform.Windows]}></SupportedPlatforms>
+
+On Windows, the [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) provides APIs to instrument, inspect, debug, and profile Chromium-based browsers.
+
+The Chrome DevTools Protocol is the foundation for the Microsoft Edge DevTools.
+
+Use the Chrome DevTools Protocol for features that aren't implemented in the WebView2 platform.
+
+
+## Basic Usage
+
+To use the Chrome DevTools Protocol API, you can use the following `InAppWebViewController` methods:
+- [callDevToolsProtocolMethod](https://pub.dev/documentation/flutter_inappwebview/latest/flutter_inappwebview/PlatformInAppWebViewController/callDevToolsProtocolMethod.html): Runs an asynchronous DevToolsProtocol method.
+- [addDevToolsProtocolEventListener](https://pub.dev/documentation/flutter_inappwebview/latest/flutter_inappwebview/PlatformInAppWebViewController/addDevToolsProtocolEventListener.html): Subscribe to a DevToolsProtocol event.
+
+If you need to listen to events or call a dev tool protocol method before the first load,
+then you should load the initial URL inside the `onWebViewCreated` event, after you have set up your code correctly.
+
+:::info
+To implement some plugin APIs, these Chrome DevTools Protocol Domains have been **enabled** by default:
+- [Runtime](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/)
+- [Page](https://chromedevtools.github.io/devtools-protocol/tot/Page/)
+- [Network](https://chromedevtools.github.io/devtools-protocol/tot/Network/)
+- [Fetch](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/)
+:::
+
+Here is an example:
+```dart
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+WebViewEnvironment? webViewEnvironment;
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+    final availableVersion = await WebViewEnvironment.getAvailableVersion();
+    assert(availableVersion != null,
+    'Failed to find an installed WebView2 Runtime or non-stable Microsoft Edge installation.');
+
+    webViewEnvironment = await WebViewEnvironment.create(
+        settings:
+        WebViewEnvironmentSettings(userDataFolder: 'YOUR_CUSTOM_PATH'));
+  }
+
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
+  }
+
+  runApp(const MaterialApp(home: MyApp()));
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey webViewKey = GlobalKey();
+
+  InAppWebViewController? webViewController;
+  InAppWebViewSettings settings = InAppWebViewSettings(
+      isInspectable: kDebugMode,
+      mediaPlaybackRequiresUserGesture: false,
+      allowsInlineMediaPlayback: true,
+      iframeAllow: "camera; microphone",
+      iframeAllowFullscreen: true);
+
+  double progress = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: const Text("Official InAppWebView website")),
+        body: SafeArea(
+            child: Column(children: <Widget>[
+              Expanded(
+                child: Stack(
+                  children: [
+                    InAppWebView(
+                      key: webViewKey,
+                      webViewEnvironment: webViewEnvironment,
+                      initialSettings: settings,
+                      onWebViewCreated: (controller) async {
+                        webViewController = controller;
+
+                        // Prepare DevTools Protocol
+                        if (!kIsWeb &&
+                            defaultTargetPlatform == TargetPlatform.windows) {
+                          // Enables page domain notifications.
+                          await controller.callDevToolsProtocolMethod(
+                              methodName: 'Page.enable');
+                          // Listen for a Page event
+                          await controller.addDevToolsProtocolEventListener(
+                            eventName: 'Page.loadEventFired',
+                            callback: (data) {
+                              print('Page.loadEventFired: $data');
+                            },
+                          );
+                        }
+
+                        // Load your URL
+                        await controller.loadUrl(
+                            urlRequest: URLRequest(
+                                url: WebUri("https://inappwebview.dev/")));
+                      },
+                      onProgressChanged: (controller, progress) {
+                        setState(() {
+                          this.progress = progress / 100;
+                        });
+                      },
+                    ),
+                    progress < 1.0
+                        ? LinearProgressIndicator(value: progress)
+                        : Container(),
+                  ],
+                ),
+              ),
+              ButtonBar(
+                alignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    child: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      webViewController?.goBack();
+                    },
+                  ),
+                  ElevatedButton(
+                    child: const Icon(Icons.arrow_forward),
+                    onPressed: () {
+                      webViewController?.goForward();
+                    },
+                  ),
+                  ElevatedButton(
+                    child: const Icon(Icons.refresh),
+                    onPressed: () {
+                      webViewController?.reload();
+                    },
+                  ),
+                ],
+              ),
+            ])));
+  }
+}
+```

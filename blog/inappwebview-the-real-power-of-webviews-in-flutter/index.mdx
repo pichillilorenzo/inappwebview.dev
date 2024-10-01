@@ -11,7 +11,7 @@ tags: [webview, inappwebview]
   <link rel="canonical" href="https://medium.com/flutter-community/inappwebview-the-real-power-of-webviews-in-flutter-c6d52374209d" />
 </head>
 
-import Gist from 'react-gist';
+import Gist from 'super-react-gist';
 
 ![InAppWebView article logo](./inappwebview-logo.noresize.png)
 
@@ -85,7 +85,7 @@ Here is a simple example that shows an `InAppWebView` widget, its current URL, a
 
 This is the full code example:
 
-<Gist id="44f4f8921754d046dfbda982f2e681b7"/>
+<Gist url="https://gist.github.com/pichillilorenzo/44f4f8921754d046dfbda982f2e681b7"/>
 
 ### JavaScript Handlers (Channels)
 
@@ -97,7 +97,7 @@ In order to call `window.flutter_inappwebview.callHandler(handlerName <String>, 
 
 Here is an example:
 
-<Gist id="ec214383d3458072a2702a901e13dd8f"/>
+<Gist url="https://gist.github.com/pichillilorenzo/ec214383d3458072a2702a901e13dd8f"/>
 
 ### WebRTC in InAppWebView
 
@@ -121,7 +121,7 @@ Furthermore, on Android, you need to implement the `androidOnPermissionRequest` 
 
 Here is the full code example:
 
-<Gist id="6608a42e28d9aea5447cd66a1c697965" />
+<Gist url="https://gist.github.com/pichillilorenzo/6608a42e28d9aea5447cd66a1c697965" />
 
 ### How to enable download files in InAppWebView
 
@@ -134,7 +134,7 @@ On Android you need to add write permission inside your `AndroidManifest.xml` fi
 Then, you need to ask permission using the [permission_handler](https://pub.dev/packages/permission_handler) plugin. Instead, to effectively download your file, you can use the [flutter_downloader](https://pub.dev/packages/flutter_downloader) plugin.
 Here is a complete example using http://ovh.net/files/ (in particular, the http://ovh.net/files/1Mio.dat as URL) to test the download:
 
-<Gist id="ee74e103fdc324f761c5fde7b73bd430" />
+<Gist url="https://gist.github.com/pichillilorenzo/ee74e103fdc324f761c5fde7b73bd430" />
 
 As you can see, I'm using also the [path_provider](https://pub.dev/packages/path_provider) plugin to get the folder where I want to save the file.
 
@@ -159,7 +159,7 @@ Also, `CreateWindowRequest` contains the `url` of the request (on Android, if th
 
 Here is a simple example that shows an `AlertDialog` when the user clicks on the link:
 
-<Gist id="059b021067a32a71b0c399b561135b6a" />
+<Gist url="https://gist.github.com/pichillilorenzo/059b021067a32a71b0c399b561135b6a" />
 
 ![onCreateWindow Event - Popup window example](./oncreatewindow-event-popup-window-example.gif "onCreateWindow Event - Popup window example.")
 
@@ -226,7 +226,7 @@ You can customize WebView's context menu adding custom menu items, and/or hiding
 
 Here is the full code example:
 
-<Gist id="26248e7a3fade6f41f3abe17dbb5b3ec" />
+<Gist url="https://gist.github.com/pichillilorenzo/26248e7a3fade6f41f3abe17dbb5b3ec" />
 
 ### Conclusion
 

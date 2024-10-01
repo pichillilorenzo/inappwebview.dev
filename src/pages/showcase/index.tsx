@@ -6,13 +6,11 @@ import styles from './index.module.css';
 // @ts-ignore
 import showcaseDataJSON from './showcase-data.json';
 
-const showcaseData = showcaseDataJSON.sort((a: ShowcaseItem, b: ShowcaseItem) => {
-  return Date.parse(b.insertDate) - Date.parse(a.insertDate);
-});
-
 interface SearchForm {
   text: string;
   openSource: boolean;
+  mobilePlatform: boolean;
+  desktopPlatform: boolean;
 }
 
 export interface ShowcaseItem {
@@ -30,11 +28,15 @@ export interface ShowcaseItem {
   usedFor: string;
 }
 
+const showcaseData: ShowcaseItem[] = showcaseDataJSON.sort((a: ShowcaseItem, b: ShowcaseItem) => {
+  return Date.parse(b.insertDate) - Date.parse(a.insertDate);
+});
+
 function ShowcasePageHeader() {
   return (
     <header className={'hero hero--primary'}>
       <div className="container text--center">
-        <h1 className={'hero__title'}>An open list of apps built with Flutter InAppWebView</h1>
+        <h1 className={'hero__title'}>An open list of {showcaseData.length} apps built with Flutter InAppWebView</h1>
         <a className="button button--primary" href="/submit-app">
           Submit App
         </a>
@@ -60,6 +62,20 @@ function SearchBar({
     }));
   };
 
+  const handleMobilePlatformChange = event => {
+    setSearchForm(prevState => ({
+      ...prevState,
+      mobilePlatform: event.target.checked
+    }));
+  };
+
+  const handleDesktopPlatformChange = event => {
+    setSearchForm(prevState => ({
+      ...prevState,
+      desktopPlatform: event.target.checked
+    }));
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar__inner">
@@ -71,6 +87,16 @@ function SearchBar({
           <div>
             <label htmlFor="open-source">Open Source</label>
             <input id={"open-source"} type={"checkbox"} checked={search.openSource} onChange={handleOpenSourceChange}/>
+          </div>
+          <div className="margin-left--md">
+            <label htmlFor="mobile-platform">Mobile</label>
+            <input id={"mobile-platform"} type={"checkbox"} checked={search.mobilePlatform}
+                   onChange={handleMobilePlatformChange}/>
+          </div>
+          <div className="margin-left--md">
+            <label htmlFor="desktop-platform">Desktop</label>
+            <input id={"desktop-platform"} type={"checkbox"} checked={search.desktopPlatform}
+                   onChange={handleDesktopPlatformChange}/>
           </div>
         </div>
       </div>
@@ -104,20 +130,24 @@ function ShowcaseItemInfo(item: ShowcaseItem) {
                  src={item.screenshots[0]}
                  alt={item.appName}
                  title={item.appName}/>
-
           </div>
-
         </a>
         <div className="card__footer">
           <div className="button-group button-group--block">
-            {item.googlePlayStore && <a href={item.googlePlayStore} target="_blank" rel="noopener noreferrer"
-                                        className={clsx("button button--link", styles.appStoreLink)}>
-                Google Play
-            </a>}
+            {item.googlePlayStore &&
+                <a href={item.googlePlayStore} target="_blank" rel="noopener noreferrer"
+                   className={clsx("button button--link", styles.appStoreLink)}>
+                    Google Play
+                </a>}
             {item.appleAppStore &&
                 <a href={item.appleAppStore} target="_blank" rel="noopener noreferrer"
                    className={clsx("button button--link", styles.appStoreLink)}>
                     Apple Store
+                </a>}
+            {!item.googlePlayStore && !item.appleAppStore && item.sourceCode &&
+                <a href={item.sourceCode} target="_blank" rel="noopener noreferrer"
+                   className={clsx("button button--link", styles.appStoreLink)}>
+                    Source Code
                 </a>}
           </div>
         </div>
@@ -144,10 +174,12 @@ function ShowcaseItems({showcaseData}: { showcaseData: ShowcaseItem[] }) {
 
 const initialSearchForm: SearchForm = {
   text: '',
-  openSource: false
+  openSource: false,
+  mobilePlatform: false,
+  desktopPlatform: false
 }
 
-export default function ShowcasePage(): JSX.Element {
+export default function ShowcasePage() {
   const {siteConfig} = useDocusaurusContext();
   const [search, setSearchForm] = useState(initialSearchForm);
   const [searchResults, setSearchResults] = React.useState([] as ShowcaseItem[]);
@@ -210,9 +242,19 @@ function searchFlutterApps(searchForm: SearchForm) {
     results = weightedSearch(showcaseData, weightedTests, "insertDate") as ShowcaseItem[];
   }
 
-  if (searchForm.openSource) {
-    results = results.filter(item => item.sourceCode != null && item.sourceCode !== '');
-  }
+  results = results.filter(item => {
+    let shouldReturn = true;
+    if (searchForm.openSource) {
+      shouldReturn = shouldReturn && item.sourceCode != null && item.sourceCode !== ''
+    }
+    if (searchForm.mobilePlatform) {
+      shouldReturn = shouldReturn && item.platforms.includes('mobile');
+    }
+    if (searchForm.desktopPlatform) {
+      shouldReturn = shouldReturn && item.platforms.includes('desktop');
+    }
+    return shouldReturn;
+  });
 
   return results;
 }

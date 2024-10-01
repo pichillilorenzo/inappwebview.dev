@@ -4,7 +4,8 @@
     "insertDate":"2020-08-06 20:00:00",
     "icon":"https://user-images.githubusercontent.com/5956938/109398507-ab5e9300-793d-11eb-88a2-2bbde80eeaa6.png",
     "platforms":[
-      "mobile"
+      "mobile",
+      "desktop"
     ],
     "shortDescription":"Full-Featured Mobile Browser App created using Flutter and flutter_inappwebview.",
     "screenshots":[
@@ -129,6 +130,49 @@
     "website": "",
     "longDescription": "This is an illustration collection client. Use this application to discover and explore more creative illustrations!\n\n○Latest works\n\n・You can quickly view the latest works of the users you follow\n\n・You can view ranked works\n\n○Search\n\n・Search for works using any keywords\n\n・You can also search by work title and character name\n\n・You can also search by work ID and character ID or link\n\n・Frequently searched keywords will remain on the search bar\n\n○Features\n\n・Supports blocking of specific authors, tags or works",
     "usedFor": "This app mainly uses flutter_inappwebview for logging in on the web, specifically utilizing shouldOverrideUrlLoading for handling the login redirection."
+  },
+  {
+    "appName": "Simple Live",
+    "insertDate": "2024-09-27T22:30:00Z",
+    "icon": "https://github.com/user-attachments/assets/476be1fe-df8d-4522-9ca1-917875a8ec0e",
+    "platforms": [
+      "mobile"
+    ],
+    "shortDescription": "Simply watch the live broadcast.",
+    "screenshots": [
+      "https://github.com/user-attachments/assets/a9754647-67f5-4320-b294-e89861160b71",
+      "https://github.com/user-attachments/assets/2c3bf492-df96-4dd5-84d4-4994fb60591d",
+      "https://github.com/user-attachments/assets/d0dd86ee-c245-469b-ae77-7962a27f87f4",
+      "https://github.com/user-attachments/assets/cc0efcee-e1de-4ac9-a1bc-69311cd2dc07"
+    ],
+    "googlePlayStore": "",
+    "appleAppStore": "",
+    "sourceCode": "https://github.com/xiaoyaocz/dart_simple_live",
+    "website": "",
+    "longDescription": "Simply watch the live broadcast.\n\nSupported live streaming platforms:\n- Huya Live\n- Douyu Live\n- Bilibili Live\n- Douyin live broadcast",
+    "usedFor": "To implement the login page."
+  },
+  {
+    "appName": "GSY Github App",
+    "insertDate": "2024-09-27T23:00:00Z",
+    "icon": "https://github.com/user-attachments/assets/12abdc1e-a5b4-44a0-9ad4-70bd27e54ea1",
+    "platforms": [
+      "mobile"
+    ],
+    "shortDescription": "An open source Github client App.",
+    "screenshots": [
+      "https://github.com/user-attachments/assets/a02e49e8-8911-4b43-9839-f1bbd56b921d",
+      "https://github.com/user-attachments/assets/0674dff0-a6ea-4c65-8a73-fecc329d4522",
+      "https://github.com/user-attachments/assets/b8fbe03f-e391-4a6b-857b-77b25d0e9ebd",
+      "https://github.com/user-attachments/assets/aa488207-409d-418a-afdf-788c3b97bdd1",
+      "https://github.com/user-attachments/assets/f92f3b31-946f-4cdf-a39d-6b177deb9166"
+    ],
+    "googlePlayStore": "",
+    "appleAppStore": "",
+    "sourceCode": "https://github.com/xiaoyaocz/dart_simple_live",
+    "website": "",
+    "longDescription": "A cross-platform open source Github client App, providing richer functions and better experience, aiming to better daily management and maintenance of personal Github, and providing a better and more convenient driving experience.",
+    "usedFor": "To implement the login page."
   },
   {
     "appName": "Ente Photos",

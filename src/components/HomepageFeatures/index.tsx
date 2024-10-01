@@ -125,7 +125,7 @@ export default function HomepageFeatures(): JSX.Element {
             </a>
           </p>
           <p>
-            <h6>Supported Platforms</h6>
+            <strong className={"margin-bottom--sm"} style={{'display': 'block'}}>Supported Platforms</strong>
             <a target="_blank" href="https://pub.dartlang.org/packages/flutter_inappwebview_platform_interface" rel="nofollow">
               <img className={styles.badge}
                    src="https://img.shields.io/pub/v/flutter_inappwebview_platform_interface?include_prereleases&label=Platform Interface"

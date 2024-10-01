@@ -25,7 +25,7 @@
     "raw-loader": "^4.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-gist": "^1.2.4"
+    "super-react-gist": "^1.1.1"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "3.5.2",
