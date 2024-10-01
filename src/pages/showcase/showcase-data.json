@@ -169,7 +169,7 @@
     ],
     "googlePlayStore": "",
     "appleAppStore": "",
-    "sourceCode": "https://github.com/xiaoyaocz/dart_simple_live",
+    "sourceCode": "https://github.com/CarGuo/gsy_github_app_flutter",
     "website": "",
     "longDescription": "A cross-platform open source Github client App, providing richer functions and better experience, aiming to better daily management and maintenance of personal Github, and providing a better and more convenient driving experience.",
     "usedFor": "To implement the login page."
