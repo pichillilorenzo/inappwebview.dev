@@ -394,13 +394,56 @@ Instead, if you want to handle custom schemes and return a custom response for t
 you can use the `onLoadResourceWithCustomScheme` event.
 With that event, you can handle the url request and return a `CustomSchemeResponse` to load a specific resource encoded to `base64`.
 
-To register the list of custom schemes you want to capture, set the `InAppWebViewSettings.resourceCustomSchemes` with a list of string values.
+For all the platform except for Windows, to register the list of custom schemes you want to capture, set the `InAppWebViewSettings.resourceCustomSchemes` with a list of string values.
+
+Instead, for Windows platform, you need to set up the `WebViewEnvironment.customSchemeRegistrations` parameter that accepts a list of `CustomSchemeRegistration` instances, for example:
+```dart
+webViewEnvironment = await WebViewEnvironment.create(
+    settings: WebViewEnvironmentSettings(
+        userDataFolder: 'YOUR_CUSTOM_PATH',
+        customSchemeRegistrations: [
+      CustomSchemeRegistration(
+          scheme: "my-special-custom-scheme",
+          allowedOrigins: ['*'],
+          treatAsSecure: true,
+          hasAuthorityComponent: true)
+    ]));
+```
 
 Example:
 ```dart
 import 'package:flutter/services.dart';
+
+WebViewEnvironment? webViewEnvironment;
+
+Future main() async {
+
+  //...
+
+  if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
+    final availableVersion = await WebViewEnvironment.getAvailableVersion();
+    assert(availableVersion != null,
+        'Failed to find an installed WebView2 Runtime or non-stable Microsoft Edge installation.');
+
+    webViewEnvironment = await WebViewEnvironment.create(
+        settings: WebViewEnvironmentSettings(
+            userDataFolder: 'YOUR_CUSTOM_PATH',
+            customSchemeRegistrations: [
+          CustomSchemeRegistration(
+              scheme: "my-special-custom-scheme",
+              allowedOrigins: ['*'],
+              treatAsSecure: true,
+              hasAuthorityComponent: true)
+        ]));
+  }
+
+  //...
+}
+
 //...
+
 InAppWebView(
+  webViewEnvironment: webViewEnvironment,
   initialUrlRequest: URLRequest(url: WebUri('https://example.com')),
   initialSettings: InAppWebViewSettings(resourceCustomSchemes: ["my-special-custom-scheme"]),
   onLoadResourceWithCustomScheme: (controller, request) async {
