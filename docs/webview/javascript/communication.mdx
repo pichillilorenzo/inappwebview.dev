@@ -14,25 +14,34 @@ import {SupportedPlatforms} from '../../../src/components/SupportedPlatforms';
 </head>
 
 You can communicate with JavaScript and vice-versa. There 3 ways to communicate with JavaScript:
-- [JavaScript Handlers](#JavaScript-Handlers);
-- [Web Message Channels](#Web-Message-Channels);
-- [Web Message Listeners](#Web-Message-Listeners).
+- [JavaScript Handlers](#javascript-handlers);
+- [Web Message Channels](#web-message-channels);
+- [Web Message Listeners](#web-message-listeners).
 
 ## JavaScript Handlers
 
 <SupportedPlatforms
     platforms={[Platform.Android, Platform.iOS, Platform.macOS, Platform.Windows]}></SupportedPlatforms>
 
-To add a JavaScript handler, you can use `InAppWebViewController.addJavaScriptHandler` method, where you define the `handlerName` and a `callback` to be invoked when it is called by the JavaScript side. The `callback` can return data to be sent on the JavaScript side.
+To add a JavaScript handler, you can use `InAppWebViewController.addJavaScriptHandler` method, where you define the `handlerName` and a `callback` to be invoked when it is called by the JavaScript side.
+The `callback` can return data to be sent on the JavaScript side.
 If you need to manage JavaScript handlers as soon as the web page is loaded, `InAppWebViewController.addJavaScriptHandler` should be called when the `InAppWebView` is created.
+
+:::info
+    Starting from plugin version >= `6.2.0-beta.1`, you should use the function callback type `JavaScriptHandlerFunction`,
+    specifying the callback parameter with the type `JavaScriptHandlerFunctionData` to get other info other than only the arguments,
+    as the function callback type `JavaScriptHandlerCallback` is now **deprecated** but still works.
+
+    Without forcing the `JavaScriptHandlerFunctionData` parameter type, you will end up using the **deprecated** function callback type `JavaScriptHandlerCallback`.
+:::
 
 Here is an example of how to register a JavaScript handler:
 ```dart
 onWebViewCreated: (controller) {
   // register a JavaScript handler with name "myHandlerName"
-  controller.addJavaScriptHandler(handlerName: 'myHandlerName', callback: (args) {
-    // print arguments coming from the JavaScript side!
-    print(args);
+  controller.addJavaScriptHandler(handlerName: 'myHandlerName', callback: (JavaScriptHandlerFunctionData data) {
+    // print arguments and other info coming from the JavaScript side!
+    print(data);
 
     // return data to the JavaScript side!
     return {
@@ -42,17 +51,30 @@ onWebViewCreated: (controller) {
 },
 ```
 
-Instead, on the JavaScript side, to execute the callback handler and send data to Flutter, you need to use the `window.flutter_inappwebview.callHandler(handlerName, ...args)` method, where `handlerName` is a string that represents the handler name that you are calling and `args` are optional arguments that you can send to the Flutter side.
+Instead, on the JavaScript side, to execute the callback handler and send data to Flutter,
+you need to use the `window.flutter_inappwebview.callHandler(handlerName, ...args)` method,
+where `handlerName` is a string that represents the handler name that you are calling and `args` are optional arguments that you can send to the Flutter side.
 
 :::info
-  *Note:* If you want a different name instead of `window.flutter_inappwebview`, you can simply wrap it inside another JavaScript function or object.
+    The default **JavaScript Bridge** object name is `flutter_inappwebview`, available in the `window` object.
 
-  For example: `window.myCustomObj = { callHandler: window.flutter_inappwebview.callHandler }` and, then, you can use `window.myCustomObj.callHandler` in the same way.
+    If you want to use a custom name, starting from plugin version >= `6.2.0-beta.1`, you can use the
+    `await InAppWebViewController.setJavaScriptBridgeName(bridgeName)` static method.
+    This method should be called before any WebViews are created or when there are no WebViews.
+    Calling this method after a WebView has been created will not change the current JavaScript Bridge object name and could lead to errors.
+    Also, the `bridgeName` must be a non-empty string with only alphanumeric and underscore characters and it can't start with a number.
+    It should be a valid JavaScript variable name.
 
-  Also, you can wrap a whole specific handler this way: `const myHandlerName = (...args) => window.flutter_inappwebview.callHandler('myHandlerName', ...args);` and, then, you can use `myHandlerName();` in the same way.
+    To get the current **JavaScript Bridge** object name, you can use the
+    `await InAppWebViewController.getJavaScriptBridgeName()` static method.
 :::
 
-In order to call `window.flutter_inappwebview.callHandler` properly inside a JavaScript file or a `<script>` HTML tag, you need to wait and listen to the `flutterInAppWebViewPlatformReady` JavaScript event. This event will be dispatched as soon as the platform is ready to handle the `callHandler` method. You can also use a global flag variable that is set when the `flutterInAppWebViewPlatformReady` event is dispatch and use it before calling the `window.flutter_inappwebview.callHandler` method.
+On Android, if the WebView doesn't support the feature `WebViewFeature.DOCUMENT_START_SCRIPT`
+(which you can check using `await WebViewFeature.isFeatureSupported(WebViewFeature.DOCUMENT_START_SCRIPT)`), then
+in order to call `window.flutter_inappwebview.callHandler` properly inside a JavaScript file or a `<script>` HTML tag,
+you need to wait and listen to the `flutterInAppWebViewPlatformReady` JavaScript event.
+This event will be dispatched as soon as the platform is ready to handle the `callHandler` method.
+You can also use a global flag variable that is set when the `flutterInAppWebViewPlatformReady` event is dispatch and use it before calling the `window.flutter_inappwebview.callHandler` method.
 ```javascript
 // execute inside the "flutterInAppWebViewPlatformReady" event listener
 window.addEventListener("flutterInAppWebViewPlatformReady", function(event) {
@@ -72,7 +94,8 @@ if (isFlutterInAppWebViewReady) {
 }
 ```
 
-Instead, if you are evaluating JavaScript code from the Dart (Flutter) side, you can call `window.flutter_inappwebview.callHandler` directly on the `onLoadStop` event (or after that) without listening the `flutterInAppWebViewPlatformReady` JavaScript event because, at that time, it will be already fired. For example:
+Instead, if you are evaluating JavaScript code from the Dart (Flutter) side, you can call `window.flutter_inappwebview.callHandler` directly on the `onLoadStop` event (or after that)
+without listening the `flutterInAppWebViewPlatformReady` JavaScript event because, at that time, it will be already fired. For example:
 ```dart
 onLoadStop: (controller, url) async {
   await controller.evaluateJavascript(source: """
@@ -100,11 +123,11 @@ Future main() async {
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.windows) {
     final availableVersion = await WebViewEnvironment.getAvailableVersion();
     assert(availableVersion != null,
-        'Failed to find an installed WebView2 Runtime or non-stable Microsoft Edge installation.');
+    'Failed to find an installed WebView2 Runtime or non-stable Microsoft Edge installation.');
 
     webViewEnvironment = await WebViewEnvironment.create(
         settings:
-            WebViewEnvironmentSettings(userDataFolder: 'YOUR_CUSTOM_PATH'));
+        WebViewEnvironmentSettings(userDataFolder: 'YOUR_CUSTOM_PATH'));
   }
 
   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
@@ -134,10 +157,10 @@ class _MyAppState extends State<MyApp> {
           appBar: AppBar(title: Text("JavaScript Handlers")),
           body: SafeArea(
               child: Column(children: <Widget>[
-            Expanded(
-              child: InAppWebView(
-                webViewEnvironment: webViewEnvironment,
-                initialData: InAppWebViewInitialData(data: """
+                Expanded(
+                  child: InAppWebView(
+                    webViewEnvironment: webViewEnvironment,
+                    initialData: InAppWebViewInitialData(data: """
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -162,29 +185,30 @@ class _MyAppState extends State<MyApp> {
     </body>
 </html>
                       """),
-                initialSettings: settings,
-                onWebViewCreated: (controller) {
-                  controller.addJavaScriptHandler(
-                      handlerName: 'handlerFoo',
-                      callback: (args) {
-                        // return data to the JavaScript side!
-                        return {'bar': 'bar_value', 'baz': 'baz_value'};
-                      });
+                    initialSettings: settings,
+                    onWebViewCreated: (controller) {
+                      controller.addJavaScriptHandler(
+                          handlerName: 'handlerFoo',
+                          callback: (JavaScriptHandlerFunctionData data) {
+                            // return data to the JavaScript side!
+                            return {'bar': 'bar_value', 'baz': 'baz_value'};
+                          });
 
-                  controller.addJavaScriptHandler(
-                      handlerName: 'handlerFooWithArgs',
-                      callback: (args) {
-                        print(args);
-                        // it will print: [1, true, [bar, 5], {foo: baz}, {bar: bar_value, baz: baz_value}]
-                      });
-                },
-                onConsoleMessage: (controller, consoleMessage) {
-                  print(consoleMessage);
-                  // it will print: {message: {"bar":"bar_value","baz":"baz_value"}, messageLevel: 1}
-                },
-              ),
-            ),
-          ]))),
+                      controller.addJavaScriptHandler(
+                          handlerName: 'handlerFooWithArgs',
+                          callback: (JavaScriptHandlerFunctionData data) {
+                            print(data);
+                            // it will print:
+                            // JavaScriptHandlerFunctionData{args: [1, true, [bar, 5], {foo: baz}, {bar: bar_value, baz: baz_value}], isMainFrame: true, origin: , requestUrl: about:blank}
+                          });
+                    },
+                    onConsoleMessage: (controller, consoleMessage) {
+                      print(consoleMessage);
+                      // it will print: {message: {"bar":"bar_value","baz":"baz_value"}, messageLevel: 1}
+                    },
+                  ),
+                ),
+              ]))),
     );
   }
 }
@@ -238,6 +262,81 @@ onConsoleMessage: (controller, consoleMessage) {
   // it will print: {message: {"foo":1,"bar":false}, messageLevel: 1}
 },
 ```
+
+### JavaScript Handlers Security
+
+Starting from plugin version >= `6.2.0-beta.1`, you can restrict execution of **all** the JavaScript Handlers
+using the `InAppWebViewSettings.javaScriptHandlersForMainFrameOnly` and `InAppWebViewSettings.javaScriptHandlersOriginAllowList` parameters.
+
+If `InAppWebViewSettings.javaScriptHandlersForMainFrameOnly` is set to `true`, then it will allow **all** the
+JavaScript Handlers only on the main frame.
+This will affect also the **internal JavaScript Handlers** used by the plugin itself. The default value is `false`.
+
+`InAppWebViewSettings.javaScriptBridgeOriginAllowList` represents a `Set` of
+Regular Expression Patterns that will be used on native side to match the allowed origins
+that are able to execute **all** the JavaScript Handlers defined for the current WebView.
+This will affect also the **internal JavaScript Handlers** used by the plugin itself.
+An empty `Set` will block every origin.
+The default value is `null` and will allow every origin.
+
+Also, starting from plugin version >= `6.2.0-beta.1`, you should use the function callback type
+`JavaScriptHandlerFunction`, specifying the callback parameter with the type `JavaScriptHandlerFunctionData`, when adding a new JavaScript Handler.
+Without forcing the `JavaScriptHandlerFunctionData` parameter type, you will end up using the **deprecated** function callback type `JavaScriptHandlerCallback`.
+The `JavaScriptHandlerFunctionData` contains info about the origin and the full url of the frame that made the request and
+if the request is coming from the main frame or a sub-frame.
+This way, you can apply specific validity logic for security reasons.
+
+As an example:
+```dart
+onWebViewCreated: (controller) {
+  // register a JavaScript handler with name "myHandlerName"
+  controller.addJavaScriptHandler(handlerName: 'myHandlerName', callback: (JavaScriptHandlerFunctionData data) {
+    // validity check
+    if (!data.isMainFrame || data.origin.host != 'validhost.com') {
+      throw Exception('Invalid host');
+    }
+
+    // print arguments and other info coming from the JavaScript side!
+    print(data);
+
+    // return data to the JavaScript side!
+    return {
+      'bar': 'bar_value', 'baz': 'baz_value'
+    };
+  });
+},
+```
+
+### JavaScript Bridge Security
+
+Starting from plugin version >= `6.2.0-beta.1`, you can enable or disable the **JavaScript Bridge** feature using `InAppWebViewSettings.javaScriptBridgeEnabled`.
+
+The default value is `true`. Setting it to `false` will disable the **JavaScript Bridge** completely.
+This will affect also all the internal plugin UserScripts that are using the **JavaScript Bridge** to work.
+
+:::info
+    Setting or changing this value after the WebView has been created won't have any effect.
+    It should be set when initializing the WebView through `PlatformWebViewCreationParams.initialSettings` parameter.
+:::
+
+You can also restrict access to it using `InAppWebViewSettings.javaScriptBridgeForMainFrameOnly` and `InAppWebViewSettings.javaScriptBridgeOriginAllowList`.
+
+If `InAppWebViewSettings.javaScriptBridgeForMainFrameOnly` is set to `true`, then it will allow the JavaScript Bridge only on the main frame. The default value is `false`.
+
+`InAppWebViewSettings.javaScriptBridgeOriginAllowList` represents a `Set` of patterns that will be used to match the allowed origins where
+the JavaScript Bridge could be used.
+Adding `'*'` as an allowed origin or setting this to `null`, it means it will allow every origin.
+Instead, an empty `Set` will block every origin and, in this case,
+it will force the behaviour of the `InAppWebViewSettings.javaScriptBridgeEnabled` parameter, as it was set to `false`.
+
+:::info
+    Setting or changing these both values after the WebView has been created won't have any effect.
+    It should be set when initializing the WebView through `PlatformWebViewCreationParams.initialSettings` parameter.
+
+    **NOTE for Android**: each origin pattern MUST follow the table rule of `PlatformInAppWebViewController.addWebMessageListener`.
+
+    **NOTE for iOS, macOS, Windows**: each origin pattern will be used as a Regular Expression Pattern that will be used on JavaScript side using [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
+:::
 
 ## Web Message Channels
 

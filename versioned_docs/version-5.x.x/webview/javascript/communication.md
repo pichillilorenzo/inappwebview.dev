@@ -7,9 +7,9 @@ date: 2021-03-08 10:48:00
 # Communication
 
 You can communicate with JavaScript and vice-versa. There 3 ways to communicate with JavaScript:
-- [JavaScript Handlers](#JavaScript-Handlers);
-- [Web Message Channels](#Web-Message-Channels);
-- [Web Message Listeners](#Web-Message-Listeners).
+- [JavaScript Handlers](#javascript-handlers);
+- [Web Message Channels](#web-message-channels);
+- [Web Message Listeners](#web-message-listeners).
 
 ## JavaScript Handlers
 

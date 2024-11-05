@@ -50,6 +50,7 @@ void main() {
 - Android: `minSdkVersion >= 19`, `compileSdk >= 34`, [AGP](https://developer.android.com/build/releases/gradle-plugin) version `>= 7.3.0` (use [Android Studio - Android Gradle plugin Upgrade Assistant](https://developer.android.com/build/agp-upgrade-assistant) for help), support for `androidx` (see [AndroidX Migration](https://flutter.dev/docs/development/androidx-migration) to migrate an existing app)
 - iOS 12.0+: `--ios-language swift`, Xcode version `>= 15.0`
 - MacOS 10.14+: Xcode version `>= 15.0`
+- Windows: [NuGet CLI](https://learn.microsoft.com/en-us/nuget/install-nuget-client-tools?tabs=windows#nugetexe-cli) available on your PATH environment variable
 
 ## Native WebView implementation
 

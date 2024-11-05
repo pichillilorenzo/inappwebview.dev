@@ -54,3 +54,37 @@ To add or remove User Scripts, you can also use the corresponding methods, such 
 :::
 
 For each `UserScript` you can define a `groupName` that you can use, for example, to remove a group of User Scripts with the `InAppWebViewController.removeUserScriptsByGroupName` method.
+
+### Security
+
+For each `UserScript`, you can restrict execution using the `allowedOriginRules` and `forMainFrameOnly` parameters.
+`allowedOriginRules` represents a set of matching rules for the allowed origins.
+
+:::info
+    Adding `'*'` as an allowed origin or setting this to `null`, it means it will allow every origin.
+    Instead, an empty `Set` will block every origin.
+
+    **NOTE for Android**: each origin pattern MUST follow the table rule of `PlatformInAppWebViewController.addWebMessageListener`.
+
+    **NOTE for iOS, macOS, Windows**: each origin pattern will be used as a Regular Expression Pattern that will be used on JavaScript side using [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
+:::
+
+`forMainFrameOnly` is a boolean value that indicates whether to inject the script into the main frame.
+Specify `true` to inject the script only into the main frame, or `false` to inject it into all frames.
+The default value is `true`.
+
+Starting from plugin version >= `6.2.0-beta.1`, you can restrict also internal User Scripts (PluginScript) execution
+using `InAppWebViewSettings.pluginScriptsForMainFrameOnly` and `InAppWebViewSettings.pluginScriptsOriginAllowList`.
+
+They work the same way as `UserScript.forMainFrameOnly` and `UserScript.allowedOriginRules` parameters,
+but they will apply for **all** the internal User Scripts.
+Also, they should be set when initializing the WebView through `PlatformWebViewCreationParams.initialSettings` parameter,
+as setting or changing these values after the WebView has been created won't have any effect.
+
+Both settings apply also to the **JavaScript Bridge** object, which is initialized using an internal User Script.
+If no `InAppWebViewSettings.javaScriptBridgeForMainFrameOnly` and/or `InAppWebViewSettings.javaScriptBridgeOriginAllowList` are set,
+then these settings will be used respectively.
+
+The default value for `InAppWebViewSettings.pluginScriptsForMainFrameOnly` is `false`.
+
+The default value for `InAppWebViewSettings.pluginScriptsOriginAllowList` is `null`.

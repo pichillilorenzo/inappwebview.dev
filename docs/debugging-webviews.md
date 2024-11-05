@@ -65,3 +65,5 @@ For iOS >= `16.4` and MacOS >= `13.3`, you need to set `InAppWebViewSettings.isI
 ## Inspect Windows WebViews
 
 You need to set `InAppWebViewSettings.isInspectable` setting to `true` for each WebView you want to enable developer tools.
+
+Instead, to enable remote debugging using `edge://inspect/#devices` on Edge, follow the [official Microsoft Guide](https://learn.microsoft.com/en-us/microsoft-edge/webview2/how-to/remote-debugging-desktop).
