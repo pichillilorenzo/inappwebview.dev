@@ -6,6 +6,10 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
+  future: {
+    experimental_faster: true,
+  },
+
   title: 'InAppWebView',
   tagline: 'Flutter InAppWebView',
   url: 'https://inappwebview.dev',
@@ -37,6 +41,10 @@ const config = {
           editUrl:
             'https://github.com/pichillilorenzo/inappwebview.dev/tree/main/',
           lastVersion: 'current',
+          sidebarItemsGenerator: async ({defaultSidebarItemsGenerator, ...args}) => {
+            const sidebarItems = await defaultSidebarItemsGenerator(args);
+            return sidebarItems;
+          },
           versions: {
             current: {
               label: '6.x.x',
@@ -96,7 +104,7 @@ const config = {
             ]
           },
           {to: '/showcase', label: 'Showcase', position: 'left'},
-          {to: '/donate', label: 'Donate', position: 'left'},
+          {to: '/donate', label: 'Donate', position: 'left', className: 'btn-donate'},
           {
             type: 'search',
             position: 'right'

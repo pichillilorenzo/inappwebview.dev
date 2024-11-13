@@ -37,7 +37,8 @@ function ShowcasePageHeader() {
     <header className={'hero hero--primary'}>
       <div className="container text--center">
         <h1 className={'hero__title'}>An open list of {showcaseData.length} apps built with Flutter InAppWebView</h1>
-        <a className="button button--primary" href="/submit-app">
+        <a className="button button--primary" target={"_blank"}
+           href="https://github.com/pichillilorenzo/flutter_inappwebview/issues/new?assignees=&labels=showcase&projects=&template=app_showcase.yml&title=Write+your+App+name+here">
           Submit App
         </a>
       </div>

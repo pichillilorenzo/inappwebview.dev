@@ -82,3 +82,10 @@
     max-width: initial;
   }
 }
+
+.btn-donate {
+  background-color: #FFC439;
+  padding: 7px;
+  color: white;
+  border-radius: 15px;
+}

@@ -13,10 +13,10 @@ import {SupportedPlatforms} from '../src/components/SupportedPlatforms';
 
 To manage `WebView` cookies, you can use the `CookieManager` class, which implements a singleton object (shared instance).
 
-On Android, it is implemented using the [CookieManager](https://developer.android.com/reference/android/webkit/CookieManager) class.
-On iOS and macOS, it is implemented using the [WKHTTPCookieStore](https://developer.apple.com/documentation/webkit/wkhttpcookiestore) class.
-On Windows platform, it is implemented using Javascript.
-On Web platform, it is implemented using Javascript.
+- On Android, it is implemented using the [CookieManager](https://developer.android.com/reference/android/webkit/CookieManager) class.
+- On iOS and macOS, it is implemented using the [WKHTTPCookieStore](https://developer.apple.com/documentation/webkit/wkhttpcookiestore) class.
+- On Windows platform, it is implemented using the Chrome DevTools Protocol [Network domain](https://chromedevtools.github.io/devtools-protocol/tot/Network/).
+- On Web platform, it is implemented using Javascript.
 
 ## Basic Usage
 
